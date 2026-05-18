@@ -4,7 +4,7 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 독립 Astro 프로젝트로 분리한 것. 이 문서 하나로 인계 가능하도록 작성.
 
 작성일: 2026-05-18
-최종 갱신: 2026-05-18 (세션 인계)
+최종 갱신: 2026-05-18 (세션 인계 · 도메인 확정 + 배포 준비)
 
 ---
 
@@ -17,15 +17,21 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 - `.github` 이식 (CODEOWNERS·auto-assign·commit-labeler·PR템플릿·ci.yml, kikoai 기준·deploy-dev 제외)
 - GitHub 라벨 22개 클론 (kikoai 동일), `PERSONAL_TOKEN` 시크릿 등록됨
 - 패키지매니저 pnpm, **CI(green) 통과 확인**
+- MoAI-ADK 2.14.0 세팅 (ddd / manual / ko), 커밋 완료
+- **도메인 확정: `bbang.dev` 구매 완료 (국내 등록처 — 가비아/후이즈 계열)**
+- **`astro.config.mjs` site → `https://bbang.dev` 교체 완료 (commit 52fd4f3)**
+- **옵시디언 전용 문법 정책 = 미사용 확정. 기존 1편(`생각/블로그를-이전한-이유…`)의 `![[ ]]` 3건 → `<img src="/Assets/…">` 변환 완료, 빌드 green (commit 336382d). remark 플러그인 불필요**
+- **콘텐츠 동기화 정책 확정: 자동 파이프라인 미구축. 사용자가 옵시디언 볼트의 .md를 이 레포로 직접 복사 후 커밋/푸시 (수동 운영)**
 
 남은 핵심 (P0):
-1. 도메인 구매 (사용자) → `astro.config.mjs`의 `site`를 실도메인으로 교체
-2. 호스팅 연결: Vercel 권장 — 레포 import → 자동 빌드(pnpm), 커스텀 도메인+HTTPS 연결
-3. 옵시디언→Astro 콘텐츠 갱신 파이프라인 설계 (현재는 1회 수동 이관 상태)
-4. 옵시디언 전용 문법(`[[ ]]`,`![[ ]]`,`> [!callout]`) 렌더링 정책 — 현재 미처리
+1. ~~도메인~~ / ~~site 교체~~ — 완료
+2. **호스팅 연결 (사용자 대시보드 작업)**: Vercel에 레포 import → 자동 빌드(pnpm) → bbang.dev 커스텀 도메인 연결. DNS는 국내 등록처 관리툴에서 A/CNAME 레코드 설정. `.dev`는 HSTS preload라 HTTPS 필수인데 Vercel이 TLS 인증서 자동 발급·갱신(무료). → 절차는 §10 참조
+3. (배포 확인 후) SEO/GEO 풀세팅 — sitemap/RSS/OG/JSON-LD/llms.txt 등 일괄
 
-그다음 (P1): SEO/GEO 풀세팅(도메인 확정 후 일괄), favicon/PWA/GA
+그다음 (P1): favicon/PWA/GA
 참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
+
+미푸시: 로컬 커밋 2건(52fd4f3, 336382d) 존재 — 사용자 승인 후 푸시 예정 (푸시 시 CI 작동)
 
 
 ---
@@ -119,5 +125,37 @@ pnpm lint         # astro check (타입)
 
 ## 9. 레거시 참고
 
-- 원본 Quartz: `~/Desktop/obsidian-quartz-blog` (실사이트, 무손상)
+- 원본 Quartz: `~/Desktop/obsidian-quartz-blog` (실사이트, 무손상). 운영 정책 = 신규 Astro로 완전 대체(추후 정리)
 - 원본 프로토타입(분리 전): `~/Desktop/obsidian-quartz-blog/astro-prototype` (보존됨, 향후 삭제 가능)
+- 옵시디언 볼트 원본: `~/Desktop/obsidian-quartz-blog/content` (.md 143). 앞으로 글 추가 시 여기서 작성 → 이 레포 `src/content/posts/<카테고리>/`에 수동 복사
+
+## 10. Vercel 배포 + bbang.dev 연결 절차 (사용자 대시보드 작업)
+
+핵심: Astro 정적 사이트라 Vercel이 자동 인식. 인증서는 Vercel이 무료 자동 발급(직접 구매·설정 불필요).
+
+### 10-1. Vercel 프로젝트 생성
+1. vercel.com 로그인(GitHub 계정) → Add New → Project
+2. `bbbang105/bbang-dev-blog` 레포 Import
+3. Framework Preset: **Astro** 자동 감지 확인 (Build `pnpm build`, Output `dist`, Install `pnpm install`)
+4. Deploy → 빌드 성공 시 `*.vercel.app` 임시 URL 발급
+
+### 10-2. 커스텀 도메인 연결
+1. Project → Settings → Domains → `bbang.dev` 추가 (`www.bbang.dev`도 추가 권장 → bbang.dev로 리다이렉트)
+2. Vercel이 표시하는 DNS 레코드 확인 (보통 아래와 동일)
+
+### 10-3. 국내 등록처(가비아/후이즈) DNS 설정
+등록처 DNS 관리툴에서 레코드 추가:
+
+| 호스트 | 타입 | 값 |
+|---|---|---|
+| `@` (apex, bbang.dev) | A | `76.76.21.21` |
+| `www` | CNAME | `cname.vercel-dns.com.` |
+
+- 가비아: My가비아 → 도메인 → DNS 관리툴 → 레코드 설정에서 위 2건 추가
+- apex(@)는 CNAME 불가(표준 DNS) → 반드시 A 레코드 사용
+- 가비아 기본 네임서버 유지(`ns.gabia.co.kr` 등). 또는 Vercel 네임서버로 위임도 가능하나 A/CNAME 방식이 단순
+- 전파 후(수분~수시간) Vercel Domains 화면이 Valid로 바뀌고 TLS 인증서 자동 발급 → HTTPS 자동 적용 (`.dev` HSTS도 Vercel이 처리)
+
+### 10-4. 배포 확인 후 (다음 세션 작업)
+- `https://bbang.dev` 접속·HTTPS·주요 페이지 렌더 확인 (헤드리스 Chrome + CDP 실측 루프, §8 규칙)
+- 정상 확인되면 P0-3 SEO/GEO 풀세팅 착수
