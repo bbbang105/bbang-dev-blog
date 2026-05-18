@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = "한상호(Sangho Han)의 기술 블로그. 백엔드·인프라·AI/LLM 서빙·보안 대응·엔지니어링 회고를 기록합니다.",
+  description = "In the power of records, and of people.",
   current,
   published,
 } = Astro.props;
@@ -64,7 +64,7 @@ const jsonLd = {
             publisher: { "@id": `${SITE}/#person` },
             mainEntityOfPage: canonical,
             url: canonical,
-            image: `${SITE}/og/default.png`,
+            image: `${SITE}/og/cover-v2.png`,
             inLanguage: "ko",
           },
         ]
@@ -86,12 +86,12 @@ const jsonLd = {
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
-    <meta property="og:image" content="https://bbang.dev/og/default.png" />
+    <meta property="og:image" content="https://bbang.dev/og/cover-v2.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://bbang.dev/og/default.png" />
+    <meta name="twitter:image" content="https://bbang.dev/og/cover-v2.png" />
     <link rel="preload" as="font" type="font/woff2"
       href="/fonts/SarasaMonoK-Regular.woff2" crossorigin />
     {/* No-flash theme: applied before paint */}
