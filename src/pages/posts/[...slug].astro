@@ -264,7 +264,9 @@ const readMin = Math.max(1, Math.round(_plain.length / 500));
 
       // 4. Heading anchor links (#) — appended to post h2/h3 with an id
       Array.prototype.forEach.call(
-        document.querySelectorAll(".prose h2[id], .prose h3[id]"),
+        document.querySelectorAll(
+          ".prose h1[id], .prose h2[id], .prose h3[id]",
+        ),
         function (h) {
           var a = document.createElement("a");
           a.className = "head-anchor";

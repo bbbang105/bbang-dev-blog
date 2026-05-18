@@ -149,7 +149,8 @@ mark {
   }
 }
 
-/* Heading anchor (#) — appears on hover/focus of post h2/h3. */
+/* Heading anchor (#) — appears on hover/focus of post h1/h2/h3. */
+.prose h1,
 .prose h2,
 .prose h3 {
   position: relative;
@@ -162,6 +163,7 @@ mark {
   opacity: 0;
   transition: opacity 0.14s ease;
 }
+.prose h1:hover .head-anchor,
 .prose h2:hover .head-anchor,
 .prose h3:hover .head-anchor,
 .head-anchor:focus-visible {
