@@ -13,9 +13,9 @@ export const ui = {
     themeToggle: "◐ Theme",
     // Home intro
     introLabel: "// Latest writing",
-    introHeading: "Notes on backend, infrastructure, and building things.",
+    introHeading: "In the power of records, and of people.",
     introSub:
-      "A tech blog by Sangho Han, an AI-native product builder. Performance tuning, infra cost optimization, security response, and retrospectives. 140+ posts over 2 years.",
+      "Development is only a means — toward more human outcomes. Understanding people matters most, so my writing is grounded in reflection.",
     sectionPosts: "Posts",
     postsCount: "entries ported",
     footCtaLabel: "// More",
@@ -44,9 +44,9 @@ export const ui = {
     navAbout: "소개",
     themeToggle: "◐ 테마",
     introLabel: "// 최근 글",
-    introHeading: "백엔드, 인프라, 그리고 만드는 것에 대한 기록.",
+    introHeading: "기록과 사람의 힘을 믿습니다.",
     introSub:
-      "AI 네이티브로 제품을 만드는 한상호의 기술 블로그입니다. 성능 개선, 인프라 비용 최적화, 보안 대응, 그리고 회고를 남깁니다. 2년간 140편 이상 작성.",
+      "개발은 수단일 뿐, 더 인간적인 결과를 만들기 위해 노력합니다. 사람을 이해하는 일이 가장 중요하기에, 사유가 담긴 글을 씁니다.",
     sectionPosts: "글",
     postsCount: "편 이전됨",
     footCtaLabel: "// 더 보기",
