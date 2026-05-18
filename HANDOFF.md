@@ -146,14 +146,18 @@ pnpm lint         # astro check (타입)
 ### 10-3. 국내 등록처(가비아/후이즈) DNS 설정
 등록처 DNS 관리툴에서 레코드 추가:
 
-| 호스트 | 타입 | 값 |
+Vercel이 프로젝트 Domains 화면에 표시하는 **신규 권장값**을 그대로 사용 (구값 76.76.21.21 / cname.vercel-dns.com 도 작동하나 신규 권장). www CNAME은 프로젝트 전용 고유 호스트네임이므로 대시보드 복사 버튼으로 정확히 복사.
+
+| 호스트 | 타입 | 값 (2026-05-18 대시보드 기준) |
 |---|---|---|
-| `@` (apex, bbang.dev) | A | `76.76.21.21` |
-| `www` | CNAME | `cname.vercel-dns.com.` |
+| `@` (apex, bbang.dev) | A | `216.198.79.1` |
+| `www` | CNAME | `67c9a89f9cfc1817.vercel-dns-017.com.` |
 
 - 가비아: My가비아 → 도메인 → DNS 관리툴 → 레코드 설정에서 위 2건 추가
 - apex(@)는 CNAME 불가(표준 DNS) → 반드시 A 레코드 사용
-- 가비아 기본 네임서버 유지(`ns.gabia.co.kr` 등). 또는 Vercel 네임서버로 위임도 가능하나 A/CNAME 방식이 단순
+- 기존 `@`/`www`에 다른 A/CNAME(예: GitHub Pages용) 있으면 삭제 후 교체
+- 가비아 기본 네임서버 유지. 또는 Vercel 네임서버 위임도 가능하나 A/CNAME 방식이 단순
+- 저장 후 Vercel Domains에서 Refresh → Invalid→Valid 전환 시 TLS 자동 발급
 - 전파 후(수분~수시간) Vercel Domains 화면이 Valid로 바뀌고 TLS 인증서 자동 발급 → HTTPS 자동 적용 (`.dev` HSTS도 Vercel이 처리)
 
 ### 10-4. 배포 확인 후 (다음 세션 작업)
