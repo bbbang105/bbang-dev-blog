@@ -1,56 +1,92 @@
-**English** · [한국어](./README.ko.md)
-
 # bbang.dev
 
-[bbang.dev](https://bbang.dev) — Sangho Han's personal tech blog.
-Notes on backend, infra, AI/LLM serving, and security. ~142 posts.
-Full‑monospace, pure black‑and‑white, dotted editorial design.
+[https://bbang.dev](https://bbang.dev) — Sangho Han's personal tech blog.
 
-## Stack
+## Tech stack
 
-Astro 6 (static, zero integrations) · TypeScript + Content Collections ·
-Shiki dual‑theme · hand‑written single CSS · deployed on Vercel.
+- **Astro 6** — static output, **zero external integrations** (minimal‑deps
+  principle)
+- **TypeScript** + Content Collections (Zod schema validation)
+- **Shiki** dual‑theme code highlighting (github‑light / tokyo‑night)
+- Hand‑written single CSS (`src/styles/global.css`); font Sarasa Mono K
+  (self‑hosted)
+- Client JS is islands only — search, pagination, TOC, progress bar,
+  copy, lightbox, back‑to‑top
+- Deployed on **Vercel** (auto build, auto TLS). `.dev` is HSTS‑preloaded
+  → HTTPS enforced
 
-## Develop
+## Local development
 
 ```bash
 pnpm install
-pnpm dev      # localhost:4321
-pnpm build    # static dist/
-pnpm lint     # astro check
+pnpm dev      # http://localhost:4321
+pnpm build    # static output to dist/ (146 pages)
+pnpm preview  # serve the build
+pnpm lint     # astro check (types)
 ```
 
-## Write a post
+## Writing a post
 
-Add `src/content/posts/<category>/<slug>.md`. Images go in
-`public/assets/` (lowercase) and are referenced as `/assets/...`.
-Plain Markdown + GFM only (no Obsidian syntax).
+Write in the Obsidian vault, then copy the `.md` into
+`src/content/posts/<category>/<slug>.md`, put images in `public/assets/`,
+commit and push — Vercel rebuilds. (Not an Obsidian integration; it just
+renders the `.md` files.)
+
+### Frontmatter
 
 ```yaml
 ---
-title: "Title"          # required
-date: 2026-04-01         # required
-description: one line    # optional — meta/OG/RSS
-category: "AI"           # optional — label
-tags: [ai, llm]          # optional — clickable → /?q=tag
-thumbnail: /assets/x.png # optional — card thumb
+title: "Post title"        # required (string)
+date: 2026-04-01           # required (date)
+description: one‑line      # optional — meta / OG / RSS / shown under title
+category: "AI"             # optional — meta label
+tags: [ai, llm]            # optional — meta + click → /?q=tag search
+thumbnail: /assets/x.png   # optional — list‑card thumbnail
 ---
 ```
 
-Folder = URL (`/posts/<folder>/<slug>/`) = collection. Reading time,
-heading anchors, canonical, OG and JSON‑LD are all automatic.
+- Validated by Zod. Missing/mistyped `title` or `date` fails the build;
+  unknown keys are ignored.
+- The folder a post lives in is its URL (`/posts/<folder>/<slug>/`) and
+  its collection.
+- Image paths must be **lowercase `/assets/`** (uppercase `Assets` breaks
+  local dev).
+- Body headings: use `#` (section) / `##` (sub) / `###` (detail)
+  consistently.
+- No Obsidian‑specific syntax (`[[ ]]`, `![[ ]]`, `> [!callout]`) —
+  standard Markdown + GFM (tables) only.
+- Reading time, heading anchors, canonical, OG and JSON‑LD are automatic.
 
 ## Features
 
-Client‑side search · category collections · sticky/drawer TOC ·
-heading & post link copy · reading progress · code copy · image
-lightbox · light/dark · back‑to‑top · scoped EN/KO toggle on About ·
-RSS · sitemap · llms.txt · GA4. Built dependency‑free.
+- Home: numbered ledger feed + full client‑side search (keyword `<mark>`
+  highlight) + pagination
+- Collections: category accordion / meta tags click → `/?q=tag` filter
+- Post: TOC (desktop sticky rail / mobile drawer) with scrollspy, heading
+  link anchors (copy section URL), copy post link, reading time, reading
+  progress bar, code copy, image lightbox, back‑to‑top
+- Theme: light by default (no flash), dark toggle — a soft invert
+  (`#fff ↔ #0a0a0a` / `#f4f4f4`), no color
+- i18n: header/footer always English; the About page has its own scoped
+  ko/en toggle
+- Accessibility: respects `prefers-reduced-motion`, dotted `:focus-visible`
+- About: kiko intro + self‑built / career / certifications portfolio
 
-## Deploy
+## SEO / GEO
 
-Push to `main` → Vercel auto‑builds. Custom domain `bbang.dev`
-(apex primary, `www` → apex). CI: `pnpm lint` + `pnpm build`.
+- canonical (Korean slugs %‑encoded) · OG · Twitter Card
+- JSON‑LD `@graph`: WebSite + Person (sameAs) + BlogPosting on posts
+- `sitemap.xml` (all URLs) · `rss.xml` (all posts) · `robots.txt` ·
+  `llms.txt`
+- Google Analytics 4
+- All written by hand (zero deps). hreflang is intentionally omitted —
+  it's a single‑URL client toggle, not per‑language URLs.
+
+## Deployment
+
+GitHub `bbbang105/bbang-dev-blog` → Vercel (auto build on push to `main`).
+Custom domain `bbang.dev` (apex primary, `www` → apex 307), DNS via
+registrar A/CNAME records. CI: `pnpm lint` + `pnpm build` (must be green).
 
 ---
 
