@@ -105,6 +105,18 @@ body {
   display: none !important;
 }
 
+/* About content has its own ko/en toggle (#about-i18n), independent of
+   the always-English chrome. These override the global rule above for
+   that subtree only (equal specificity, declared later). */
+.about-i18n[data-lang="en"] [data-lang-ko],
+.about-i18n[data-lang="ko"] [data-lang-en] {
+  display: none !important;
+}
+.about-i18n[data-lang="ko"] [data-lang-ko],
+.about-i18n[data-lang="en"] [data-lang-en] {
+  display: revert !important;
+}
+
 /* Links: no color ever. Affordance = dashed underline that goes solid +
    thickens on hover. */
 a {
@@ -1805,6 +1817,11 @@ a.pg-n:hover {
   display: block;
   margin-bottom: 1.2rem;
 }
+.about-langbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.2rem;
+}
 .kiko-block {
   border: 1.5px dashed var(--line);
   padding: clamp(1.6rem, 4vw, 2.6rem);
@@ -1956,7 +1973,7 @@ a.pg-n:hover {
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.certs span {
+.certs > span {
   font-size: var(--fs-small);
   border: 1px dashed var(--hair);
   padding: 0.3rem 0.65rem;

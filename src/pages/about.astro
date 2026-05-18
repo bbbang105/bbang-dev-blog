@@ -5,11 +5,19 @@ import { about } from "../i18n";
 ---
 
 <Base title="About — bbang.dev" current="about">
+  <div class="about-i18n" id="about-i18n" data-lang="en">
   <section class="about-hero">
     <div class="wrap">
-      <span class="label">
-        <T en={about.whoLabel.en} ko={about.whoLabel.ko} />
-      </span>
+      <div class="about-langbar">
+        <button
+          class="theme-toggle ico"
+          id="lang-toggle"
+          type="button"
+          aria-label="Toggle language"
+        >
+          <span data-lang-en>KO</span><span data-lang-ko>EN</span>
+        </button>
+      </div>
       <div class="kiko-block">
         <span class="tag-now">
           <T en={about.kikoBadge.en} ko={about.kikoBadge.ko} />
@@ -115,4 +123,27 @@ import { about } from "../i18n";
       </div>
     </div>
   </section>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var box = document.getElementById("about-i18n");
+      var btn = document.getElementById("lang-toggle");
+      if (!box) return;
+      var l = "en";
+      try {
+        var s = localStorage.getItem("aboutLang");
+        if (s === "ko" || s === "en") l = s;
+      } catch (e) {}
+      box.dataset.lang = l;
+      if (btn)
+        btn.addEventListener("click", function () {
+          var next = box.dataset.lang === "ko" ? "en" : "ko";
+          box.dataset.lang = next;
+          try {
+            localStorage.setItem("aboutLang", next);
+          } catch (e) {}
+        });
+    })();
+  </script>
 </Base>

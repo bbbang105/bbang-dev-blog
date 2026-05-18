@@ -37,7 +37,6 @@ const person = {
     "https://github.com/bbbang105",
     "https://www.linkedin.com/in/sangho105/",
     "https://www.instagram.com/bbang_dev/",
-    "https://www.threads.com/@bbang_dev",
     "https://x.com/bbang_dev",
   ],
 };
@@ -100,10 +99,7 @@ const jsonLd = {
       (function () {
         try {
           var t = localStorage.getItem("theme");
-          if (!t)
-            t = window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
+          if (t !== "dark" && t !== "light") t = "light";
           document.documentElement.dataset.theme = t;
         } catch (e) {}
       })();
@@ -111,11 +107,11 @@ const jsonLd = {
     {/* No-flash language: applied before paint. Default = en. */}
     <script is:inline>
       (function () {
+        // Global chrome (header/footer/nav) is always English.
+        // Per-page language (currently only About) is scoped locally.
         try {
-          var l = localStorage.getItem("lang");
-          if (l !== "ko" && l !== "en") l = "en";
-          document.documentElement.dataset.lang = l;
-          document.documentElement.lang = l;
+          document.documentElement.dataset.lang = "en";
+          document.documentElement.lang = "en";
         } catch (e) {}
       })();
     </script>
@@ -169,14 +165,6 @@ const jsonLd = {
             <small>tech log</small>
           </a>
           <div class="mast-tools">
-            <button
-              class="theme-toggle ico"
-              id="lang-toggle"
-              type="button"
-              aria-label="Toggle language"
-            >
-              <span data-lang-en>KO</span><span data-lang-ko>EN</span>
-            </button>
             <button
               class="theme-toggle ico"
               id="theme-toggle"
@@ -236,9 +224,6 @@ const jsonLd = {
           <a href="https://www.instagram.com/bbang_dev/" rel="me noopener"
             >Instagram</a
           >
-          <a href="https://www.threads.com/@bbang_dev" rel="me noopener"
-            >Threads</a
-          >
           <a href="https://x.com/bbang_dev" rel="me noopener">X</a>
           <a href="mailto:hchsa77@gmail.com">Email</a>
         </nav>
@@ -268,21 +253,6 @@ const jsonLd = {
           sync();
         });
         sync();
-      })();
-    </script>
-    <script is:inline>
-      (function () {
-        var btn = document.getElementById("lang-toggle");
-        if (!btn) return;
-        btn.addEventListener("click", function () {
-          var cur = document.documentElement.dataset.lang;
-          var next = cur === "ko" ? "en" : "ko";
-          document.documentElement.dataset.lang = next;
-          document.documentElement.lang = next;
-          try {
-            localStorage.setItem("lang", next);
-          } catch (e) {}
-        });
       })();
     </script>
     <script is:inline>
