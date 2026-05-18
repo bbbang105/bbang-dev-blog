@@ -136,6 +136,58 @@ mark {
   border-radius: 0;
 }
 
+/* Respect OS "reduce motion": near-instant transitions/animations,
+   no smooth scroll. Covers drawer, progress bar, lightbox, etc. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Heading anchor (#) — appears on hover/focus of post h2/h3. */
+.prose h2,
+.prose h3 {
+  position: relative;
+}
+.head-anchor {
+  margin-left: 0.45em;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.14s ease;
+}
+.prose h2:hover .head-anchor,
+.prose h3:hover .head-anchor,
+.head-anchor:focus-visible {
+  opacity: 1;
+}
+
+/* Body-image lightbox — dark overlay, centered image (drawer-tone). */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 5vmin;
+  background: rgba(10, 10, 10, 0.92);
+  cursor: zoom-out;
+}
+.lightbox[hidden] {
+  display: none;
+}
+.lightbox img {
+  max-width: 100%;
+  max-height: 100%;
+  border: 1px solid var(--paper);
+}
+
 /* Hard overflow guard: no embedded/media element may exceed its container. */
 img,
 svg,

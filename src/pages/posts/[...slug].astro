@@ -21,6 +21,18 @@ const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 const fmtDate = (d: Date) =>
   d.toISOString().slice(0, 10).replace(/-/g, ".");
+
+// Estimated reading time: strip code/markdown/markup, count remaining
+// characters, ~500 chars/min (Korean long-form pace). Floor of 1 min.
+const _plain = (post.body ?? "")
+  .replace(/```[\s\S]*?```/g, "")
+  .replace(/`[^`]*`/g, "")
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, "")
+  .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+  .replace(/<[^>]+>/g, "")
+  .replace(/[#>*_~|>\-]/g, "")
+  .replace(/\s+/g, "");
+const readMin = Math.max(1, Math.round(_plain.length / 500));
 ---
 
 <Base
@@ -47,6 +59,10 @@ const fmtDate = (d: Date) =>
           <span>
             <T en={ui.en.metaPublished} ko={ui.ko.metaPublished} />
             {" "}{fmtDate(post.data.date)}
+          </span>
+          <span class="dot">·</span>
+          <span>
+            <T en={`${readMin} min read`} ko={`약 ${readMin}분`} />
           </span>
           {
             post.data.tags.length > 0 && (
@@ -244,6 +260,57 @@ const fmtDate = (d: Date) =>
         }
         window.addEventListener("scroll", spy, { passive: true });
         spy();
+      }
+
+      // 4. Heading anchor links (#) — appended to post h2/h3 with an id
+      Array.prototype.forEach.call(
+        document.querySelectorAll(".prose h2[id], .prose h3[id]"),
+        function (h) {
+          var a = document.createElement("a");
+          a.className = "head-anchor";
+          a.href = "#" + h.id;
+          a.setAttribute("aria-label", "이 섹션 링크");
+          a.textContent = "#";
+          h.appendChild(a);
+        },
+      );
+
+      // 5. Image lightbox — click a body image to view it enlarged.
+      // Linked images keep their link (skipped).
+      var imgs = document.querySelectorAll(".prose img");
+      if (imgs.length) {
+        var box = null;
+        var big = null;
+        function lbClose() {
+          if (!box) return;
+          box.hidden = true;
+          document.documentElement.style.overflow = "";
+        }
+        function lbOpen(src, alt) {
+          if (!box) {
+            box = document.createElement("div");
+            box.className = "lightbox";
+            box.hidden = true;
+            big = document.createElement("img");
+            box.appendChild(big);
+            document.body.appendChild(box);
+            box.addEventListener("click", lbClose);
+            document.addEventListener("keydown", function (e) {
+              if (e.key === "Escape") lbClose();
+            });
+          }
+          big.src = src;
+          big.alt = alt || "";
+          box.hidden = false;
+          document.documentElement.style.overflow = "hidden";
+        }
+        Array.prototype.forEach.call(imgs, function (im) {
+          if (im.closest("a")) return;
+          im.style.cursor = "zoom-in";
+          im.addEventListener("click", function () {
+            lbOpen(im.currentSrc || im.src, im.alt);
+          });
+        });
       }
     })();
   </script>
