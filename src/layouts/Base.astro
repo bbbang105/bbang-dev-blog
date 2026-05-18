@@ -6,11 +6,72 @@ interface Props {
   title: string;
   description?: string;
   current?: "home" | "collections" | "about";
+  // Set on post pages: switches og:type to "article" and emits BlogPosting.
+  published?: Date;
 }
 
-const { title, description = "한상호 — 기술 블로그 (Astro 프로토타입)", current } =
-  Astro.props;
+const {
+  title,
+  description = "한상호(Sangho Han)의 기술 블로그. 백엔드·인프라·AI/LLM 서빙·보안 대응·엔지니어링 회고를 기록합니다.",
+  current,
+  published,
+} = Astro.props;
 const year = new Date().getFullYear();
+
+// --- SEO/GEO ---
+const SITE = "https://bbang.dev";
+// Canonical: served URLs are directory-style (trailing slash); normalize so
+// the tag always matches the live URL. new URL() percent-encodes Korean
+// slugs, staying consistent with sitemap.xml.
+const _p = Astro.url.pathname;
+const canonical = new URL(_p.endsWith("/") ? _p : _p + "/", SITE).href;
+const isArticle = !!published;
+const headline = title.replace(/\s+—\s+bbang\.dev$/, "");
+
+const person = {
+  "@type": "Person",
+  "@id": `${SITE}/#person`,
+  name: "한상호 (Sangho Han)",
+  url: `${SITE}/about/`,
+  sameAs: [
+    "https://github.com/bbbang105",
+    "https://www.linkedin.com/in/sangho105/",
+    "https://www.instagram.com/bbang_dev/",
+    "https://www.threads.com/@bbang_dev",
+    "https://x.com/bbang_dev",
+  ],
+};
+const website = {
+  "@type": "WebSite",
+  "@id": `${SITE}/#website`,
+  url: `${SITE}/`,
+  name: "bbang.dev",
+  inLanguage: "ko",
+  publisher: { "@id": `${SITE}/#person` },
+};
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    website,
+    person,
+    ...(isArticle
+      ? [
+          {
+            "@type": "BlogPosting",
+            headline,
+            datePublished: published!.toISOString(),
+            dateModified: published!.toISOString(),
+            author: { "@id": `${SITE}/#person` },
+            publisher: { "@id": `${SITE}/#person` },
+            mainEntityOfPage: canonical,
+            url: canonical,
+            image: `${SITE}/og/default.png`,
+            inLanguage: "ko",
+          },
+        ]
+      : []),
+  ],
+};
 ---
 
 <!doctype html>
@@ -58,6 +119,32 @@ const year = new Date().getFullYear();
         } catch (e) {}
       })();
     </script>
+    {/* SEO/GEO: canonical, OG core, Twitter text, RSS, JSON-LD.
+        og:image / twitter:card / twitter:image are set above. */}
+    <link rel="canonical" href={canonical} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="bbang.dev"
+      href={`${SITE}/rss.xml`}
+    />
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
+    <meta property="og:site_name" content="bbang.dev" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {
+      isArticle && (
+        <meta
+          property="article:published_time"
+          content={published!.toISOString()}
+        />
+      )
+    }
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <header class="masthead">
