@@ -27,13 +27,16 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 - **이미지 전수 복구: (1) `/Assets/`→`/assets/` 케이스 정규화 5개 글 (git 추적 dir은 소문자 `public/assets/`, Vercel Linux 대소문자 구분으로 전 이미지 404였음) (2) 공백 파일명 2건 ascii rename(`velog-activity.png`,`blog-move-reason-1.png`). 라이브 이미지 전부 200 검증 (commit e084d71, efea418)**
 - **canonical = apex 전환 완료: `https://bbang.dev` primary, `www`→apex 307. 검증됨**
 - **SEO/GEO 1차 완료 (의존성 0, 손수 엔드포인트): `src/pages/sitemap.xml.ts`(145 URL=정적3+포스트142, 한글경로 %인코딩), `src/pages/rss.xml.ts`(RSS2.0 142건), `public/robots.txt`, `public/llms.txt`. 라이브 200 검증 (commit 59236be). RSS는 Vercel 정적서빙이 application/xml 부여(비차단)**
-- **푸시 완료: 모든 커밋 origin/main 반영, CI green**
+- **다른 세션 favicon/OG 작업 머지됨 (commit ccbae7f): favicon 세트·og/default·site.webmanifest·i18n. push 완료**
+- **SEO/GEO 2차 완료 (commit 51b3d77, Base.astro): canonical(Astro.url+site, 한글 %인코딩=sitemap 일치)·og:type/site_name/locale/title/description/url·twitter:title/description·RSS `<link rel=alternate>`·JSON-LD @graph(WebSite+Person sameAs5+글은 BlogPosting). 글=article, 일반=website 조건분기. 기존 og:image/twitter:card 미중복. 라이브 검증 완료. hreflang은 단일 URL 클라이언트 ko/en 토글 구조라 의도적 제외**
+- **푸시 완료: 모든 커밋 origin/main 반영, CI green. 사이트 출시 완료 상태**
 
-남은 핵심 (P0):
-1. ~~도메인~~ / ~~site~~ / ~~Vercel 배포~~ / ~~이미지 복구~~ / ~~canonical(apex)~~ / ~~SEO 1차~~ — 완료
-2. **SEO/GEO 2차 (head 메타) — Base.astro 의존, 블록됨**: canonical·og:url/title/type/site_name·full Twitter card·JSON-LD(BlogPosting/Person/WebSite)·hreflang(ko/en)·RSS `<link rel=alternate>` 는 전부 `Base.astro <head>`에 들어가야 함. 그런데 `Base.astro`에 **다른 세션 미커밋 OG/favicon 작업 14줄**이 진행 중 → 충돌. **다른 세션이 Base.astro를 커밋한 뒤** 그 위에 통합해야 함 (사용자 결정사항)
+남은 핵심 (P0): **전부 완료** (도메인·site·Vercel·이미지·canonical·SEO 1·2차)
 
-그다음 (P1): favicon/PWA/GA — **주의: `src/layouts/Base.astro` 수정 + `public/favicon*·logo.svg·og/·site.webmanifest` 가 다른 세션에서 미커밋 상태로 진행 중. 건드리지 말 것(사용자 지시)**
+그다음 (P1, 선택):
+- GA(기존 G-BKNGY77L23 재사용 여부 결정 필요)
+- og:image 동적 생성(글별 OG 이미지 — 현재 전 페이지 공통 og/default.png). `src/pages/cover/[...id].svg.ts` 기존 커버 생성기 재활용 검토
+- 접근성/검색 하이라이트 등 §6 P2 항목
 참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
 
 
