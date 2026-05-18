@@ -156,18 +156,85 @@ mark {
   position: relative;
 }
 .head-anchor {
-  margin-left: 0.45em;
-  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5em;
   color: var(--muted);
   text-decoration: none;
   opacity: 0;
-  transition: opacity 0.14s ease;
+  transition: opacity 0.14s ease, color 0.14s ease;
+}
+.head-anchor svg {
+  display: block;
 }
 .prose h1:hover .head-anchor,
 .prose h2:hover .head-anchor,
 .prose h3:hover .head-anchor,
 .head-anchor:focus-visible {
   opacity: 1;
+}
+.head-anchor:hover {
+  color: var(--ink);
+}
+/* Copied feedback: brief check mark beside the link icon. */
+.head-anchor.copied {
+  opacity: 1;
+  color: var(--ink);
+}
+.head-anchor.copied::after {
+  content: "✓";
+  margin-left: 0.3em;
+  font-size: 0.82em;
+  font-weight: 700;
+}
+
+/* Clickable meta tag → home search filtered by that tag. */
+.tag-link {
+  color: inherit;
+  text-decoration: none;
+}
+.tag-link:hover,
+.tag-link:focus-visible {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+/* Copy-post-link — a link-style action (icon + underlined text),
+   deliberately distinct from the boxed .code-copy. */
+.link-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.02em;
+  transition: color 0.14s ease;
+}
+.link-copy .lc-ico {
+  display: block;
+  flex: none;
+}
+.link-copy .lc-txt {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+}
+.link-copy:hover,
+.link-copy:focus-visible {
+  color: var(--ink);
+}
+.link-copy.is-done {
+  color: var(--ink);
+}
+.link-copy.is-done .lc-txt {
+  text-decoration: none;
 }
 
 /* Body-image lightbox — dark overlay, centered image (drawer-tone). */
@@ -1317,8 +1384,20 @@ a.pg-n:hover {
   margin-left: -0.9rem;
   transition: color 0.12s ease;
 }
+/* TOC mirrors the md heading structure: d1 top section (prominent),
+   d2 sub (indented), d3 detail (deepest, dimmed). */
+.post-toc li.toc-d1 a {
+  color: var(--ink);
+  font-weight: 600;
+}
+.post-toc li.toc-d1:not(:first-child) a {
+  margin-top: 0.5rem;
+}
+.post-toc li.toc-d2 a {
+  padding-left: 1.55rem;
+}
 .post-toc li.toc-d3 a {
-  padding-left: 2rem;
+  padding-left: 2.3rem;
   font-size: 0.8rem;
   color: var(--hair);
 }
@@ -1480,16 +1559,20 @@ a.pg-n:hover {
   letter-spacing: -0.01em;
   margin-top: 2.8rem;
 }
+/* Clear, stepped hierarchy so md #/##/### read distinctly:
+   h1 = major section (dominant), h2 = sub-section (dashed rule),
+   h3 = detail. */
 .prose h1 {
-  font-size: 1.7rem;
+  font-size: 2.05rem;
 }
 .prose h2 {
-  font-size: 1.42rem;
+  font-size: 1.4rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px dashed var(--hair);
 }
 .prose h3 {
-  font-size: 1.18rem;
+  font-size: 1.12rem;
+  color: var(--muted);
 }
 .prose h2 + *,
 .prose h3 + * {
@@ -1600,6 +1683,11 @@ a.pg-n:hover {
   margin: 0 auto;
   border-top: 1.5px dashed var(--line);
   padding: 2rem 0 3rem;
+}
+
+/* Article header actions (copy-link) — under the title/desc. */
+.article-actions {
+  margin: 1.5rem 0 0;
 }
 .post-nav a {
   font-size: var(--fs-small);

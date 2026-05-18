@@ -17,7 +17,9 @@ const { Content, headings } = await render(post);
 
 // TOC: body section headings only (h2/h3). The page <h1> is the title,
 // rendered separately in the article header — exclude it.
-const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+// Body headings: include h1 (many posts use `#` for top-level sections,
+// only the page title h1 lives outside .prose and is excluded by render()).
+const toc = headings.filter((h) => h.depth >= 1 && h.depth <= 3);
 
 const fmtDate = (d: Date) =>
   d.toISOString().slice(0, 10).replace(/-/g, ".");
@@ -78,7 +80,9 @@ const readMin = Math.max(1, Math.round(_plain.length / 500));
             post.data.tags.map((t) => (
               <>
                 <span class="dot">·</span>
-                <span>{t}</span>
+                <a class="tag-link" href={`/?q=${encodeURIComponent(t)}`}>
+                  {t}
+                </a>
               </>
             ))
           }
@@ -89,6 +93,26 @@ const readMin = Math.max(1, Math.round(_plain.length / 500));
             <p class="desc">{post.data.description}</p>
           )
         }
+        <div class="article-actions">
+          <button class="link-copy" id="post-link-copy" type="button">
+            <svg
+              class="lc-ico"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M9 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1" />
+              <path d="M15 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1" />
+            </svg>
+            <span class="lc-txt">Copy link</span>
+          </button>
+        </div>
         <hr class="rule" />
       </header>
     </div>
@@ -262,7 +286,31 @@ const readMin = Math.max(1, Math.round(_plain.length / 500));
         spy();
       }
 
-      // 4. Heading anchor links (#) — appended to post h2/h3 with an id
+      // Shared optimistic clipboard copy (same fallback as code-copy).
+      function copyText(str) {
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(str).catch(function () {});
+          } else {
+            var ta = document.createElement("textarea");
+            ta.value = str;
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand("copy");
+            document.body.removeChild(ta);
+          }
+        } catch (e) {}
+      }
+
+      // 4. Heading anchor — link icon; click copies that section's URL.
+      var LINK_SVG =
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none"' +
+        ' stroke="currentColor" stroke-width="2.2" stroke-linecap="round"' +
+        ' stroke-linejoin="round" aria-hidden="true">' +
+        '<path d="M9 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/>' +
+        '<path d="M15 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>';
       Array.prototype.forEach.call(
         document.querySelectorAll(
           ".prose h1[id], .prose h2[id], .prose h3[id]",
@@ -271,11 +319,41 @@ const readMin = Math.max(1, Math.round(_plain.length / 500));
           var a = document.createElement("a");
           a.className = "head-anchor";
           a.href = "#" + h.id;
-          a.setAttribute("aria-label", "이 섹션 링크");
-          a.textContent = "#";
+          a.setAttribute("aria-label", "이 섹션 링크 복사");
+          a.innerHTML = LINK_SVG;
+          a.addEventListener("click", function (e) {
+            e.preventDefault();
+            copyText(
+              location.origin + location.pathname + "#" + h.id,
+            );
+            try {
+              history.replaceState(null, "", "#" + h.id);
+            } catch (e2) {}
+            a.classList.add("copied");
+            clearTimeout(a._t);
+            a._t = setTimeout(function () {
+              a.classList.remove("copied");
+            }, 1400);
+          });
           h.appendChild(a);
         },
       );
+
+      // 4b. Copy full post link button (post-nav).
+      var plc = document.getElementById("post-link-copy");
+      if (plc) {
+        var plcTxt = plc.querySelector(".lc-txt");
+        plc.addEventListener("click", function () {
+          copyText(location.href.split("#")[0]);
+          if (plcTxt) plcTxt.textContent = "Link copied";
+          plc.classList.add("is-done");
+          clearTimeout(plc._t);
+          plc._t = setTimeout(function () {
+            if (plcTxt) plcTxt.textContent = "Copy link";
+            plc.classList.remove("is-done");
+          }, 1600);
+        });
+      }
 
       // 5. Image lightbox — click a body image to view it enlarged.
       // Linked images keep their link (skipped).
