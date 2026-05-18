@@ -23,15 +23,17 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 - **옵시디언 전용 문법 정책 = 미사용 확정. 기존 1편(`생각/블로그를-이전한-이유…`)의 `![[ ]]` 3건 → `<img src="/Assets/…">` 변환 완료, 빌드 green (commit 336382d). remark 플러그인 불필요**
 - **콘텐츠 동기화 정책 확정: 자동 파이프라인 미구축. 사용자가 옵시디언 볼트의 .md를 이 레포로 직접 복사 후 커밋/푸시 (수동 운영)**
 
+- **Vercel 배포 라이브: `https://www.bbang.dev` 정상(HTTPS·TLS OK·HSTS). 전 페이지 200, 디자인 톤 정상. CI green**
+- **이미지 전수 복구: (1) `/Assets/`→`/assets/` 케이스 정규화 5개 글 (git 추적 dir은 소문자 `public/assets/`, Vercel Linux 대소문자 구분으로 전 이미지 404였음) (2) 공백 파일명 2건 ascii rename(`velog-activity.png`,`blog-move-reason-1.png`). 라이브 이미지 전부 200 검증 (commit e084d71, efea418)**
+- **푸시 완료: 모든 커밋 origin/main 반영, CI green**
+
 남은 핵심 (P0):
-1. ~~도메인~~ / ~~site 교체~~ — 완료
-2. **호스팅 연결 (사용자 대시보드 작업)**: Vercel에 레포 import → 자동 빌드(pnpm) → bbang.dev 커스텀 도메인 연결. DNS는 국내 등록처 관리툴에서 A/CNAME 레코드 설정. `.dev`는 HSTS preload라 HTTPS 필수인데 Vercel이 TLS 인증서 자동 발급·갱신(무료). → 절차는 §10 참조
-3. (배포 확인 후) SEO/GEO 풀세팅 — sitemap/RSS/OG/JSON-LD/llms.txt 등 일괄
+1. ~~도메인~~ / ~~site 교체~~ / ~~Vercel 배포~~ / ~~이미지 복구~~ — 완료
+2. **canonical = apex(bbang.dev) 결정됨. 사용자 Vercel 대시보드 작업 1건 남음**: Project → Settings → Domains에서 `bbang.dev`를 **Set as Primary**로 변경 (현재 www가 primary라 apex→www 307 중 → www→apex로 뒤집기). astro.config는 이미 `https://bbang.dev`라 코드 변경 불필요. DNS(가비아) 레코드는 그대로 유지
+3. (apex primary 전환 후) SEO/GEO 풀세팅 — canonical·OG·sitemap(@astrojs/sitemap)·RSS(@astrojs/rss)·robots.txt·JSON-LD(BlogPosting/Person/WebSite)·llms.txt·hreflang(ko/en) 일괄
 
-그다음 (P1): favicon/PWA/GA
+그다음 (P1): favicon/PWA/GA — **주의: `src/layouts/Base.astro` 수정 + `public/favicon*·logo.svg·og/·site.webmanifest` 가 다른 세션에서 미커밋 상태로 진행 중. 건드리지 말 것(사용자 지시)**
 참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
-
-미푸시: 로컬 커밋 2건(52fd4f3, 336382d) 존재 — 사용자 승인 후 푸시 예정 (푸시 시 CI 작동)
 
 
 ---
