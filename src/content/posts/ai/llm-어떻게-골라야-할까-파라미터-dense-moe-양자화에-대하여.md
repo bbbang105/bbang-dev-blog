@@ -5,7 +5,7 @@ date: 2026-04-01
 description: 파라미터란 무엇이고, Dense와 MoE는 어떻게 다르며, 양자화는 왜 필요한지 — GPU 서버에 LLM을 직접 올리며 배운 것들을 정리합니다.
 tags:
   - ai
-thumbnail: /Assets/llm-thumbnail.png
+thumbnail: /assets/llm-thumbnail.png
 ---
 
 ---
