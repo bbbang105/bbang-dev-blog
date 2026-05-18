@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://bbbang105.github.io",
+  site: "https://bbang.dev",
   markdown: {
     // Astro's built-in Shiki. Dual theme: github-light / tokyo-night (dark).
     shikiConfig: {
