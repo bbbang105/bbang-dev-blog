@@ -25,12 +25,13 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 
 - **Vercel 배포 라이브: `https://www.bbang.dev` 정상(HTTPS·TLS OK·HSTS). 전 페이지 200, 디자인 톤 정상. CI green**
 - **이미지 전수 복구: (1) `/Assets/`→`/assets/` 케이스 정규화 5개 글 (git 추적 dir은 소문자 `public/assets/`, Vercel Linux 대소문자 구분으로 전 이미지 404였음) (2) 공백 파일명 2건 ascii rename(`velog-activity.png`,`blog-move-reason-1.png`). 라이브 이미지 전부 200 검증 (commit e084d71, efea418)**
+- **canonical = apex 전환 완료: `https://bbang.dev` primary, `www`→apex 307. 검증됨**
+- **SEO/GEO 1차 완료 (의존성 0, 손수 엔드포인트): `src/pages/sitemap.xml.ts`(145 URL=정적3+포스트142, 한글경로 %인코딩), `src/pages/rss.xml.ts`(RSS2.0 142건), `public/robots.txt`, `public/llms.txt`. 라이브 200 검증 (commit 59236be). RSS는 Vercel 정적서빙이 application/xml 부여(비차단)**
 - **푸시 완료: 모든 커밋 origin/main 반영, CI green**
 
 남은 핵심 (P0):
-1. ~~도메인~~ / ~~site 교체~~ / ~~Vercel 배포~~ / ~~이미지 복구~~ — 완료
-2. **canonical = apex(bbang.dev) 결정됨. 사용자 Vercel 대시보드 작업 1건 남음**: Project → Settings → Domains에서 `bbang.dev`를 **Set as Primary**로 변경 (현재 www가 primary라 apex→www 307 중 → www→apex로 뒤집기). astro.config는 이미 `https://bbang.dev`라 코드 변경 불필요. DNS(가비아) 레코드는 그대로 유지
-3. (apex primary 전환 후) SEO/GEO 풀세팅 — canonical·OG·sitemap(@astrojs/sitemap)·RSS(@astrojs/rss)·robots.txt·JSON-LD(BlogPosting/Person/WebSite)·llms.txt·hreflang(ko/en) 일괄
+1. ~~도메인~~ / ~~site~~ / ~~Vercel 배포~~ / ~~이미지 복구~~ / ~~canonical(apex)~~ / ~~SEO 1차~~ — 완료
+2. **SEO/GEO 2차 (head 메타) — Base.astro 의존, 블록됨**: canonical·og:url/title/type/site_name·full Twitter card·JSON-LD(BlogPosting/Person/WebSite)·hreflang(ko/en)·RSS `<link rel=alternate>` 는 전부 `Base.astro <head>`에 들어가야 함. 그런데 `Base.astro`에 **다른 세션 미커밋 OG/favicon 작업 14줄**이 진행 중 → 충돌. **다른 세션이 Base.astro를 커밋한 뒤** 그 위에 통합해야 함 (사용자 결정사항)
 
 그다음 (P1): favicon/PWA/GA — **주의: `src/layouts/Base.astro` 수정 + `public/favicon*·logo.svg·og/·site.webmanifest` 가 다른 세션에서 미커밋 상태로 진행 중. 건드리지 말 것(사용자 지시)**
 참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
