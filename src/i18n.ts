@@ -15,7 +15,7 @@ export const ui = {
     introLabel: "// Latest writing",
     introHeading: "Notes on backend, infrastructure, and building things.",
     introSub:
-      "A tech blog by Sangho Han, an AI-native product builder. Performance tuning, infra cost optimization, security response, and retrospectives. 140+ posts over 2 years — this is an Astro prototype porting a few of them.",
+      "A tech blog by Sangho Han, an AI-native product builder. Performance tuning, infra cost optimization, security response, and retrospectives. 140+ posts over 2 years.",
     sectionPosts: "Posts",
     postsCount: "entries ported",
     footCtaLabel: "// More",
@@ -46,7 +46,7 @@ export const ui = {
     introLabel: "// 최근 글",
     introHeading: "백엔드, 인프라, 그리고 만드는 것에 대한 기록.",
     introSub:
-      "AI 네이티브로 제품을 만드는 한상호의 기술 블로그입니다. 성능 개선, 인프라 비용 최적화, 보안 대응, 그리고 회고를 남깁니다. 2년간 140편 이상 작성 — 여기는 그 일부를 옮긴 Astro 프로토타입입니다.",
+      "AI 네이티브로 제품을 만드는 한상호의 기술 블로그입니다. 성능 개선, 인프라 비용 최적화, 보안 대응, 그리고 회고를 남깁니다. 2년간 140편 이상 작성.",
     sectionPosts: "글",
     postsCount: "편 이전됨",
     footCtaLabel: "// 더 보기",

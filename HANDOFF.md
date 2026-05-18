@@ -25,10 +25,10 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 
 ```
 src/
-  pages/         index / collections / about / posts/[slug] / page/[page] / 404 / cover/[id].svg.ts
+  pages/         index / collections / about / posts/[...slug] / page/[page] / 404 / cover/[...id].svg.ts
   layouts/Base.astro    공통 셸(헤더 2단 반응형, 푸터, 테마/언어 토글)
   components/T.astro     ko/en 분기 컴포넌트
-  content/posts/*.md     글 141개
+  content/posts/<카테고리>/<safe-slug>.md   글 142개 (원본 파일명→안전 슬러그, 폴더=카테고리)
   content.config.ts      frontmatter 스키마(title/date/tags/description/category/thumbnail/bodyImage)
   styles/global.css      전체 디자인 시스템(단일 파일)
   i18n.ts                UI 문자열 ko/en
@@ -66,7 +66,7 @@ npm run check      # astro check (타입)
 ### P0 — 배포 전 필수
 1. **도메인**: 사용자가 구매 예정. 확정되면 `astro.config.mjs`의 `site`를 실제 도메인으로 교체(현재 `https://bbbang105.github.io` placeholder). `public/CNAME`(GitHub Pages 시) 또는 호스팅 DNS 설정
 2. **호스팅 선택 + 배포 CI**: Vercel(권장)/Cloudflare Pages/GitHub Pages/Netlify 중 결정. GitHub 새 레포 생성 후 연결. 배포 워크플로 작성(없음). GitHub Pages면 base 경로 처리 주의
-3. **콘텐츠 동기화**: 현재 Astro 141 vs Quartz 볼트 143. (a) 누락분 포함 1회 전체 동기화, (b) 옵시디언→Astro 갱신 파이프라인(스크립트/심볼릭/CI) 설계, (c) 옵시디언 전용 문법(`[[위키링크]]`,`![[임베드]]`,`> [!callout]`,블록참조) 렌더링 정책 — 안 쓰면 무시, 쓰면 remark 플러그인/전처리 필요
+3. **콘텐츠 동기화** (1회 전체 이관 완료: Quartz 볼트 142편 → 원본 파일명 기반 안전 슬러그, 카테고리 폴더 보존, title/category frontmatter 주입). 남은 것: (a) 옵시디언→Astro 갱신 파이프라인(스크립트/CI) 설계, (b) 옵시디언 전용 문법(`[[위키링크]]`,`![[임베드]]`,`> [!callout]`,블록참조) 렌더링 정책 — 현재 미처리, 사용 시 remark 플러그인/전처리 필요
 4. **이미지 경로 정리**: 깨진 본문 이미지 일괄 매핑(`public/assets/`로 이동 + frontmatter/본문 경로 치환 규칙)
 
 ### P1 — 출시 직후
