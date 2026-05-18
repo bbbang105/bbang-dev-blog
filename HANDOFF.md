@@ -31,12 +31,14 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 - **SEO/GEO 2차 완료 (commit 51b3d77, Base.astro): canonical(Astro.url+site, 한글 %인코딩=sitemap 일치)·og:type/site_name/locale/title/description/url·twitter:title/description·RSS `<link rel=alternate>`·JSON-LD @graph(WebSite+Person sameAs5+글은 BlogPosting). 글=article, 일반=website 조건분기. 기존 og:image/twitter:card 미중복. 라이브 검증 완료. hreflang은 단일 URL 클라이언트 ko/en 토글 구조라 의도적 제외**
 - **푸시 완료: 모든 커밋 origin/main 반영, CI green. 사이트 출시 완료 상태**
 
-남은 핵심 (P0): **전부 완료** (도메인·site·Vercel·이미지·canonical·SEO 1·2차)
+- **P1 완료 (commit f3c6e44): (1) GA4 `G-BKNGY77L23` 재사용 gtag Base.astro 삽입 (사용자 결정: 기존 ID 재사용, GA 보고서에서 도메인 필터로 구분) (2) `:focus-visible` solid→dotted 점선 일관화(+`.col-head`), `.hsearch`는 의도된 밑줄 포커스라 톤 보존 위해 유지 (3) 홈 검색 결과 제목 키워드 `<mark>` 하이라이트 (이스케이프 안전, mono 톤). 라이브+시각 검증 완료**
+- **동적 OG: 사용자 결정으로 공통 og/default.png 유지 (글별 미생성, 추가 의존성 회피)**
+- **푸시 완료: 모든 커밋 origin/main 반영, CI green. P0+P1 완료, 출시 상태**
 
-그다음 (P1, 선택):
-- GA(기존 G-BKNGY77L23 재사용 여부 결정 필요)
-- og:image 동적 생성(글별 OG 이미지 — 현재 전 페이지 공통 og/default.png). `src/pages/cover/[...id].svg.ts` 기존 커버 생성기 재활용 검토
-- 접근성/검색 하이라이트 등 §6 P2 항목
+남은 핵심 (P0): **전부 완료** (도메인·site·Vercel·이미지·canonical·SEO 1·2차)
+P1: **전부 완료** (GA·focus-visible·검색 mark / 동적OG는 결정상 미진행)
+
+그다음 (P2, 선택, §6 참조): 본문 이미지 라이트박스, prefers-reduced-motion 확장, 헤딩 hover # 앵커·읽기시간, 글별 동적 OG(재논의 시)
 참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
 
 
