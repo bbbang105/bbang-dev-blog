@@ -4,6 +4,29 @@ bbang.dev 개인 기술 블로그. Quartz 4(레거시) 리디자인 프로토타
 독립 Astro 프로젝트로 분리한 것. 이 문서 하나로 인계 가능하도록 작성.
 
 작성일: 2026-05-18
+최종 갱신: 2026-05-18 (세션 인계)
+
+---
+
+## 0. 현재 상태 (최신 — 새 세션은 여기부터)
+
+완료:
+- 독립 Astro 프로젝트, GitHub `github.com/bbbang105/bbang-dev-blog` (Public) 연결, `main` 푸시 중
+- 원본 콘텐츠 142편 이관 (원본 파일명 기반 안전 슬러그, 카테고리 폴더 보존)
+- 에셋 이관 완료: `public/Assets/` (백준·이미지1·인터스텔라 등 21개), 본문 `../Assets/`→`/Assets/` 정규화, 렌더링 검증됨
+- `.github` 이식 (CODEOWNERS·auto-assign·commit-labeler·PR템플릿·ci.yml, kikoai 기준·deploy-dev 제외)
+- GitHub 라벨 22개 클론 (kikoai 동일), `PERSONAL_TOKEN` 시크릿 등록됨
+- 패키지매니저 pnpm, **CI(green) 통과 확인**
+
+남은 핵심 (P0):
+1. 도메인 구매 (사용자) → `astro.config.mjs`의 `site`를 실도메인으로 교체
+2. 호스팅 연결: Vercel 권장 — 레포 import → 자동 빌드(pnpm), 커스텀 도메인+HTTPS 연결
+3. 옵시디언→Astro 콘텐츠 갱신 파이프라인 설계 (현재는 1회 수동 이관 상태)
+4. 옵시디언 전용 문법(`[[ ]]`,`![[ ]]`,`> [!callout]`) 렌더링 정책 — 현재 미처리
+
+그다음 (P1): SEO/GEO 풀세팅(도메인 확정 후 일괄), favicon/PWA/GA
+참고(비차단): CI에 Node20 액션 deprecation 경고 어노테이션 있음(2026-06 이후 적용, 실패 아님)
+
 
 ---
 
