@@ -40,10 +40,10 @@ astro.config.mjs         site URL + Shiki 설정
 ## 4. 로컬 실행
 
 ```
-npm install
-npm run dev        # http://localhost:4321
-npm run build      # dist/ 정적 출력 (현재 145 페이지, 0 에러)
-npm run check      # astro check (타입)
+pnpm install
+pnpm dev          # http://localhost:4321
+pnpm build        # dist/ 정적 출력 (146 페이지, 0 에러)
+pnpm lint         # astro check (타입)
 ```
 
 ## 5. 완료된 것 (그대로 사용 가능)
