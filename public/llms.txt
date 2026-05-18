@@ -1,0 +1,21 @@
+# bbang.dev
+
+> Personal tech blog by Sangho Han (GitHub: bbbang105). Notes on backend, infrastructure, AI/LLM serving, security response, and engineering retrospectives. 140+ posts over two years, written primarily in Korean.
+
+Static Astro site. Content is Markdown organized by category at /posts/<category>/<slug>/. UI supports a ko/en toggle; post bodies are Korean.
+
+## Key pages
+
+- [Home](https://bbang.dev/): full post index with client-side search
+- [Collections](https://bbang.dev/collections/): posts grouped by category
+- [About](https://bbang.dev/about/): author profile and portfolio
+
+## Feeds
+
+- [Sitemap](https://bbang.dev/sitemap.xml): every URL on the site
+- [RSS](https://bbang.dev/rss.xml): full chronological post feed
+
+## Notes
+
+- Canonical host is https://bbang.dev (www.bbang.dev 307-redirects here).
+- Primary post language: Korean.
