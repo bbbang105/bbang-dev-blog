@@ -1420,7 +1420,7 @@ a.pg-n:hover {
 .toc-fab {
   position: fixed;
   right: 0;
-  top: 50%;
+  top: 37%;
   transform: translateY(-50%);
   z-index: 55;
   writing-mode: vertical-rl;
@@ -1449,6 +1449,88 @@ a.pg-n:hover {
 }
 .toc-backdrop[hidden] {
   display: none;
+}
+
+/* Back-to-top — appears after ~1 screen of scroll. Same mono/dashed
+   tone as .toc-fab; bottom-right, both mobile & desktop. */
+.to-top {
+  position: fixed;
+  right: 1.4rem;
+  bottom: 1.4rem;
+  z-index: 54;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, background 0.15s ease,
+    color 0.15s ease;
+}
+.to-top .tt-label {
+  font-size: 0.66rem;
+}
+.to-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+/* Invert only where a real pointer hovers — prevents the sticky-:hover
+   black state that lingers after a tap on touch devices. */
+@media (hover: hover) {
+  .to-top.is-visible:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+.to-top.is-visible:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+@media (max-width: 640px) {
+  .to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 2.6rem;
+    height: 2.6rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    line-height: 1;
+    letter-spacing: 0;
+    font-size: 0.95rem;
+  }
+  .to-top .tt-label {
+    /* keep it compact on mobile — arrow carries the meaning */
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+/* Desktop: align the button to the same vertical line as the TOC rail
+   (right edge of the centered content container), slightly larger. */
+@media (min-width: 1101px) {
+  .to-top {
+    right: calc(max(0px, (100vw - var(--maxw)) / 2) + var(--gutter));
+    bottom: 2rem;
+    padding: 0.62rem 0.85rem;
+    font-size: 0.82rem;
+  }
 }
 .prose :is(h2, h3) {
   scroll-margin-top: 1.8rem;
@@ -1609,6 +1691,17 @@ a.pg-n:hover {
   text-underline-offset: 3px;
   text-decoration-color: var(--hair);
 }
+/* Mono fonts have ugly synthetic oblique — render em upright with a
+   dotted underline instead (distinct from strong's solid + bold). */
+.prose em,
+.prose i {
+  font-style: normal;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--hair);
+}
 .prose ul,
 .prose ol {
   padding-left: 1.4rem;
@@ -1681,6 +1774,18 @@ a.pg-n:hover {
   border: 1px dashed var(--hair);
   padding: 0.5rem 0.75rem;
   text-align: left;
+}
+/* Mobile: keep natural column widths and scroll horizontally instead of
+   squeezing cells until Korean text breaks one char per line. */
+@media (max-width: 640px) {
+  .prose table {
+    min-width: max-content;
+    width: max-content;
+  }
+  .prose th,
+  .prose td {
+    white-space: nowrap;
+  }
 }
 
 /* Shiki dual-theme: swap CSS vars on dark */

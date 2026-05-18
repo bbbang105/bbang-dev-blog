@@ -230,6 +230,47 @@ const jsonLd = {
       </div>
     </footer>
 
+    <button class="to-top" id="to-top" type="button" aria-label="Scroll to top">
+      ↑<span class="tt-label">TOP</span>
+    </button>
+
+    <script is:inline>
+      (function () {
+        var b = document.getElementById("to-top");
+        if (!b) return;
+        var foot = document.querySelector(".site-foot");
+        var shown = false;
+        function onScroll() {
+          var y = window.scrollY || document.documentElement.scrollTop;
+          // Hide once the footer enters the viewport so the button never
+          // overlaps the footer links (e.g. EMAIL).
+          var footTop = foot
+            ? foot.getBoundingClientRect().top
+            : Infinity;
+          var want =
+            y > window.innerHeight * 0.9 &&
+            footTop > window.innerHeight;
+          if (want !== shown) {
+            shown = want;
+            b.classList.toggle("is-visible", shown);
+          }
+        }
+        b.addEventListener("click", function () {
+          var reduce = false;
+          try {
+            reduce = window.matchMedia(
+              "(prefers-reduced-motion: reduce)",
+            ).matches;
+          } catch (e) {}
+          window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+          b.blur();
+        });
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        onScroll();
+      })();
+    </script>
+
     <script is:inline>
       (function () {
         var btn = document.getElementById("theme-toggle");
