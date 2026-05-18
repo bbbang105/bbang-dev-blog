@@ -1,0 +1,118 @@
+---
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { about } from "../i18n";
+---
+
+<Base title="About — bbang.dev" current="about">
+  <section class="about-hero">
+    <div class="wrap">
+      <span class="label">
+        <T en={about.whoLabel.en} ko={about.whoLabel.ko} />
+      </span>
+      <div class="kiko-block">
+        <span class="tag-now">
+          <T en={about.kikoBadge.en} ko={about.kikoBadge.ko} />
+        </span>
+        <h2>kiko</h2>
+        <p class="one-liner">
+          <T en={about.kikoOneLiner.en} ko={about.kikoOneLiner.ko} />
+        </p>
+        <p class="solves">
+          <T en={about.kikoSolves.en} ko={about.kikoSolves.ko} />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block">
+    <div class="wrap">
+      <h2>
+        <T en={about.selfBuiltHeading.en} ko={about.selfBuiltHeading.ko} />
+      </h2>
+      <div class="showcase">
+        {
+          about.showcase.map((p) => (
+            <article class="proj">
+              <div class="thumb" aria-hidden="true">
+                <span>{p.name}</span>
+              </div>
+              <h3>{p.name}</h3>
+              <span class="role">
+                <T en={p.role.en} ko={p.role.ko} />
+              </span>
+              <p class="one">
+                <T en={p.one.en} ko={p.one.ko} />
+              </p>
+              <ul class="impact">
+                {p.impact.en.map((_, idx) => (
+                  <li>
+                    <T en={p.impact.en[idx]} ko={p.impact.ko[idx]} />
+                  </li>
+                ))}
+              </ul>
+              <div class="links">
+                {p.links.map((l) => (
+                  <a href={l.href} rel="noopener">
+                    {l.label} →
+                  </a>
+                ))}
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section-block">
+    <div class="wrap">
+      <h2>
+        <T en={about.careerHeading.en} ko={about.careerHeading.ko} />
+      </h2>
+      <ul class="career">
+        {
+          about.career.map((c) => (
+            <li>
+              <div class="ch">
+                <strong>
+                  <T en={c.company.en} ko={c.company.ko} />
+                </strong>
+                <span class="period">
+                  <T en={c.period.en} ko={c.period.ko} />
+                </span>
+              </div>
+              <div class="role" style="margin-top:.5rem">
+                {c.role}
+              </div>
+              <p class="cd">
+                <T en={c.desc.en} ko={c.desc.ko} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section-block">
+    <div class="wrap">
+      <h2>
+        <T en={about.certsHeading.en} ko={about.certsHeading.ko} />
+      </h2>
+      <div class="certs">
+        {
+          about.certs.map((c) => (
+            <span>
+              <T en={c.en} ko={c.ko} />
+            </span>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

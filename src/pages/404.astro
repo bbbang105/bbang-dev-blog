@@ -1,0 +1,24 @@
+---
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { ui } from "../i18n";
+---
+
+<Base title="404 — bbang.dev">
+  <section class="intro">
+    <div class="wrap">
+      <span class="label">
+        <T en={ui.en.notFoundLabel} ko={ui.ko.notFoundLabel} />
+      </span>
+      <h1>
+        <T en={ui.en.notFoundHeading} ko={ui.ko.notFoundHeading} />
+      </h1>
+      <p class="sub">
+        <T en={ui.en.notFoundSub} ko={ui.ko.notFoundSub} />{" "}
+        <a href="/">
+          <T en={ui.en.notFoundLink} ko={ui.ko.notFoundLink} />
+        </a>
+      </p>
+    </div>
+  </section>
+</Base>

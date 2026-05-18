@@ -1,0 +1,249 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import T from "../../components/T.astro";
+import { ui } from "../../i18n";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+
+// TOC: body section headings only (h2/h3). The page <h1> is the title,
+// rendered separately in the article header — exclude it.
+const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+
+const fmtDate = (d: Date) =>
+  d.toISOString().slice(0, 10).replace(/-/g, ".");
+---
+
+<Base
+  title={`${post.data.title} — bbang.dev`}
+  description={post.data.description}
+>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
+
+  <article>
+    <div class="wrap">
+      <header class="article-head">
+        <div class="article-meta">
+          {
+            post.data.category && (
+              <>
+                <span class="meta-cat">
+                  {post.data.category.toUpperCase()}
+                </span>
+                <span class="dot">/</span>
+              </>
+            )
+          }
+          <span>
+            <T en={ui.en.metaPublished} ko={ui.ko.metaPublished} />
+            {" "}{fmtDate(post.data.date)}
+          </span>
+          {
+            post.data.tags.length > 0 && (
+              <>
+                <span class="dot">/</span>
+                <span>
+                  <T en={ui.en.metaTags} ko={ui.ko.metaTags} />
+                </span>
+              </>
+            )
+          }
+          {
+            post.data.tags.map((t) => (
+              <>
+                <span class="dot">·</span>
+                <span>{t}</span>
+              </>
+            ))
+          }
+        </div>
+        <h1>{post.data.title}</h1>
+        {
+          post.data.description && (
+            <p class="desc">{post.data.description}</p>
+          )
+        }
+        <hr class="rule" />
+      </header>
+    </div>
+
+    <div class="wrap article-body">
+      <div class="prose">
+        <Content />
+      </div>
+
+      {
+        toc.length > 0 && (
+          <aside class="post-toc" id="post-toc" aria-label="Table of contents">
+            <p class="toc-label">
+              <T en="On this page" ko="목차" />
+            </p>
+            <button class="toc-close" id="toc-close" type="button" aria-label="Close contents">
+              ×
+            </button>
+            <nav>
+              <ul>
+                {toc.map((h) => (
+                  <li class={`toc-d${h.depth}`}>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+        )
+      }
+
+      <nav class="post-nav">
+        <a href="/">
+          <T en={ui.en.backToPosts} ko={ui.ko.backToPosts} />
+        </a>
+      </nav>
+    </div>
+  </article>
+
+  {
+    toc.length > 0 && (
+      <>
+        <button
+          class="toc-fab"
+          id="toc-fab"
+          type="button"
+          aria-expanded="false"
+          aria-controls="post-toc"
+        >
+          <T en="☰ Contents" ko="☰ 목차" />
+        </button>
+        <div class="toc-backdrop" id="toc-backdrop" hidden />
+        <script is:inline>
+          (function () {
+            var fab = document.getElementById("toc-fab");
+            var toc = document.getElementById("post-toc");
+            var bd = document.getElementById("toc-backdrop");
+            var cl = document.getElementById("toc-close");
+            if (!fab || !toc || !bd) return;
+            function open(v) {
+              toc.classList.toggle("is-open", v);
+              bd.hidden = !v;
+              fab.setAttribute("aria-expanded", v ? "true" : "false");
+            }
+            fab.addEventListener("click", function () {
+              open(!toc.classList.contains("is-open"));
+            });
+            bd.addEventListener("click", function () {
+              open(false);
+            });
+            if (cl) cl.addEventListener("click", function () {
+              open(false);
+            });
+            toc.addEventListener("click", function (e) {
+              if (e.target.closest("a")) open(false);
+            });
+            document.addEventListener("keydown", function (e) {
+              if (e.key === "Escape") open(false);
+            });
+          })();
+        </script>
+      </>
+    )
+  }
+
+  <script is:inline>
+    (function () {
+      // 1. Reading progress bar
+      var bar = document.getElementById("read-progress");
+      function onScroll() {
+        var de = document.documentElement;
+        var max = de.scrollHeight - de.clientHeight;
+        var p = max > 0 ? (de.scrollTop || document.body.scrollTop) / max : 0;
+        if (bar) bar.style.transform = "scaleX(" + Math.min(1, p) + ")";
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll);
+      onScroll();
+
+      // 2. Code block copy buttons
+      var pres = document.querySelectorAll(".prose pre");
+      Array.prototype.forEach.call(pres, function (pre) {
+        if (pre.parentElement && pre.parentElement.classList.contains("code-wrap"))
+          return;
+        var wrap = document.createElement("div");
+        wrap.className = "code-wrap";
+        pre.parentNode.insertBefore(wrap, pre);
+        wrap.appendChild(pre);
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "code-copy";
+        btn.textContent = "[copy]";
+        wrap.appendChild(btn);
+        btn.addEventListener("click", function () {
+          var code = pre.innerText;
+          try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(code).catch(function () {});
+            } else {
+              var ta = document.createElement("textarea");
+              ta.value = code;
+              ta.style.position = "fixed";
+              ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+            }
+          } catch (e) {}
+          // Optimistic feedback — show confirmation regardless of API result.
+          btn.textContent = "✓ [copied]";
+          btn.classList.add("is-done");
+          clearTimeout(btn._t);
+          btn._t = setTimeout(function () {
+            btn.textContent = "[copy]";
+            btn.classList.remove("is-done");
+          }, 1600);
+        });
+      });
+
+      // 3. TOC scrollspy — highlight the section currently in view
+      var links = document.querySelectorAll(".post-toc a[href^='#']");
+      if (links.length) {
+        var map = {};
+        Array.prototype.forEach.call(links, function (a) {
+          map[decodeURIComponent(a.getAttribute("href").slice(1))] = a;
+        });
+        var heads = [];
+        Array.prototype.forEach.call(
+          document.querySelectorAll(".prose h2, .prose h3"),
+          function (h) {
+            if (h.id && map[h.id]) heads.push(h);
+          },
+        );
+        var cur = null;
+        function spy() {
+          var y = window.scrollY + 120;
+          var active = heads[0];
+          for (var i = 0; i < heads.length; i++) {
+            if (heads[i].offsetTop <= y) active = heads[i];
+          }
+          if (active && active !== cur) {
+            cur = active;
+            Array.prototype.forEach.call(links, function (a) {
+              a.classList.remove("is-active");
+            });
+            if (map[active.id]) map[active.id].classList.add("is-active");
+          }
+        }
+        window.addEventListener("scroll", spy, { passive: true });
+        spy();
+      }
+    })();
+  </script>
+</Base>

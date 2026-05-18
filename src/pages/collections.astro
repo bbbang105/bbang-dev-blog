@@ -1,0 +1,76 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const fmtDate = (d: Date) =>
+  d.toISOString().slice(0, 10).replace(/-/g, ".");
+
+// Group by the existing folder taxonomy (post.data.category). Posts are
+// pre-sorted newest-first, so each group inherits that order. Groups are
+// ordered by size (largest collection first).
+const groupsMap = new Map<string, typeof posts>();
+for (const p of posts) {
+  const cat = p.data.category || "ETC";
+  if (!groupsMap.has(cat)) groupsMap.set(cat, []);
+  groupsMap.get(cat)!.push(p);
+}
+// Sort: Latin-initial categories first (A→Z, so "AI" leads), then
+// Korean-initial categories in 가나다 order.
+const isLatin = (s: string) => /^[A-Za-z]/.test(s);
+const groups = [...groupsMap.entries()].sort((a, b) => {
+  const la = isLatin(a[0]) ? 0 : 1;
+  const lb = isLatin(b[0]) ? 0 : 1;
+  if (la !== lb) return la - lb;
+  return a[0].localeCompare(b[0], la === 0 ? "en" : "ko");
+});
+const totalCats = groups.length;
+---
+
+<Base title="Collections — bbang.dev" current="collections">
+  <section class="intro">
+    <div class="wrap">
+      <h1>
+        <T en="Browse by collection" ko="컬렉션으로 둘러보기" />
+      </h1>
+      <p class="sec sub">
+        <T
+          en={`${totalCats} collections · ${posts.length} posts`}
+          ko={`컬렉션 ${totalCats}개 · 글 ${posts.length}개`}
+        />
+      </p>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="wrap">
+    <div class="collections">
+      {
+        groups.map(([cat, items]) => (
+          <details class="collection">
+            <summary class="col-head">
+              <span class="col-mark" aria-hidden="true" />
+              <span class="col-cat">{cat.toUpperCase()}</span>
+              <span class="col-count">{items.length}</span>
+            </summary>
+            <ul class="col-list" role="list">
+              {items.map((p) => (
+                <li class="col-item">
+                  <a href={`/posts/${p.id}`}>
+                    <span class="ci-date">{fmtDate(p.data.date)}</span>
+                    <span class="ci-title">{p.data.title}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+</Base>

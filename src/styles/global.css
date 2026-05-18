@@ -1,0 +1,1838 @@
+/* ============================================================
+   bbang.dev — Astro prototype
+   Aesthetic: gallery98.org skeleton (mono / dashed / B&W)
+              × simplethread.com reading comfort
+   Font: Sarasa Mono K (Latin Iosevka + Korean, both fixed-width)
+   ============================================================ */
+
+@font-face {
+  font-family: "Sarasa Mono K";
+  src: url("/fonts/SarasaMonoK-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Sarasa Mono K";
+  src: url("/fonts/SarasaMonoK-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --ink: #0a0a0a;
+  --paper: #ffffff;
+  --muted: #6b6b6b;
+  --line: #0a0a0a;
+  --hair: rgba(10, 10, 10, 0.28);
+  /* Pure black & white — no color anywhere. --accent maps to ink so every
+     existing var(--accent) site renders B&W; affordance is via underline,
+     not hue. --accent-soft is a neutral grayscale wash. */
+  --accent: var(--ink);
+  --accent-soft: rgba(10, 10, 10, 0.07);
+  --selection: rgba(10, 10, 10, 0.16);
+
+  --mono: "Sarasa Mono K", "JetBrains Mono", ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+
+  --measure: 70ch; /* body text column */
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
+  --maxw: 1240px;
+
+  --fs-mega: clamp(2rem, 6vw, 4.25rem);
+  --fs-h1: clamp(1.7rem, 4vw, 2.7rem);
+  --fs-h2: clamp(1.3rem, 2.4vw, 1.7rem);
+  --fs-h3: 1.12rem;
+  --fs-body: 1.0rem;
+  --fs-small: 0.8rem;
+  --fs-label: 0.72rem;
+
+  --lh-body: 1.78; /* generous vertical rhythm for Korean long-form */
+  --rhythm: 1.6rem;
+}
+
+:root[data-theme="dark"] {
+  --ink: #f4f4f4;
+  --paper: #0a0a0a;
+  --muted: #9a9a9a;
+  --line: #f4f4f4;
+  --hair: rgba(244, 244, 244, 0.3);
+  /* Dark mode = pure white/black invert; still no color. */
+  --accent: var(--ink);
+  --accent-soft: rgba(244, 244, 244, 0.1);
+  --selection: rgba(244, 244, 244, 0.22);
+}
+
+/* ---------- Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-gutter: stable;
+}
+
+body {
+  font-family: var(--mono);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" 0;
+  transition: background 0.18s ease, color 0.18s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+::selection {
+  background: var(--selection);
+}
+
+/* ---------- Language show/hide (mirrors data-theme mechanism) ---------- */
+/* Default root is data-lang="en"; the no-flash inline script may switch it. */
+:root[data-lang="en"] [data-lang-ko],
+:root[data-lang="ko"] [data-lang-en] {
+  display: none !important;
+}
+
+/* Links: no color ever. Affordance = dashed underline that goes solid +
+   thickens on hover. */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness 0.12s ease,
+    text-decoration-color 0.12s ease;
+}
+a:hover {
+  text-decoration-style: solid;
+  text-decoration-thickness: 2px;
+}
+
+/* Focus: pure ink (black light / white dark) solid outline. */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* Hard overflow guard: no embedded/media element may exceed its container. */
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+img {
+  height: auto;
+}
+pre,
+table {
+  max-width: 100%;
+}
+/* Belt-and-braces: never allow the document to scroll sideways. The real
+   fixes below (min-width:0 on grid/flex children, wrapping, container
+   max-widths) remove the cause; this only catches sub-pixel rounding. */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+hr {
+  border: none;
+  border-top: 1px dashed var(--hair);
+  margin: 0;
+}
+
+/* ---------- Layout primitives ---------- */
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.rule {
+  border: none;
+  border-top: 1.5px dashed var(--line);
+  opacity: 0.55;
+}
+
+.label {
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ---------- Masthead ---------- */
+.masthead {
+  border-bottom: 1.5px dashed var(--line);
+}
+.masthead .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.15rem;
+  padding-bottom: 1.15rem;
+}
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+.brand {
+  text-decoration: none;
+}
+.brand:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.brand .blink {
+  color: var(--ink);
+}
+.brand small {
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.nav a {
+  color: var(--ink);
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+}
+.nav a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+/* Current page cue: solid underline, no color. */
+.nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.theme-toggle {
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--ink);
+  background: none;
+  border: 1px dashed var(--line);
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.theme-toggle:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.theme-toggle.ico {
+  padding: 0.3rem 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  min-width: 2.2rem;
+  text-align: center;
+}
+
+/* Header structure: flat single row on desktop, 2-zone stack on mobile.
+   .mast-bar / .mast-tools are display:contents on desktop so brand and the
+   toggle buttons participate directly in the .wrap flex row (unchanged
+   approved desktop). They become real flex containers on mobile. */
+.mast-bar,
+.mast-tools {
+  display: contents;
+}
+.masthead .wrap {
+  flex-wrap: wrap;
+}
+@media (min-width: 761px) {
+  .masthead .wrap {
+    justify-content: flex-start;
+  }
+  .brand {
+    order: 0;
+  }
+  .nav {
+    order: 1;
+    margin-left: auto;
+  }
+  .nav .hsearch {
+    order: -1;
+  }
+  #lang-toggle {
+    order: 2;
+  }
+  #theme-toggle {
+    order: 3;
+  }
+}
+@media (max-width: 760px) {
+  .mast-bar {
+    display: flex;
+    flex: 1 1 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+  .mast-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .brand {
+    white-space: nowrap;
+  }
+  .nav {
+    flex: 1 1 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.7rem 1.3rem;
+  }
+  .nav .hsearch {
+    order: 99;
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: none;
+  }
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* ---------- Hero / intro statement ---------- */
+.intro {
+  padding: clamp(2rem, 5.6vw, 4rem) 0;
+}
+.intro .label {
+  display: block;
+  margin-bottom: 1.5rem;
+}
+.intro h1 {
+  font-size: calc(var(--fs-mega) * 0.8);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  max-width: 24ch;
+}
+.intro .sub {
+  margin-top: 1.3rem;
+  max-width: 58ch;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+/* ---------- Section header (gallery98 "CURRENT SPOTLIGHT") ---------- */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.4rem 0 1.6rem;
+  flex-wrap: wrap;
+}
+.section-head h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.section-head .count {
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* ---------- Magazine: cover story ---------- */
+/* Thumbnails render in ORIGINAL COLOR — only the chrome is B&W. The color
+   image popping against the mono B&W frame IS the gallery98 effect. */
+.cover {
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+  position: relative;
+  margin-bottom: 2.6rem;
+}
+.cover:hover {
+  text-decoration: none;
+}
+.cover-frame {
+  position: relative;
+  border: 1.5px solid var(--line);
+  overflow: hidden;
+  aspect-ratio: 16 / 7;
+}
+.cover-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* gallery98 inverted label box overlaid on the cover */
+.cover-label {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  max-width: min(640px, 88%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 1.3rem clamp(1.2rem, 3vw, 2rem) 1.5rem;
+}
+.cover-label .cl-meta {
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.85;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+}
+.cover-label h2 {
+  margin-top: 0.7rem;
+  font-size: clamp(1.5rem, 4vw, 2.7rem);
+  line-height: 1.16;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.cover-label .cl-excerpt {
+  margin-top: 0.7rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.82;
+  max-width: 52ch;
+}
+.cover:hover .cover-label h2 {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ---------- Magazine: asymmetric tile grid ---------- */
+/* Print contact-sheet rhythm: a 12-col grid where tiles claim varied spans
+   in a repeating large / medium / small cadence — not a uniform card grid. */
+/* Larger, more legible tiles. 6-col grid (was 12) → fewer-per-row, bigger.
+   Asymmetric magazine cadence preserved over a 6-tile cycle:
+   row A = 1 large (span 4) + 1 tall medium (span 2);
+   row B = 2 equal wide (span 3 each);
+   row C = 2 equal wide (span 3 each).
+   Every tile is wide enough for category + date + 2–3 line title +
+   description excerpt without truncation. */
+/* gallery98-style dense masonry: small items, many per row, each image
+   at its NATURAL aspect ratio (no crop). CSS multi-column gives true
+   masonry flow; break-inside:avoid keeps each item intact. The
+   data-layout shuffle CSS below is now dead (no script sets the
+   attribute) — harmless, kept to avoid a large risky deletion. */
+/* Row-wise grid (NOT css columns) so reading order is left→right
+   newest-first. Natural image heights kept; align-items:start lets
+   shorter items sit without stretching. */
+/* Tetris mosaic: 6-col grid, varied col/row spans, dense flow packs
+   holes so it stays tight while reading roughly newest-first left→right.
+   Deterministic cadence (period 6) — a designed asymmetric rhythm, NOT
+   random shuffle (user rejected that). */
+/* 3-col row grid: uniform width, height follows each thumbnail's
+   natural aspect ratio (no crop). Reading order stays perfect
+   newest-first left→right. align-items:start lets short tiles sit
+   without stretching (ragged bottoms — not column-packed). */
+.tile-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+  gap: 2.6rem 2rem;
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  text-decoration: none;
+  min-width: 0;
+}
+.tile:hover {
+  text-decoration: none;
+}
+.tile-thumb {
+  border: 1px solid var(--line);
+  overflow: hidden;
+  width: 100%;
+}
+.tile-thumb img {
+  width: 100%;
+  height: auto; /* short images keep natural ratio */
+  max-height: 28rem; /* cap very tall portraits (~60% of an extreme one) */
+  object-fit: cover; /* when max-height clamps, crop instead of squash */
+  object-position: center; /* show the middle of the photo */
+  display: block;
+  transition: transform 0.3s ease;
+}
+.tile:hover .tile-thumb img {
+  transform: scale(1.02);
+}
+/* No-thumbnail fallback: a typographic terminal card rendered in real
+   HTML/CSS (Sarasa web font → Korean shapes correctly, unlike the old
+   garbled generated SVG). Pure B&W, gallery98/terminal feel. */
+/* No-thumbnail card — composed like the cover label (category chip
+   above a large bottom-aligned title), clean B&W typographic, no logo. */
+.tile-fallback {
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px dashed var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem 1.5rem 1.6rem;
+  font-weight: 700;
+}
+.fb-cat {
+  align-self: flex-start;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.18rem 0.55rem;
+}
+.fb-title {
+  font-size: 1.3rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+.cover-fallback {
+  width: 100%;
+  height: 100%;
+  background: var(--paper);
+}
+
+/* Filtered-out items must truly hide: [hidden]'s display:none has low
+   specificity and was overridden by .tile{display:flex} → search "did
+   nothing". Force it. */
+[hidden] {
+  display: none !important;
+}
+
+/* ---------- Header search (gallery98 dashed mono input) ---------- */
+.hsearch {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px dashed var(--line);
+  padding: 0.35rem 0.2rem;
+  font-family: var(--mono);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  color: var(--ink);
+  width: 18rem;
+  max-width: 34vw;
+}
+.hsearch::placeholder {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.88em;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.hsearch:focus {
+  outline: none;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ink);
+}
+/* Custom clear (×) — kill the native blue, make it mono on-theme */
+.hsearch::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 0.78em;
+  height: 0.78em;
+  margin-left: 0.5em;
+  cursor: pointer;
+  background-color: var(--muted);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 2 14 14M14 2 2 14' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2 2 14 14M14 2 2 14' stroke='%23000' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+.hsearch::-webkit-search-cancel-button:hover {
+  background-color: var(--ink);
+}
+@media (max-width: 760px) {
+  .hsearch {
+    width: 100%;
+    max-width: none;
+    order: 99;
+  }
+}
+
+/* ---------- Home: featured lead + numbered ledger ---------- */
+.feed-feat {
+  display: block;
+  padding: 0 0 2rem;
+  margin-bottom: 2.2rem;
+  border-bottom: 1.5px dashed var(--line);
+  color: var(--ink);
+  text-decoration: none;
+}
+.feed-feat .ff-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.feed-feat .ff-title {
+  margin: 1rem 0 0.85rem;
+  font-size: clamp(1.7rem, 3.4vw, 2.7rem);
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.feed-feat:hover .ff-title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.feed-feat .ff-desc {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 62ch;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.ledger {
+  list-style: none;
+}
+.led-row {
+  display: grid;
+  grid-template-columns: 3.4rem 1fr;
+  gap: 1.5rem;
+  align-items: baseline;
+  border-top: 1px dashed var(--hair);
+  padding: 1.15rem 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+.led-row:first-child {
+  border-top: 1.5px dashed var(--line);
+}
+/* Absolute post index, rendered server-side — stays fixed per post
+   across pages (page 2 starts at 16, not reset to 01). */
+.led-n {
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+.led-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.34;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.led-row:hover .led-title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.led-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.led-meta .cat,
+.feed-feat .cat {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.14em 0.45em;
+  letter-spacing: 0.12em;
+}
+@media (max-width: 560px) {
+  .led-row {
+    grid-template-columns: 2.6rem 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ============================================================
+   CURATED LAYOUT SHUFFLE — 5 hand-tuned asymmetric cadences.
+   One is chosen per page load by a pre-paint inline script that
+   sets data-layout="0..4" on <html> (see Base.astro). All sizing
+   is pure CSS keyed on :root[data-layout] → zero post-paint JS,
+   zero layout-shift flash.
+
+   SCOPED to desktop (min-width:1101px) on purpose: below that the
+   existing tablet (861–1100px → 2-up) and mobile (≤860px → 1-up)
+   media queries take over unchanged, so responsive degradation is
+   identical regardless of which cadence was rolled. Desktop-only
+   scoping also keeps cadence specificity from leaking past the
+   breakpoints.
+
+   Every cadence:
+     - is a REPEATING cycle (handles any post count by cycling)
+     - has every row summing to exactly 6 cols → no overflow
+     - keeps varied sizes/shapes (the gallery98 magazine feel)
+     - reuses only the existing frame set (16/8, 4/5, 16/9, 5/4,
+       plus 21/9 panorama and 4/3 trio for extra rhythm)
+   The base .tile rules above are the fallback if no attribute is
+   set (script-disabled / very old engine) — visually = cadence 0.
+
+   Cadence character (kept genuinely different):
+     L0 Classic   — 4-cycle: feature+companion / wide+wide
+     L1 Banner    — 6-cycle: full panorama / wide+wide /
+                      feature+companion / panorama (two big strips)
+     L2 Triptych  — 9-cycle: mostly even 3-up square (4/3) rhythm
+                      with a feature+companion break (calm, gridded)
+     L3 Zigzag    — 6-cycle: feature+companion / companion+feature
+                      (mirrored) / wide+wide  (feature alternates side)
+     L4 Spotlight — 6-cycle: panorama opens, square+square,
+                      companion+feature, closing wide strip
+   ============================================================ */
+
+@media (min-width: 1101px) {
+
+/* ---- L0 Classic (also the explicit default override) ---- */
+:root[data-layout="0"] .tile-grid .tile {
+  grid-column: span 3;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 1) {
+  grid-column: span 4;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 1) .tile-thumb {
+  aspect-ratio: 16 / 8;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 2) {
+  grid-column: span 2;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 2) .tile-thumb {
+  aspect-ratio: 4 / 5;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 3) .tile-thumb {
+  aspect-ratio: 16 / 9;
+}
+:root[data-layout="0"] .tile-grid .tile:nth-of-type(4n + 4) .tile-thumb {
+  aspect-ratio: 5 / 4;
+}
+
+/* ---- L1 Banner — 6-cycle, opens each cycle with a panorama ---- */
+:root[data-layout="1"] .tile-grid .tile {
+  grid-column: span 3;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 1) {
+  grid-column: 1 / -1; /* full-bleed panorama */
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 1) .tile-thumb {
+  aspect-ratio: 21 / 9;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 2) .tile-thumb,
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 3) .tile-thumb {
+  aspect-ratio: 16 / 9;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 4) {
+  grid-column: span 4;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 4) .tile-thumb {
+  aspect-ratio: 16 / 8;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 5) {
+  grid-column: span 2;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 5) .tile-thumb {
+  aspect-ratio: 4 / 5;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 6) {
+  grid-column: span 6;
+}
+:root[data-layout="1"] .tile-grid .tile:nth-of-type(6n + 6) .tile-thumb {
+  aspect-ratio: 21 / 9;
+}
+
+/* ---- L2 Triptych — even 3-up square rhythm (calmest) ---- */
+:root[data-layout="2"] .tile-grid .tile {
+  grid-column: span 2;
+}
+:root[data-layout="2"] .tile-grid .tile .tile-thumb {
+  aspect-ratio: 4 / 3;
+}
+/* every 7th tile is a wide feature break so it isn't monotonous */
+:root[data-layout="2"] .tile-grid .tile:nth-of-type(9n + 1) {
+  grid-column: span 4;
+}
+:root[data-layout="2"] .tile-grid .tile:nth-of-type(9n + 1) .tile-thumb {
+  aspect-ratio: 16 / 8;
+}
+:root[data-layout="2"] .tile-grid .tile:nth-of-type(9n + 2) {
+  grid-column: span 2;
+}
+:root[data-layout="2"] .tile-grid .tile:nth-of-type(9n + 2) .tile-thumb {
+  aspect-ratio: 4 / 5;
+}
+
+/* ---- L3 Zigzag — feature alternates left/right each cycle ---- */
+:root[data-layout="3"] .tile-grid .tile {
+  grid-column: span 3;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 1) {
+  grid-column: span 4;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 1) .tile-thumb {
+  aspect-ratio: 16 / 8;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 2) {
+  grid-column: span 2;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 2) .tile-thumb {
+  aspect-ratio: 4 / 5;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 3) {
+  grid-column: span 2;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 3) .tile-thumb {
+  aspect-ratio: 4 / 5;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 4) {
+  grid-column: span 4;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 4) .tile-thumb {
+  aspect-ratio: 16 / 8;
+}
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 5) .tile-thumb,
+:root[data-layout="3"] .tile-grid .tile:nth-of-type(6n + 6) .tile-thumb {
+  aspect-ratio: 16 / 9;
+}
+
+/* ---- L4 Spotlight — 6-cycle: cycle OPENS with a full panorama so
+   the row before it always completes (no hole), then square+square,
+   then companion+feature. Panorama-led, square-heavy mid. ---- */
+:root[data-layout="4"] .tile-grid .tile {
+  grid-column: span 3;
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 1) {
+  grid-column: 1 / -1; /* spotlight panorama opens each cycle */
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 1) .tile-thumb {
+  aspect-ratio: 21 / 9;
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 2) .tile-thumb,
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 3) .tile-thumb {
+  aspect-ratio: 5 / 4; /* square pair */
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 4) {
+  grid-column: span 2;
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 4) .tile-thumb {
+  aspect-ratio: 4 / 5; /* tall companion */
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 5) {
+  grid-column: span 4;
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 5) .tile-thumb {
+  aspect-ratio: 16 / 8; /* feature */
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 6) {
+  grid-column: span 6;
+}
+:root[data-layout="4"] .tile-grid .tile:nth-of-type(6n + 6) .tile-thumb {
+  aspect-ratio: 21 / 9; /* closing wide strip — own full row */
+}
+
+} /* end @media (min-width:1101px) — curated layout shuffle */
+
+.tile-body {
+  padding-top: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* allow text children to wrap, not widen the tile */
+}
+.tile-date {
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+/* Category label: gallery98 inverted box, mono uppercase, no color */
+.tile-cat {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.1rem 0.4rem;
+  letter-spacing: 0.12em;
+}
+/* Title legibility favoured over a tight clamp — Korean filenames are
+   long, so show essentially the whole title. Standard tiles up to 3
+   lines; feature/companion up to 4. Solid min font size. */
+.tile-title {
+  margin-top: 0.8rem;
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  font-size: 1.02rem;
+  word-break: keep-all;
+  overflow-wrap: anywhere; /* long Latin/URL tokens break, not overflow */
+}
+.tile:hover .tile-title {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+/* gallery98 meta line: category box + date + bullet-separated tags */
+.tile-meta {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem 0.5rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.tile-dot {
+  white-space: nowrap;
+}
+/* Description: always visible, compact 2-line clamp (scannable, touch-
+   friendly, accessible — better than hover-reveal which breaks on
+   mobile and hurts scanning). */
+.tile-excerpt {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.tile-read {
+  margin-top: 0.6rem;
+  align-self: flex-start;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 1px;
+}
+.tile-tags {
+  margin-top: 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.tile-tag {
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px dashed var(--hair);
+  padding: 0.12rem 0.45rem;
+  font-weight: 700;
+}
+
+/* ---------- Pager (gallery98 dashed-rule, no color) ---------- */
+.pager {
+  margin-top: 3.5rem;
+  margin-bottom: 3.5rem;
+  border-top: 1.5px dashed var(--line);
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-size: var(--fs-small);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.pg-edge {
+  color: var(--ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+a.pg-edge:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.pg-edge.is-off {
+  color: var(--hair);
+  pointer-events: none;
+}
+.pg-nums {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
+}
+.pg-n {
+  color: var(--muted);
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+  padding: 0.28rem 0.52rem;
+  border: 1px dashed transparent;
+}
+a.pg-n:hover {
+  color: var(--ink);
+  border-color: var(--line);
+}
+.pg-n.is-cur {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.pg-ell {
+  color: var(--muted);
+  padding: 0.28rem 0.3rem;
+  font-weight: 700;
+  user-select: none;
+}
+
+/* Mobile: keep number cells compact; wrap+center handles any count safely */
+@media (max-width: 640px) {
+  .pg-n {
+    padding: 0.28rem 0.42rem;
+  }
+  .pg-ell {
+    padding: 0.28rem 0.18rem;
+  }
+}
+
+/* Compact intro for archive pages 2+ */
+.intro--compact {
+  padding: clamp(2rem, 4vw, 3rem) 0 1.5rem;
+}
+.intro-archive {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 640px) {
+  .tile-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .tile-title {
+    font-size: 1rem;
+  }
+  .cover-frame {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1000px) {
+  .tile-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------- Footer search/suggestion row (gallery98 big footer) ---------- */
+.foot-cta {
+  border-top: 1.5px dashed var(--line);
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+}
+.foot-cta .label {
+  display: block;
+  margin-bottom: 1rem;
+}
+.foot-cta p {
+  font-size: clamp(1.1rem, 2.6vw, 1.7rem);
+  font-weight: 700;
+  line-height: 1.35;
+  max-width: 30ch;
+}
+.foot-cta p a {
+  border-bottom: 2px solid var(--accent);
+  white-space: nowrap;
+}
+
+/* ---------- Footer ---------- */
+.site-foot {
+  border-top: 1.5px dashed var(--line);
+  flex-shrink: 0;
+}
+.site-foot .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  padding: 2.2rem var(--gutter);
+}
+.site-foot .copy {
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+.foot-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.4rem;
+}
+.foot-links a {
+  color: var(--ink);
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+}
+.foot-links a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ---------- Article (simplethread reading comfort) ---------- */
+.article-head {
+  padding: clamp(2.5rem, 6vw, 4rem) 0 0;
+}
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.2rem;
+  align-items: center;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.article-meta .dot {
+  opacity: 0.5;
+}
+.article-meta .meta-cat {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.15rem 0.5rem;
+  letter-spacing: 0.14em;
+}
+.article-head h1 {
+  margin-top: 1.5rem;
+  font-size: var(--fs-h1);
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  max-width: 34ch;
+}
+.article-head .desc {
+  margin-top: 1.1rem;
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: var(--measure);
+  line-height: 1.7;
+}
+.article-head .rule {
+  margin-top: 2.2rem;
+}
+
+/* ---------- Article body + right TOC ---------- */
+/* Default (tablet/mobile): single column, prose centered. TOC becomes a
+   right-side slide-in drawer triggered by the vertical .toc-fab. */
+.article-body {
+  position: relative;
+}
+.post-toc {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 60;
+  width: min(82vw, 19rem);
+  height: 100dvh;
+  overflow-y: auto;
+  background: var(--paper);
+  border-left: 1.5px dashed var(--line);
+  padding: 2.4rem 1.6rem;
+  transform: translateX(101%);
+  transition: transform 0.22s ease;
+}
+.post-toc.is-open {
+  transform: translateX(0);
+}
+.toc-label {
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+}
+.toc-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.4rem;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.toc-close:hover {
+  color: var(--ink);
+}
+.post-toc nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+.post-toc li a {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.86rem;
+  line-height: 1.4;
+  padding: 0.42rem 0;
+  border-left: 1px dashed transparent;
+  padding-left: 0.9rem;
+  margin-left: -0.9rem;
+  transition: color 0.12s ease;
+}
+.post-toc li.toc-d3 a {
+  padding-left: 2rem;
+  font-size: 0.8rem;
+  color: var(--hair);
+}
+.post-toc li a:hover {
+  color: var(--ink);
+  border-left-color: var(--line);
+}
+.toc-fab {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 55;
+  writing-mode: vertical-rl;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px dashed var(--line);
+  border-right: 0;
+  padding: 1rem 0.45rem;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.toc-fab:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.toc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 58;
+  background: color-mix(in srgb, var(--ink) 38%, transparent);
+}
+.toc-backdrop[hidden] {
+  display: none;
+}
+.prose :is(h2, h3) {
+  scroll-margin-top: 1.8rem;
+}
+.post-toc li a.is-active {
+  color: var(--ink);
+  border-left-color: var(--ink);
+}
+/* Desktop: reading column stays page-centered (1fr | measure | 1fr);
+   the TOC lives in the right gutter as a sticky rail. */
+@media (min-width: 1101px) {
+  /* Reserve a fixed right column for the TOC; the prose is centered
+     within the remaining writing area (between full-left and
+     page-center). */
+  .article-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 15rem;
+    column-gap: 3rem;
+    align-items: start;
+  }
+  .article-body .prose,
+  .article-body .post-nav {
+    grid-column: 1;
+    max-width: var(--measure);
+    margin: 0 auto;
+  }
+  .article-body .post-nav {
+    width: 100%;
+  }
+  .post-toc {
+    grid-column: 2;
+    justify-self: start;
+    position: sticky;
+    top: 4rem;
+    z-index: auto;
+    width: auto;
+    max-width: 15rem;
+    height: auto;
+    max-height: calc(100vh - 6rem);
+    background: none;
+    border-left: 1px dashed var(--line);
+    padding: 0.2rem 0 0.2rem 1.4rem;
+    transform: none;
+  }
+  .toc-close,
+  .toc-fab,
+  .toc-backdrop {
+    display: none !important;
+  }
+}
+
+/* Reading progress — thin solid rail pinned to the very top */
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  z-index: 70;
+  pointer-events: none;
+}
+
+/* Code block + copy button */
+.prose .code-wrap {
+  position: relative;
+}
+.prose .code-wrap > pre {
+  margin: 0;
+}
+.code-copy {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.6rem;
+  background: var(--paper);
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 0.2rem 0.45rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.14s ease, color 0.14s ease;
+}
+.prose .code-wrap:hover .code-copy,
+.code-copy:focus-visible {
+  opacity: 1;
+}
+.code-copy:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+.code-copy.is-done {
+  opacity: 1;
+  color: var(--ink);
+  border-style: solid;
+}
+
+
+.prose {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: clamp(2rem, 5vw, 3.2rem) 0 4rem;
+  font-size: 1.02rem;
+  line-height: var(--lh-body);
+}
+.prose > * + * {
+  margin-top: var(--rhythm);
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-top: 2.8rem;
+}
+.prose h1 {
+  font-size: 1.7rem;
+}
+.prose h2 {
+  font-size: 1.42rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed var(--hair);
+}
+.prose h3 {
+  font-size: 1.18rem;
+}
+.prose h2 + *,
+.prose h3 + * {
+  margin-top: 1rem;
+}
+.prose p {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.prose a {
+  text-decoration-thickness: 1px;
+}
+.prose a:hover {
+  text-decoration-thickness: 2px;
+}
+.prose strong {
+  font-weight: 700;
+  /* emphasis = weight + thin underline (no bg wash — a gray box on
+     every bold is noisy in long Korean prose) */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--hair);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+.prose li + li {
+  margin-top: 0.55rem;
+}
+.prose li {
+  word-break: keep-all;
+}
+.prose blockquote {
+  border-left: 2px solid var(--accent);
+  padding: 0.4rem 0 0.4rem 1.3rem;
+  color: var(--muted);
+  font-style: normal;
+}
+.prose blockquote > * + * {
+  margin-top: 0.7rem;
+}
+.prose img {
+  border: 1px dashed var(--hair);
+  margin: var(--rhythm) 0;
+}
+.prose hr {
+  border-top: 1px dashed var(--hair);
+  margin: 2.6rem 0;
+}
+.prose code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: transparent;
+  border: 1px dashed var(--hair);
+  padding: 0.08em 0.34em;
+}
+.prose pre {
+  font-family: var(--mono);
+  border: 1px dashed var(--hair);
+  padding: 1.1rem 1.2rem;
+  max-width: 100%;
+  overflow-x: auto; /* wide code scrolls inside the box, not the page */
+  font-size: 0.86rem;
+  line-height: 1.65;
+  background: var(--paper);
+}
+.prose pre code {
+  background: none;
+  border: 0; /* inline-code dashed box must NOT apply inside code blocks */
+  padding: 0;
+  font-size: inherit;
+  white-space: pre; /* keep code formatting; the pre scrolls horizontally */
+}
+/* Wrap long inline code / bare URLs instead of widening the article. */
+.prose code {
+  overflow-wrap: anywhere;
+}
+.prose a {
+  overflow-wrap: anywhere;
+}
+/* Wide tables scroll within their own box, never past the page. */
+.prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.prose th,
+.prose td {
+  border: 1px dashed var(--hair);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+/* Shiki dual-theme: swap CSS vars on dark */
+:root[data-theme="dark"] .astro-code,
+:root[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}
+
+.post-nav {
+  max-width: var(--measure);
+  margin: 0 auto;
+  border-top: 1.5px dashed var(--line);
+  padding: 2rem 0 3rem;
+}
+.post-nav a {
+  font-size: var(--fs-small);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ---------- Collections (gallery98 curated index, B&W mono) ---------- */
+.collections {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem 0 4rem;
+}
+.collection {
+  border-bottom: 1px dashed var(--hair);
+}
+.col-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 1.05rem 0;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.col-head::-webkit-details-marker {
+  display: none;
+}
+.col-head:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.col-mark::before {
+  content: "[+]";
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.collection[open] .col-mark::before {
+  content: "[\2212]";
+}
+.col-head:hover .col-mark::before,
+.col-head:hover .col-count {
+  color: var(--ink);
+}
+.collection[open] .col-head {
+  border-bottom: 1.5px dashed var(--line);
+}
+.collection[open] .col-list {
+  padding-bottom: 1.6rem;
+}
+.col-cat {
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.95rem;
+}
+.col-count {
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.col-list {
+  list-style: none;
+  margin-top: 1.2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 2.5rem;
+}
+.col-item a {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.55rem 0;
+  border-bottom: 1px dashed var(--hair);
+  color: var(--ink);
+  text-decoration: none;
+}
+.col-item a:hover .ci-title {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+.ci-date {
+  flex: none;
+  min-width: 5.5rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ci-title {
+  font-weight: 700;
+  line-height: 1.4;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .col-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- About / portfolio ---------- */
+.about-hero {
+  padding: clamp(2.5rem, 7vw, 5rem) 0 0;
+}
+.about-hero .label {
+  display: block;
+  margin-bottom: 1.2rem;
+}
+.kiko-block {
+  border: 1.5px dashed var(--line);
+  padding: clamp(1.6rem, 4vw, 2.6rem);
+}
+.kiko-block .tag-now {
+  display: inline-block;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.25rem 0.6rem;
+  margin-bottom: 1.1rem;
+}
+.kiko-block h2 {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.kiko-block .one-liner {
+  margin-top: 1rem;
+  font-size: 1.05rem;
+  max-width: 52ch;
+  line-height: 1.6;
+}
+.kiko-block .solves {
+  margin-top: 0.8rem;
+  color: var(--muted);
+  max-width: 52ch;
+}
+
+.showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.4rem;
+}
+.proj {
+  border: 1px dashed var(--line);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.proj .thumb {
+  border: 1px dashed var(--hair);
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.1rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 9px,
+    var(--accent-soft) 9px,
+    var(--accent-soft) 10px
+  );
+}
+.proj .thumb span {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0.04em;
+  background: var(--paper);
+  padding: 0.3rem 0.7rem;
+}
+.proj h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.proj .role {
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+.proj .one {
+  margin-top: 0.8rem;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.proj .impact {
+  margin-top: 0.9rem;
+  font-size: 0.86rem;
+  color: var(--muted);
+  list-style: none;
+}
+.proj .impact li {
+  padding-left: 1rem;
+  position: relative;
+}
+.proj .impact li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+.proj .links {
+  margin-top: auto;
+  padding-top: 1.1rem;
+  display: flex;
+  gap: 1rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.career {
+  list-style: none;
+  max-width: var(--measure);
+}
+.career li {
+  border-top: 1px dashed var(--hair);
+  padding: 1.4rem 0;
+}
+.career li:last-child {
+  border-bottom: 1px dashed var(--hair);
+}
+.career .ch {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.career .ch strong {
+  font-size: 1.05rem;
+}
+.career .ch .period {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  font-weight: 700;
+}
+.career .cd {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+.certs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.certs span {
+  font-size: var(--fs-small);
+  border: 1px dashed var(--hair);
+  padding: 0.3rem 0.65rem;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.section-block {
+  padding: clamp(2rem, 5vw, 3.5rem) 0;
+}
+.section-block > h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 860px) {
+  .showcase {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

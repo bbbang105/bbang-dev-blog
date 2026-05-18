@@ -1,0 +1,13 @@
+---
+// Renders both ko/en variants inline; CSS (data-lang on <html>) shows one.
+// Mirrors the dark-mode dual-state approach — no JS re-render needed.
+interface Props {
+  en: string;
+  ko: string;
+  as?: string;
+}
+const { en, ko, as = "span" } = Astro.props;
+const Tag = as as any;
+---
+
+<Tag data-lang-en set:text={en} /><Tag data-lang-ko set:text={ko} />

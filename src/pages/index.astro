@@ -1,0 +1,190 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import T from "../components/T.astro";
+import { ui } from "../i18n";
+import { fmtDate } from "../lib/feed";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const sFor = (p: (typeof posts)[number]) =>
+  `${p.data.title} ${p.data.description ?? ""} ${p.data.tags.join(" ")} ${p.data.category ?? ""}`.toLowerCase();
+const nn = (n: number) => String(n).padStart(2, "0");
+---
+
+<Base title="bbang.dev — 기술 블로그" current="home">
+  <section class="intro">
+    <div class="wrap">
+      <h1>
+        <T en={ui.en.introHeading} ko={ui.ko.introHeading} />
+      </h1>
+      <p class="sec sub">
+        <T en={ui.en.introSub} ko={ui.ko.introSub} />
+      </p>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="wrap">
+    <div class="section-head">
+      <h2><T en={ui.en.sectionPosts} ko={ui.ko.sectionPosts} /></h2>
+      <span class="count">
+        <T
+          en={`${posts.length} ${ui.en.postsCount}`}
+          ko={`${posts.length}${ui.ko.postsCount}`}
+        />
+      </span>
+    </div>
+
+    <div class="ledger" role="list">
+      {
+        posts.map((p, i) => (
+          <a
+            class="led-row"
+            role="listitem"
+            href={`/posts/${p.id}`}
+            data-s={sFor(p)}
+          >
+            <span class="led-n" aria-hidden="true">{nn(i + 1)}</span>
+            <span class="led-main">
+              <span class="led-title">{p.data.title}</span>
+              <span class="led-meta">
+                {p.data.category && (
+                  <span class="cat">{p.data.category.toUpperCase()}</span>
+                )}
+                <span>{fmtDate(p.data.date)}</span>
+                {p.data.tags.slice(0, 2).map((t) => (
+                  <span>· {t}</span>
+                ))}
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <p class="no-results" id="no-results" hidden>
+      <T en="No posts match your search." ko="검색 결과가 없습니다." />
+    </p>
+
+    <nav class="pager" id="pager" aria-label="Pagination"></nav>
+  </section>
+
+  <section class="foot-cta">
+    <div class="wrap">
+      <p>
+        <T en={ui.en.footCtaText} ko={ui.ko.footCtaText} />{" "}
+        <a href="/about">
+          <T en={ui.en.footCtaLink} ko={ui.ko.footCtaLink} />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <script is:inline>
+    (function () {
+      var PER = 15;
+      var rows = Array.prototype.slice.call(
+        document.querySelectorAll(".led-row"),
+      );
+      var pager = document.getElementById("pager");
+      var none = document.getElementById("no-results");
+      var q = document.getElementById("q");
+      var page = 1;
+      function pad(n) {
+        return String(n).length < 2 ? "0" + n : "" + n;
+      }
+      function matches(el, terms) {
+        var h = el.getAttribute("data-s") || "";
+        return terms.every(function (t) {
+          return h.indexOf(t) > -1;
+        });
+      }
+      function render() {
+        var v = ((q && q.value) || "").trim().toLowerCase();
+        var terms = v.split(/\s+/).filter(Boolean);
+        var searching = terms.length > 0;
+        var visible = searching
+          ? rows.filter(function (el) {
+              return matches(el, terms);
+            })
+          : rows;
+        var pages = Math.max(1, Math.ceil(visible.length / PER));
+        if (page > pages) page = pages;
+        var start = (page - 1) * PER;
+        rows.forEach(function (el) {
+          el.hidden = true;
+        });
+        visible.slice(start, start + PER).forEach(function (el) {
+          el.hidden = false;
+        });
+        if (none) none.hidden = visible.length !== 0;
+        buildPager(pages);
+      }
+      function buildPager(pages) {
+        var h = "";
+        function numCell(n) {
+          return n === page
+            ? '<span class="pg-n is-cur" aria-current="page">' +
+                pad(n) +
+                "</span>"
+            : '<a class="pg-n" data-go="' +
+                n +
+                '" href="#">' +
+                pad(n) +
+                "</a>";
+        }
+        h += '<span class="pg-nums">';
+        var mobile = false;
+        try {
+          mobile = window.matchMedia("(max-width: 640px)").matches;
+        } catch (e) {}
+        if (mobile) {
+          var W = 5;
+          var s = Math.min(
+            Math.max(1, page - 2),
+            Math.max(1, pages - W + 1),
+          );
+          var en = Math.min(pages, s + W - 1);
+          if (s > 1) h += '<span class="pg-ell">…</span>';
+          for (var m = s; m <= en; m++) h += numCell(m);
+          if (en < pages) h += '<span class="pg-ell">…</span>';
+        } else {
+          for (var n = 1; n <= pages; n++) h += numCell(n);
+        }
+        h += "</span>";
+        pager.innerHTML = pages <= 1 ? "" : h;
+        Array.prototype.forEach.call(
+          pager.querySelectorAll("[data-go]"),
+          function (a) {
+            a.addEventListener("click", function (e) {
+              e.preventDefault();
+              page = parseInt(a.getAttribute("data-go"), 10);
+              render();
+              window.scrollTo({ top: 0, behavior: "instant" });
+            });
+          },
+        );
+      }
+      try {
+        var pq = new URLSearchParams(location.search).get("q");
+        if (pq && q) q.value = pq;
+      } catch (e) {}
+      try {
+        window
+          .matchMedia("(max-width: 640px)")
+          .addEventListener("change", function () {
+            render();
+          });
+      } catch (e) {}
+      if (q)
+        q.addEventListener("input", function () {
+          page = 1;
+          render();
+        });
+      render();
+    })();
+  </script>
+</Base>
