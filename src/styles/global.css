@@ -121,10 +121,19 @@ a:hover {
   text-decoration-thickness: 2px;
 }
 
-/* Focus: pure ink (black light / white dark) solid outline. */
+/* Focus: pure ink (black light / white dark) dotted outline —
+   matches the site's dotted-rule design language; applied consistently. */
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px dotted var(--ink);
   outline-offset: 2px;
+}
+
+/* Search-result keyword highlight — mono, on-theme (no default yellow). */
+mark {
+  background: var(--selection);
+  color: inherit;
+  padding: 0 0.12em;
+  border-radius: 0;
 }
 
 /* Hard overflow guard: no embedded/media element may exceed its container. */
@@ -1568,7 +1577,7 @@ a.pg-n:hover {
   display: none;
 }
 .col-head:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px dotted var(--ink);
   outline-offset: 3px;
 }
 .col-mark::before {

@@ -102,6 +102,32 @@ const nn = (n: number) => String(n).padStart(2, "0");
           return h.indexOf(t) > -1;
         });
       }
+      function escHtml(s) {
+        return s.replace(/[&<>]/g, function (c) {
+          return c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;";
+        });
+      }
+      // Wrap matched terms in the post title with <mark>. Safe: the title is
+      // HTML-escaped first, terms are regex-escaped; output is only escaped
+      // text plus our own <mark> tags.
+      function mark(el, terms) {
+        var t = el.querySelector(".led-title");
+        if (!t) return;
+        if (t.getAttribute("data-orig") === null)
+          t.setAttribute("data-orig", t.textContent);
+        var orig = t.getAttribute("data-orig");
+        var esc = [];
+        for (var i = 0; i < terms.length; i++) {
+          if (terms[i])
+            esc.push(terms[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+        }
+        if (!esc.length) {
+          t.textContent = orig;
+          return;
+        }
+        var re = new RegExp("(" + esc.join("|") + ")", "ig");
+        t.innerHTML = escHtml(orig).replace(re, "<mark>$1</mark>");
+      }
       function render() {
         var v = ((q && q.value) || "").trim().toLowerCase();
         var terms = v.split(/\s+/).filter(Boolean);
@@ -119,6 +145,7 @@ const nn = (n: number) => String(n).padStart(2, "0");
         });
         visible.slice(start, start + PER).forEach(function (el) {
           el.hidden = false;
+          mark(el, searching ? terms : []);
         });
         if (none) none.hidden = visible.length !== 0;
         buildPager(pages);
