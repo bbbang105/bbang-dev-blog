@@ -18,6 +18,40 @@ import { about } from "../i18n";
           <span data-lang-en>KO</span><span data-lang-ko>EN</span>
         </button>
       </div>
+
+      <div class="intro">
+        <span class="intro-label">
+          <T en={about.introLabel.en} ko={about.introLabel.ko} />
+        </span>
+        <h1 class="intro-name">
+          <T en={about.introName.en} ko={about.introName.ko} />
+        </h1>
+        <span class="intro-role">
+          <T en={about.introRole.en} ko={about.introRole.ko} />
+        </span>
+        <div class="intro-lines">
+          {
+            about.introLines.en.map((_, idx) => (
+              <p>
+                <T
+                  en={about.introLines.en[idx]}
+                  ko={about.introLines.ko[idx]}
+                />
+              </p>
+            ))
+          }
+        </div>
+        <div class="intro-links">
+          {
+            about.links.map((l) => (
+              <a href={l.href} rel="noopener" target="_blank">
+                {l.label} →
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
       <div class="kiko-block">
         <span class="tag-now">
           <T en={about.kikoBadge.en} ko={about.kikoBadge.ko} />
@@ -41,10 +75,62 @@ import { about } from "../i18n";
       <div class="showcase">
         {
           about.showcase.map((p) => (
-            <article class="proj">
-              <div class="thumb" aria-hidden="true">
-                <span>{p.name}</span>
-              </div>
+            <article class={p.featured ? "proj proj-featured" : "proj"}>
+              {p.featured && "gallery" in p ? (
+                <div class="carousel" data-carousel>
+                  <div class="carousel-viewport">
+                    <ul class="carousel-track">
+                      {p.gallery.map((g) => (
+                        <li class="carousel-slide">
+                          <img
+                            class="cimg"
+                            data-lang-ko
+                            src={g.ko}
+                            alt={g.alt.ko}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <img
+                            class="cimg"
+                            data-lang-en
+                            src={g.en}
+                            alt={g.alt.en}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <button
+                    class="carousel-arrow prev"
+                    type="button"
+                    aria-label="Previous slide"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    class="carousel-arrow next"
+                    type="button"
+                    aria-label="Next slide"
+                  >
+                    ›
+                  </button>
+                  <div class="carousel-dots" role="tablist">
+                    {p.gallery.map((_, i) => (
+                      <button
+                        class="carousel-dot"
+                        type="button"
+                        aria-label={`Go to slide ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div class="thumb" aria-hidden="true">
+                  <span>{p.name}</span>
+                </div>
+              )}
               <h3>{p.name}</h3>
               <span class="role">
                 <T en={p.role.en} ko={p.role.ko} />
@@ -59,9 +145,14 @@ import { about } from "../i18n";
                   </li>
                 ))}
               </ul>
+              <div class="tags">
+                {p.tags.map((t) => (
+                  <span>{t}</span>
+                ))}
+              </div>
               <div class="links">
                 {p.links.map((l) => (
-                  <a href={l.href} rel="noopener">
+                  <a href={l.href} rel="noopener" target="_blank">
                     {l.label} →
                   </a>
                 ))}
@@ -97,6 +188,76 @@ import { about } from "../i18n";
               </div>
               <p class="cd">
                 <T en={c.desc.en} ko={c.desc.ko} />
+              </p>
+              <ul class="cpoints">
+                {c.points.en.map((_, idx) => (
+                  <li>
+                    <T en={c.points.en[idx]} ko={c.points.ko[idx]} />
+                  </li>
+                ))}
+              </ul>
+              <div class="tags">
+                {c.tags.map((t) => (
+                  <span>{t}</span>
+                ))}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section-block">
+    <div class="wrap">
+      <h2>
+        <T en={about.activitiesHeading.en} ko={about.activitiesHeading.ko} />
+      </h2>
+      <ul class="career">
+        {
+          about.activities.map((a) => (
+            <li>
+              <div class="ch">
+                <strong>
+                  <T en={a.title.en} ko={a.title.ko} />
+                </strong>
+                <span class="period">
+                  <T en={a.period.en} ko={a.period.ko} />
+                </span>
+              </div>
+              <p class="cd">
+                <T en={a.desc.en} ko={a.desc.ko} />
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section class="section-block">
+    <div class="wrap">
+      <h2>
+        <T en={about.educationHeading.en} ko={about.educationHeading.ko} />
+      </h2>
+      <ul class="career">
+        {
+          about.education.map((e) => (
+            <li>
+              <div class="ch">
+                <strong>
+                  <T en={e.school.en} ko={e.school.ko} />
+                </strong>
+                <span class="period">
+                  <T en={e.period.en} ko={e.period.ko} />
+                </span>
+              </div>
+              <p class="cd">
+                <T en={e.desc.en} ko={e.desc.ko} />
               </p>
             </li>
           ))
@@ -144,6 +305,66 @@ import { about } from "../i18n";
             localStorage.setItem("aboutLang", next);
           } catch (e) {}
         });
+    })();
+  </script>
+
+  <script is:inline>
+    (function () {
+      var roots = document.querySelectorAll("[data-carousel]");
+      roots.forEach(function (root) {
+        var track = root.querySelector(".carousel-track");
+        var slides = root.querySelectorAll(".carousel-slide");
+        var prev = root.querySelector(".carousel-arrow.prev");
+        var next = root.querySelector(".carousel-arrow.next");
+        var dots = root.querySelectorAll(".carousel-dot");
+        var n = slides.length;
+        if (!track || n === 0) return;
+        var i = 0;
+
+        function render() {
+          track.style.transform = "translateX(" + -i * 100 + "%)";
+          dots.forEach(function (d, k) {
+            d.setAttribute("aria-current", k === i ? "true" : "false");
+          });
+          if (prev) prev.disabled = i === 0;
+          if (next) next.disabled = i === n - 1;
+        }
+        function go(to) {
+          i = Math.max(0, Math.min(n - 1, to));
+          render();
+        }
+
+        if (prev) prev.addEventListener("click", function () { go(i - 1); });
+        if (next) next.addEventListener("click", function () { go(i + 1); });
+        dots.forEach(function (d, k) {
+          d.addEventListener("click", function () { go(k); });
+        });
+
+        root.setAttribute("tabindex", "0");
+        root.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowLeft") { go(i - 1); e.preventDefault(); }
+          else if (e.key === "ArrowRight") { go(i + 1); e.preventDefault(); }
+        });
+
+        // Pointer drag / swipe
+        var startX = 0;
+        var dragging = false;
+        root.addEventListener("pointerdown", function (e) {
+          dragging = true;
+          startX = e.clientX;
+        });
+        root.addEventListener("pointerup", function (e) {
+          if (!dragging) return;
+          dragging = false;
+          var dx = e.clientX - startX;
+          if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1);
+        });
+        root.addEventListener("pointercancel", function () {
+          dragging = false;
+        });
+
+        render();
+      });
     })();
   </script>
 </Base>

@@ -1962,8 +1962,27 @@ a.pg-n:hover {
 
 .showcase {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.4rem;
+}
+.proj-featured {
+  grid-column: 1 / -1;
+}
+@media (min-width: 861px) {
+  .proj-featured {
+    display: grid;
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+    column-gap: 2rem;
+    align-items: start;
+  }
+  .proj-featured .thumb {
+    aspect-ratio: 4 / 3;
+    margin-bottom: 0;
+    grid-row: 1 / 999;
+  }
+  .proj-featured h3 {
+    font-size: 1.5rem;
+  }
 }
 .proj {
   border: 1px dashed var(--line);
@@ -2095,6 +2114,198 @@ a.pg-n:hover {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-bottom: 1.6rem;
+}
+
+/* Intro / masthead */
+.intro {
+  padding-bottom: clamp(1.8rem, 4vw, 2.8rem);
+  border-bottom: 1px dashed var(--hair);
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
+}
+.intro-label {
+  display: block;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.9rem;
+}
+.intro-name {
+  font-size: var(--fs-mega);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.intro-role {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.intro-lines {
+  margin-top: 1.4rem;
+  max-width: var(--measure);
+}
+.intro-lines p {
+  margin-top: 0.7rem;
+  line-height: 1.7;
+}
+.intro-lines p:first-child {
+  margin-top: 0;
+}
+.intro-links {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.about-hero .kiko-block {
+  margin-top: 0;
+}
+
+/* Tech-tag chips (career + projects) */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.tags > span {
+  font-size: var(--fs-label);
+  border: 1px dashed var(--hair);
+  padding: 0.22rem 0.5rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.proj .tags {
+  margin-top: 0.9rem;
+}
+.proj .links {
+  padding-top: 0.9rem;
+}
+
+/* Career achievement points */
+.cpoints {
+  list-style: none;
+  margin-top: 1rem;
+}
+.cpoints li {
+  position: relative;
+  padding-left: 1rem;
+  margin-top: 0.4rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.cpoints li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* OneTime image carousel */
+.carousel {
+  position: relative;
+  border: 1px dashed var(--hair);
+  background: var(--accent-soft);
+  margin: 0 auto 1.1rem;
+  max-width: 100%;
+  touch-action: pan-y;
+  cursor: grab;
+  outline-offset: 2px;
+}
+.carousel:active {
+  cursor: grabbing;
+}
+.carousel-viewport {
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+}
+.carousel-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+.carousel-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-slide .cimg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: clamp(0.6rem, 2vw, 1.4rem);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+.carousel-arrow.prev {
+  left: 0.6rem;
+}
+.carousel-arrow.next {
+  right: 0.6rem;
+}
+.carousel-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.carousel-dots {
+  position: absolute;
+  bottom: 0.7rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+}
+.carousel-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--paper);
+  cursor: pointer;
+}
+.carousel-dot[aria-current="true"] {
+  background: var(--ink);
+}
+@media (min-width: 861px) {
+  .proj-featured .carousel {
+    grid-row: 1 / 999;
+    margin-bottom: 0;
+    max-width: 100%;
+  }
 }
 
 /* ---------- Responsive ---------- */
