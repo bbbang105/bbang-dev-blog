@@ -1747,6 +1747,13 @@ a.pg-n:hover {
   border-top: 1px dashed var(--hair);
   margin: 2.6rem 0;
 }
+/* Authors habitually write `---` right before a `#` section. The h1 now
+   draws its own solid top rule, so that hr is a redundant second divider
+   — hide it. (No :has() support → harmless fallback to the old dashed
+   line.) */
+.prose hr:has(+ h1) {
+  display: none;
+}
 .prose code {
   font-family: var(--mono);
   font-size: 0.88em;
