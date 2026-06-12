@@ -1681,7 +1681,7 @@ a.pg-n:hover {
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 700;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.8rem;
 }
 .prose h2 {
   font-size: 1.2rem;
