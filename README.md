@@ -66,7 +66,7 @@ thumbnail: /assets/x.png   # optional — list‑card thumbnail
   link anchors (copy section URL), copy post link, reading time, reading
   progress bar, code copy, image lightbox, back‑to‑top
 - Theme: light by default (no flash), dark toggle — a soft invert
-  (`#fff ↔ #0a0a0a` / `#f4f4f4`), no color
+  (`#fff ↔ #161616` / `#f4f4f4`), no color
 - i18n: header/footer always English; the About page has its own scoped
   ko/en toggle
 - Accessibility: respects `prefers-reduced-motion`, dotted `:focus-visible`

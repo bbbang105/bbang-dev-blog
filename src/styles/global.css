@@ -22,17 +22,17 @@
 
 /* ---------- Tokens ---------- */
 :root {
-  --ink: #0a0a0a;
+  --ink: #161616;
   --paper: #ffffff;
   --muted: #6b6b6b;
-  --line: #0a0a0a;
-  --hair: rgba(10, 10, 10, 0.28);
+  --line: #161616;
+  --hair: rgba(22, 22, 22, 0.28);
   /* Pure black & white — no color anywhere. --accent maps to ink so every
      existing var(--accent) site renders B&W; affordance is via underline,
      not hue. --accent-soft is a neutral grayscale wash. */
   --accent: var(--ink);
-  --accent-soft: rgba(10, 10, 10, 0.07);
-  --selection: rgba(10, 10, 10, 0.16);
+  --accent-soft: rgba(22, 22, 22, 0.07);
+  --selection: rgba(22, 22, 22, 0.16);
 
   --mono: "Sarasa Mono K", "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
@@ -55,7 +55,7 @@
 
 :root[data-theme="dark"] {
   --ink: #f4f4f4;
-  --paper: #0a0a0a;
+  --paper: #161616;
   --muted: #9a9a9a;
   --line: #f4f4f4;
   --hair: rgba(244, 244, 244, 0.3);
@@ -257,7 +257,7 @@ mark {
   display: grid;
   place-items: center;
   padding: 5vmin;
-  background: rgba(10, 10, 10, 0.92);
+  background: rgba(22, 22, 22, 0.92);
   cursor: zoom-out;
 }
 .lightbox[hidden] {
@@ -1745,9 +1745,9 @@ a.pg-n:hover {
   border: none;
   margin: var(--rhythm) 0;
   box-shadow:
-    0 1px 2px rgba(10, 10, 10, 0.1),
-    0 8px 24px rgba(10, 10, 10, 0.16),
-    0 20px 48px rgba(10, 10, 10, 0.12);
+    0 1px 2px rgba(22, 22, 22, 0.1),
+    0 8px 24px rgba(22, 22, 22, 0.16),
+    0 20px 48px rgba(22, 22, 22, 0.12);
 }
 /* Dark: blur shadows vanish on near-black — keep a faint ring + deep
    drop so images still separate from the page. */
@@ -2356,9 +2356,9 @@ a.pg-n:hover {
   display: block;
   /* Same soft elevation as post body images. */
   box-shadow:
-    0 1px 2px rgba(10, 10, 10, 0.1),
-    0 8px 24px rgba(10, 10, 10, 0.16),
-    0 20px 48px rgba(10, 10, 10, 0.12);
+    0 1px 2px rgba(22, 22, 22, 0.1),
+    0 8px 24px rgba(22, 22, 22, 0.16),
+    0 20px 48px rgba(22, 22, 22, 0.12);
 }
 :root[data-theme="dark"] .ab-shot img {
   box-shadow:

@@ -48,7 +48,7 @@ Vercel (자동 빌드 · TLS · CDN) ── bbang.dev
 `src/styles/global.css` 하나에 토큰부터 컴포넌트까지 전부 들어 있다 (~2,400줄).
 
 - **디자인이 곧 정체성**: gallery98.org의 모노/대시드/흑백 골격 × simplethread.com의 본문 가독성. 유틸리티 클래스 조합으로는 나오지 않는 손맛이 목표였다.
-- **순수 흑백 원칙**: `--accent`가 `--ink`로 매핑된다 — 색이 없고, 어포던스는 밑줄(dashed → solid)로 표현한다. 다크 모드는 색 반전(`#fff ↔ #0a0a0a`)일 뿐 색을 더하지 않는다. 썸네일(콘텐츠)만 원본 컬러를 유지한다.
+- **순수 흑백 원칙**: `--accent`가 `--ink`로 매핑된다 — 색이 없고, 어포던스는 밑줄(dashed → solid)로 표현한다. 다크 모드는 색 반전(`#fff ↔ #161616`)일 뿐 색을 더하지 않는다. 썸네일(콘텐츠)만 원본 컬러를 유지한다.
 - **고정폭 한글 폰트**: Sarasa Mono K self-host — Latin(Iosevka)과 한글이 모두 고정폭이라 "터미널/장부" 미감이 한·영 혼용 본문에서 깨지지 않는다.
 
 ### Content Collections + Zod
