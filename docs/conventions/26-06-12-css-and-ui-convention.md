@@ -32,7 +32,21 @@
 - 테마·언어처럼 페인트 전에 적용돼야 하는 것은 `<head>`의 no-flash 인라인 스크립트 패턴을 따른다 (`data-theme`/`data-lang` 어트리뷰트 방식).
 - 페이지 간 상태 공유는 URL 쿼리(`/?q=검색어`)로 — 전역 스토어 없음.
 
-## 5. i18n
+## 5. 본문(prose) 타이포 패턴
+
+다음 패턴은 `global.css`의 `.prose` 블록에서 확정된 규칙이다. 새 prose 스타일을 추가할 때 참고한다.
+
+| 요소 | 처리 방식 |
+|------|-----------|
+| `h1` (글 내 대단원) | `counter-increment: prose-section` + `::before`로 `Section NN` 레이블 자동 출력, 2px solid top rule |
+| `h2` (소단원) | `border-bottom: 1px dashed var(--hair)` |
+| `h3` (세부) | body-size bold — `color: var(--ink)` (muted 금지; bold body보다 약해지기 때문) |
+| `strong` | 굵기만 — 밑줄 없음 (긴 한국어 본문에서 bold마다 밑줄은 노이즈) |
+| inline `code` | `background: var(--accent-soft)` gray wash chip; dashed border 없음 |
+| 외부 링크 | `href^="http":not([href*="bbang.dev"])::after { content:"↗" }` 픽토그램 자동 삽입 |
+| 이미지 | `border: none` + `box-shadow` 3단 elevation; dashed border 없음 |
+
+## 6. i18n
 
 - 헤더/푸터 등 크롬 문자열은 **항상 영어**, `src/i18n.ts`에 정의.
 - 마크업 분기는 `<T en="..." ko="..." />` 컴포넌트 또는 `data-lang-en`/`data-lang-ko` 어트리뷰트.

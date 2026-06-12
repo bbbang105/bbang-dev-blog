@@ -19,7 +19,7 @@ Astro 6 기반 완전 정적 사이트. **외부 통합 0개(minimal-deps 원칙
 | Styling | 손으로 쓴 단일 CSS (`src/styles/global.css`, ~2,400줄) — Tailwind 없음 |
 | Font | Sarasa Mono K (self-hosted woff2, Latin Iosevka + 한글 고정폭) |
 | Code Highlight | Astro 내장 Shiki 듀얼 테마 (github-light / tokyo-night) |
-| Client JS | islands만 — 검색·페이지네이션·TOC·진행바·코드 복사·라이트박스·back-to-top (인라인 `<script is:inline>`) |
+| Client JS | islands만 — 검색·TOC·진행바·코드 복사·라이트박스·back-to-top (인라인 `<script is:inline>`) |
 | i18n | `src/i18n.ts` ko/en 문자열 맵 — 크롬(헤더/푸터)은 항상 영어, About만 스코프 토글 |
 | SEO/GEO | canonical·OG·Twitter Card·JSON-LD `@graph`·sitemap·RSS·robots·llms.txt 전부 수제 (0 deps) |
 | Analytics | Google Analytics 4 (`G-BKNGY77L23`, Base.astro 인라인) |
@@ -48,8 +48,8 @@ pnpm lint     # astro check (타입 검사)
 src/
 ├── layouts/Base.astro       # 공용 레이아웃 — head(SEO/OG/JSON-LD/GA4) + 마스트헤드 + 푸터 + 테마/검색 스크립트
 ├── pages/
-│   ├── index.astro          # 홈 — featured lead + 넘버링 ledger 피드 + 클라이언트 검색/페이지네이션
-│   ├── page/[page].astro    # 아카이브 페이지 2+ (index 재사용)
+│   ├── index.astro          # 홈 — 넘버링 ledger 피드 + 클라이언트 검색 (히어로 없음, 단일 페이지)
+│   ├── page/[page].astro    # 페이지네이션 스텁 — getStaticPaths() 빈 배열, /page/N 라우트 없음
 │   ├── posts/[...slug].astro # 포스트 상세 — TOC(스크롤스파이)·진행바·앵커·코드복사·라이트박스
 │   ├── collections.astro    # 카테고리 아코디언
 │   ├── about.astro          # 소개/포트폴리오 — 자체 ko/en 토글(.about-i18n)
@@ -73,7 +73,7 @@ public/                      # 폰트(woff2)·이미지(assets/)·OG 커버·fav
 
 - 포스트: `/posts/<카테고리 폴더>/<슬러그>/` — 글이 들어있는 폴더가 곧 카테고리이자 URL
 - 한글 슬러그는 canonical/sitemap에서 %-인코딩으로 통일
-- 페이지네이션: `/` (1페이지) → `/page/2/` …
+- 페이지네이션: 비활성 — 홈이 전체 글을 단일 페이지로 렌더링한다 (`page/[page].astro`는 빈 스텁)
 
 ---
 
@@ -97,7 +97,7 @@ public/                      # 폰트(woff2)·이미지(assets/)·OG 커버·fav
 | SEO/OG/JSON-LD/GA4 | `src/layouts/Base.astro` (head 전체) |
 | 디자인 토큰 | `src/styles/global.css` 상단 `:root` / `:root[data-theme="dark"]` |
 | 테마 no-flash | `Base.astro` 인라인 스크립트 (`localStorage.theme` → `data-theme`) |
-| 검색 | 홈 피드가 소유(라이브 검색+페이지네이션), 타 페이지는 Enter → `/?q=` 점프 |
+| 검색 | 홈 피드가 소유(라이브 검색, 단일 페이지), 타 페이지는 Enter → `/?q=` 점프 |
 | 썸네일 폴백 | `src/lib/thumbs.ts` + `src/pages/cover/[...id].svg.ts` |
 | 콘텐츠 스키마 | `src/content.config.ts` |
 | i18n 문자열 | `src/i18n.ts` (+ `src/components/T.astro`) |
