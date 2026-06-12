@@ -1774,6 +1774,12 @@ a.pg-n:hover {
   background: #e9e9e9;
   color: #0a0a0a;
 }
+/* The dark chip rule above outranks `.prose pre code` — re-assert the
+   reset so fenced code blocks never get the chip background. */
+:root[data-theme="dark"] .prose pre code {
+  background: none;
+  color: inherit;
+}
 .prose pre {
   font-family: var(--mono);
   border: 1px dashed var(--hair);
