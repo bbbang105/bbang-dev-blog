@@ -1911,13 +1911,6 @@ a.pg-n:hover {
   font-size: var(--fs-small);
   color: var(--muted);
 }
-.cl-label {
-  flex: none;
-  font-size: var(--fs-label);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
 /* Title may truncate; the date never does. */
 .cl-title {
   flex: 0 1 auto;
