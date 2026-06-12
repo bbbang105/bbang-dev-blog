@@ -17,7 +17,7 @@ export const ui = {
     introSub:
       "Development is only a means — toward more human outcomes. Understanding people matters most, so my writing is grounded in reflection.",
     sectionPosts: "Posts",
-    postsCount: "entries ported",
+    postsCount: "posts",
     footCtaLabel: "// More",
     footCtaText: "Curious what I build?",
     footCtaLink: "About →",
@@ -48,7 +48,7 @@ export const ui = {
     introSub:
       "개발은 수단일 뿐, 더 인간적인 결과를 만들기 위해 노력합니다. 사람을 이해하는 일이 가장 중요하기에, 사유가 담긴 글을 씁니다.",
     sectionPosts: "글",
-    postsCount: "편 이전됨",
+    postsCount: "편",
     footCtaLabel: "// 더 보기",
     footCtaText: "제가 무엇을 만드는 사람인지 궁금하다면",
     footCtaLink: "소개 →",
