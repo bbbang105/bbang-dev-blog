@@ -10,7 +10,7 @@
 - **Shiki** dual‑theme code highlighting (github‑light / tokyo‑night)
 - Hand‑written single CSS (`src/styles/global.css`); font Sarasa Mono K
   (self‑hosted)
-- Client JS is islands only — search, pagination, TOC, progress bar,
+- Client JS is islands only — search, TOC, progress bar,
   copy, lightbox, back‑to‑top
 - Deployed on **Vercel** (auto build, auto TLS). `.dev` is HSTS‑preloaded
   → HTTPS enforced
@@ -20,7 +20,7 @@
 ```bash
 pnpm install
 pnpm dev      # http://localhost:4321
-pnpm build    # static output to dist/ (146 pages)
+pnpm build    # static output to dist/ (~147 pages)
 pnpm preview  # serve the build
 pnpm lint     # astro check (types)
 ```
@@ -41,7 +41,7 @@ date: 2026-04-01           # required (date)
 description: one‑line      # optional — meta / OG / RSS / shown under title
 category: "AI"             # optional — meta label
 tags: [ai, llm]            # optional — meta + click → /?q=tag search
-thumbnail: /assets/x.png   # optional — list‑card thumbnail
+thumbnail: /assets/x.png   # optional — list‑card thumbnail + og:image
 ---
 ```
 
@@ -59,22 +59,26 @@ thumbnail: /assets/x.png   # optional — list‑card thumbnail
 
 ## Features
 
-- Home: numbered ledger feed + full client‑side search (keyword `<mark>`
-  highlight) + pagination
-- Collections: category accordion / meta tags click → `/?q=tag` filter
-- Post: TOC (desktop sticky rail / mobile drawer) with scrollspy, heading
-  link anchors (copy section URL), copy post link, reading time, reading
-  progress bar, code copy, image lightbox, back‑to‑top
+- Posts (home): numbered ledger feed, all posts on a single page + full
+  client‑side search (keyword `<mark>` highlight)
+- Collections: category accordion with latest‑post preview / meta tags
+  click → `/?q=tag` filter
+- Post: TOC (desktop sticky rail / mobile drawer) with scrollspy,
+  `SECTION NN` heading counters, heading link anchors (copy section URL),
+  copy post link, reading time, reading progress bar, code copy, image
+  lightbox, back‑to‑top
 - Theme: light by default (no flash), dark toggle — a soft invert
   (`#fff ↔ #161616` / `#f4f4f4`), no color
 - i18n: header/footer always English; the About page has its own scoped
   ko/en toggle
 - Accessibility: respects `prefers-reduced-motion`, dotted `:focus-visible`
-- About: kiko intro + self‑built / career / certifications portfolio
+- About: now‑building (flori) intro + image‑led showcase (filmstrip +
+  "what I built" ledger) / career / certifications portfolio
 
 ## SEO / GEO
 
-- canonical (Korean slugs %‑encoded) · OG · Twitter Card
+- canonical (Korean slugs %‑encoded) · OG · Twitter Card — posts use
+  their frontmatter `thumbnail` as og:image (default cover otherwise)
 - JSON‑LD `@graph`: WebSite + Person (sameAs) + BlogPosting on posts
 - `sitemap.xml` (all URLs) · `rss.xml` (all posts) · `robots.txt` ·
   `llms.txt`
