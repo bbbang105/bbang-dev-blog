@@ -1539,12 +1539,10 @@ a.pg-n:hover {
   color: var(--ink);
   border-left-color: var(--ink);
 }
-/* Desktop: reading column stays page-centered (1fr | measure | 1fr);
-   the TOC lives in the right gutter as a sticky rail. */
+/* Desktop: the reading column starts at the container's left edge —
+   same line as the article header and the full-width rule above — and
+   stretches to the TOC rail. */
 @media (min-width: 1101px) {
-  /* Reserve a fixed right column for the TOC; the prose is centered
-     within the remaining writing area (between full-left and
-     page-center). */
   .article-body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 15rem;
@@ -1554,8 +1552,8 @@ a.pg-n:hover {
   .article-body .prose,
   .article-body .post-nav {
     grid-column: 1;
-    max-width: var(--measure);
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
   }
   .article-body .post-nav {
     width: 100%;
@@ -1701,13 +1699,9 @@ a.pg-n:hover {
   text-decoration-thickness: 2px;
 }
 .prose strong {
+  /* emphasis = weight only — underlines on every bold read as noise in
+     long Korean prose, and dashed underlines are reserved for links */
   font-weight: 700;
-  /* emphasis = weight + thin underline (no bg wash — a gray box on
-     every bold is noisy in long Korean prose) */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--hair);
 }
 /* Mono fonts have ugly synthetic oblique — render em upright with a
    dotted underline instead (distinct from strong's solid + bold). */
