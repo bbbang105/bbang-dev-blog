@@ -8,7 +8,7 @@ export type Lang = "en" | "ko";
 export const ui = {
   en: {
     brandTag: "tech log",
-    navHome: "Home",
+    navHome: "Posts",
     navAbout: "About",
     themeToggle: "◐ Theme",
     // Home intro
@@ -40,7 +40,7 @@ export const ui = {
   },
   ko: {
     brandTag: "tech log",
-    navHome: "홈",
+    navHome: "글",
     navAbout: "소개",
     themeToggle: "◐ 테마",
     introLabel: "// 최근 글",

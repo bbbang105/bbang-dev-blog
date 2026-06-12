@@ -32,23 +32,16 @@ const totalCats = groups.length;
 ---
 
 <Base title="Collections — bbang.dev" current="collections">
-  <section class="intro">
-    <div class="wrap">
-      <h1>
-        <T en="Browse by collection" ko="컬렉션으로 둘러보기" />
-      </h1>
-      <p class="sec sub">
+  <section class="wrap">
+    <div class="section-head">
+      <h1><T en="Collections" ko="컬렉션" /></h1>
+      <span class="count">
         <T
           en={`${totalCats} collections · ${posts.length} posts`}
           ko={`컬렉션 ${totalCats}개 · 글 ${posts.length}개`}
         />
-      </p>
+      </span>
     </div>
-  </section>
-
-  <hr class="rule" />
-
-  <section class="wrap">
     <div class="collections">
       {
         groups.map(([cat, items]) => (
