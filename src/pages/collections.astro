@@ -56,6 +56,10 @@ const totalCats = groups.length;
             <summary class="col-head">
               <span class="col-mark" aria-hidden="true" />
               <span class="col-cat">{cat.toUpperCase()}</span>
+              <span class="col-latest">
+                <span class="cl-label" aria-hidden="true">latest:</span>
+                {items[0].data.title} · {fmtDate(items[0].data.date)}
+              </span>
               <span class="col-count">{items.length}</span>
             </summary>
             <ul class="col-list" role="list">

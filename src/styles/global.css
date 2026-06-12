@@ -1845,10 +1845,12 @@ a.pg-n:hover {
   display: flex;
   align-items: baseline;
   gap: 0.9rem;
-  padding: 1.05rem 0;
+  padding: 1.05rem 0.6rem;
+  margin: 0 -0.6rem;
   cursor: pointer;
   list-style: none;
   user-select: none;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 .col-head::-webkit-details-marker {
   display: none;
@@ -1866,8 +1868,35 @@ a.pg-n:hover {
 .collection[open] .col-mark::before {
   content: "[\2212]";
 }
+/* Closed rows still carry information: latest entry preview, count.
+   Hover inverts the whole row (same grammar as the home ledger). */
+.col-latest {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+.cl-label {
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-right: 0.3rem;
+}
+.col-head:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
 .col-head:hover .col-mark::before,
-.col-head:hover .col-count {
+.col-head:hover .col-count,
+.col-head:hover .col-latest {
+  color: var(--paper);
+}
+.col-head:hover .col-cat {
+  background: var(--paper);
   color: var(--ink);
 }
 .collection[open] .col-head {
@@ -1885,6 +1914,8 @@ a.pg-n:hover {
   font-size: 0.95rem;
 }
 .col-count {
+  flex: none;
+  margin-left: auto;
   font-size: var(--fs-label);
   letter-spacing: 0.12em;
   color: var(--muted);
@@ -1929,6 +1960,10 @@ a.pg-n:hover {
 @media (max-width: 760px) {
   .col-list {
     grid-template-columns: 1fr;
+  }
+  /* Narrow screens: drop the latest-entry preview; keep cat + count. */
+  .col-latest {
+    display: none;
   }
 }
 
