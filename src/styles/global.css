@@ -1690,6 +1690,11 @@ a.pg-n:hover {
   padding-left: var(--prose-inset);
   padding-right: var(--prose-inset);
 }
+/* First section opens the article: the prose padding already provides
+   the gap below the header rule — drop the heading's own top margin. */
+.prose > h1:first-child {
+  margin-top: 0;
+}
 .prose h1::before {
   content: "Section " counter(prose-section, decimal-leading-zero);
   display: block;
