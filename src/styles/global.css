@@ -51,6 +51,11 @@
 
   --lh-body: 1.78; /* generous vertical rhythm for Korean long-form */
   --rhythm: 1.6rem;
+
+  /* Soft colorless elevation for content images (post body, About strip).
+     Dark theme swaps it for a faint ring + deep drop below. */
+  --shadow-soft: 0 1px 2px rgba(22, 22, 22, 0.1),
+    0 8px 24px rgba(22, 22, 22, 0.16), 0 20px 48px rgba(22, 22, 22, 0.12);
 }
 
 :root[data-theme="dark"] {
@@ -63,6 +68,9 @@
   --accent: var(--ink);
   --accent-soft: rgba(244, 244, 244, 0.1);
   --selection: rgba(244, 244, 244, 0.22);
+  /* Blur shadows vanish on near-black — ring + deep drop instead. */
+  --shadow-soft: 0 0 0 1px rgba(244, 244, 244, 0.18),
+    0 12px 32px rgba(0, 0, 0, 0.7);
 }
 
 /* ---------- Reset ---------- */
@@ -1758,17 +1766,7 @@ a.pg-n:hover {
      chrome (the one soft element by design; everything else stays line). */
   border: none;
   margin: var(--rhythm) 0;
-  box-shadow:
-    0 1px 2px rgba(22, 22, 22, 0.1),
-    0 8px 24px rgba(22, 22, 22, 0.16),
-    0 20px 48px rgba(22, 22, 22, 0.12);
-}
-/* Dark: blur shadows vanish on near-black — keep a faint ring + deep
-   drop so images still separate from the page. */
-:root[data-theme="dark"] .prose img {
-  box-shadow:
-    0 0 0 1px rgba(244, 244, 244, 0.18),
-    0 12px 32px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-soft);
 }
 .prose hr {
   border-top: 1px dashed var(--hair);
@@ -2378,6 +2376,10 @@ a.pg-n:hover {
   padding: 1.2rem 0.25rem 1.4rem;
   margin-top: 1.3rem;
   scroll-snap-type: x mandatory;
+  /* Standard scrollbar props (Firefox); the ::-webkit ones below cover
+     Chromium/Safari. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair) transparent;
 }
 .ab-strip::-webkit-scrollbar {
   height: 8px;
@@ -2394,16 +2396,7 @@ a.pg-n:hover {
 .ab-shot img {
   width: 100%;
   display: block;
-  /* Same soft elevation as post body images. */
-  box-shadow:
-    0 1px 2px rgba(22, 22, 22, 0.1),
-    0 8px 24px rgba(22, 22, 22, 0.16),
-    0 20px 48px rgba(22, 22, 22, 0.12);
-}
-:root[data-theme="dark"] .ab-shot img {
-  box-shadow:
-    0 0 0 1px rgba(244, 244, 244, 0.18),
-    0 12px 32px rgba(0, 0, 0, 0.7);
+  box-shadow: var(--shadow-soft);
 }
 .ab-shot figcaption {
   margin-top: 0.75rem;

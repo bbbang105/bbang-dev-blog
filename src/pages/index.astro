@@ -113,7 +113,11 @@ const nn = (n: number) => String(n).padStart(2, "0");
           return;
         }
         var re = new RegExp("(" + esc.join("|") + ")", "ig");
-        t.innerHTML = escHtml(orig).replace(re, "<mark>$1</mark>");
+        // Function replacer: "$'"-style patterns in the query can't
+        // corrupt the substitution.
+        t.innerHTML = escHtml(orig).replace(re, function (m) {
+          return "<mark>" + m + "</mark>";
+        });
       }
       function render() {
         var v = ((q && q.value) || "").trim().toLowerCase();

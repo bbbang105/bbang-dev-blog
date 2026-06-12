@@ -40,7 +40,12 @@ const sections = [
         <nav class="ab-pills" aria-label="Profile links">
           {
             about.links.map((l) => (
-              <a class="ab-pill" href={l.href} rel="noopener" target="_blank">
+              <a
+                class="ab-pill"
+                href={l.href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {l.label}
                 <span class="ab-pill-arr" aria-hidden="true">
                   ↗
@@ -118,9 +123,9 @@ const sections = [
       <div class="wrap ab-grid">
         <div class="ab-rail">
           <p class="ab-num" aria-hidden="true">01</p>
-          <p class="ab-rail-label" id="ab-sec-01-label">
+          <h2 class="ab-rail-label" id="ab-sec-01-label">
             <T en={about.selfBuiltHeading.en} ko={about.selfBuiltHeading.ko} />
-          </p>
+          </h2>
           <hr class="ab-rail-rule" />
         </div>
         <div class="ab-body">
@@ -166,12 +171,24 @@ const sections = [
                           </p>
                         </div>
                       ) : "src" in s ? (
-                        <img
-                          src={s.src}
-                          alt={s.caption.ko}
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        <>
+                          {/* same src; duplicated so alt follows the
+                              active language like the srcKo/En branch */}
+                          <img
+                            data-lang-ko
+                            src={s.src}
+                            alt={s.caption.ko}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <img
+                            data-lang-en
+                            src={s.src}
+                            alt={s.caption.en}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </>
                       ) : (
                         <>
                           <img
@@ -224,7 +241,7 @@ const sections = [
                 </div>
                 <div class="ab-links">
                   {p.links.map((l) => (
-                    <a href={l.href} rel="noopener" target="_blank">
+                    <a href={l.href} rel="noopener noreferrer" target="_blank">
                       {l.label} ↗
                     </a>
                   ))}
@@ -241,9 +258,9 @@ const sections = [
       <div class="wrap ab-grid">
         <div class="ab-rail">
           <p class="ab-num" aria-hidden="true">02</p>
-          <p class="ab-rail-label" id="ab-sec-02-label">
+          <h2 class="ab-rail-label" id="ab-sec-02-label">
             <T en={about.careerHeading.en} ko={about.careerHeading.ko} />
-          </p>
+          </h2>
           <hr class="ab-rail-rule" />
         </div>
         <div class="ab-body">
@@ -285,9 +302,9 @@ const sections = [
       <div class="wrap ab-grid">
         <div class="ab-rail">
           <p class="ab-num" aria-hidden="true">03</p>
-          <p class="ab-rail-label" id="ab-sec-03-label">
+          <h2 class="ab-rail-label" id="ab-sec-03-label">
             <T en={about.activitiesHeading.en} ko={about.activitiesHeading.ko} />
-          </p>
+          </h2>
           <hr class="ab-rail-rule" />
         </div>
         <div class="ab-body">
@@ -317,9 +334,9 @@ const sections = [
       <div class="wrap ab-grid">
         <div class="ab-rail">
           <p class="ab-num" aria-hidden="true">04</p>
-          <p class="ab-rail-label" id="ab-sec-04-label">
+          <h2 class="ab-rail-label" id="ab-sec-04-label">
             <T en={about.educationHeading.en} ko={about.educationHeading.ko} />
-          </p>
+          </h2>
           <hr class="ab-rail-rule" />
         </div>
         <div class="ab-body">
@@ -349,9 +366,9 @@ const sections = [
       <div class="wrap ab-grid">
         <div class="ab-rail">
           <p class="ab-num" aria-hidden="true">05</p>
-          <p class="ab-rail-label" id="ab-sec-05-label">
+          <h2 class="ab-rail-label" id="ab-sec-05-label">
             <T en={about.certsHeading.en} ko={about.certsHeading.ko} />
-          </p>
+          </h2>
           <hr class="ab-rail-rule" />
         </div>
         <div class="ab-body">
@@ -430,7 +447,8 @@ const sections = [
               return;
             }
           }
-          setCurrent(ids[0]);
+          // Nothing in view (e.g. masthead/bio area) — no active marker.
+          setCurrent(null);
         },
         { rootMargin: "-15% 0px -55% 0px" },
       );
