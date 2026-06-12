@@ -1642,20 +1642,16 @@ a.pg-n:hover {
 
 
 .prose {
+  /* Text sits inset from the column edges; full-width rules (h1 top
+     rule, hr) outdent back out so the type reads as living INSIDE the
+     ruled frame. */
+  --prose-inset: 0.9rem;
   max-width: var(--measure);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3.2rem) 0 4rem;
+  padding: clamp(2rem, 5vw, 3.2rem) var(--prose-inset) 4rem;
   font-size: 1.02rem;
   line-height: var(--lh-body);
   counter-reset: prose-section;
-}
-/* Single-column mode (no TOC rail): breathe a little off the page
-   gutters — body text was sitting flush against them. */
-@media (max-width: 1100px) {
-  .prose {
-    padding-left: 0.8rem;
-    padding-right: 0.8rem;
-  }
 }
 .prose > * + * {
   margin-top: var(--rhythm);
@@ -1680,6 +1676,11 @@ a.pg-n:hover {
   padding-top: 1rem;
   border-top: 2px solid var(--line);
   counter-increment: prose-section;
+  /* Rule spans the full column; the heading text stays at the inset. */
+  margin-left: calc(-1 * var(--prose-inset));
+  margin-right: calc(-1 * var(--prose-inset));
+  padding-left: var(--prose-inset);
+  padding-right: var(--prose-inset);
 }
 .prose h1::before {
   content: "Section " counter(prose-section, decimal-leading-zero);
@@ -1771,7 +1772,7 @@ a.pg-n:hover {
 }
 .prose hr {
   border-top: 1px dashed var(--hair);
-  margin: 2.6rem 0;
+  margin: 2.6rem calc(-1 * var(--prose-inset));
 }
 /* Authors habitually write `---` right before a `#` section. The h1 now
    draws its own solid top rule, so that hr is a redundant second divider
