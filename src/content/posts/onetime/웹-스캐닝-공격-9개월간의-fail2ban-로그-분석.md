@@ -18,7 +18,7 @@ tags:
 [OneTime](https://www.onetime-with-members.com/) 인프라는 현재 비용절감의 목적으로 ALB을 활용하지 않고,
 인스턴스 내부에서 Nginx를 통해 라우팅하는 식으로 구성되어 있다.
 
-그렇기 때문에 보안상 취약점이 있었고, 이를 해결하기 위해 Nginx에 [Fail2Ban을 붙여서](https://bbbang105.github.io/Infra/Fail2Ban-+-Nginx%EB%A1%9C-%ED%8C%8C%EC%9D%BC-%EC%8A%A4%EC%BA%90%EB%8B%9D-%EA%B3%B5%EA%B2%A9-%EB%B0%A9%EC%96%B4%ED%95%98%EA%B8%B0) 웹 스캐닝 공격을 방지하고 있다.
+그렇기 때문에 보안상 취약점이 있었고, 이를 해결하기 위해 Nginx에 [Fail2Ban을 붙여서](https://bbang.dev/posts/infra/fail2ban-nginx로-파일-스캐닝-공격-방어하기) 웹 스캐닝 공격을 방지하고 있다.
 
 이를 적용한 지 약 9개월이 되었고, 그동안 많은 악성 IP를 차단하며 공격도 어느정도 막고 깔끔한 로그를 유지할 수 있었다. 이번 글에서는 그동안 들어온 공격 정황에 대해서 정리해보며 인사이트를 뽑아보려고 한다.
 
