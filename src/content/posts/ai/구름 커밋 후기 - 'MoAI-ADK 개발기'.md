@@ -7,6 +7,7 @@ tags:
   - ai
   - claude
   - seminar
+thumbnail: /assets/모아이ADK/img.png
 ---
 
 # 🎬 서론
@@ -18,7 +19,7 @@ tags:
 
 > 해당 글은 구름의 [COMMIT](https://tech.goorm.io/2603_commit/) 내용을 요약한 것임을 밝힙니다.
 
-<img src="/public/assets/모아이ADK/img.png" width="70%">
+<img src="/assets/모아이ADK/img.png" width="70%">
 
 ---
 
