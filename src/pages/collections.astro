@@ -32,23 +32,16 @@ const totalCats = groups.length;
 ---
 
 <Base title="Collections — bbang.dev" current="collections">
-  <section class="intro">
-    <div class="wrap">
-      <h1>
-        <T en="Browse by collection" ko="컬렉션으로 둘러보기" />
-      </h1>
-      <p class="sec sub">
-        <T
-          en={`${totalCats} collections · ${posts.length} posts`}
-          ko={`컬렉션 ${totalCats}개 · 글 ${posts.length}개`}
-        />
-      </p>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
   <section class="wrap">
+    <div class="section-head">
+      <h1><T en="Collections" ko="컬렉션" /></h1>
+      <span class="count">
+        <T
+          en={`${totalCats} collections`}
+          ko={`컬렉션 ${totalCats}개`}
+        />
+      </span>
+    </div>
     <div class="collections">
       {
         groups.map(([cat, items]) => (
@@ -56,6 +49,10 @@ const totalCats = groups.length;
             <summary class="col-head">
               <span class="col-mark" aria-hidden="true" />
               <span class="col-cat">{cat.toUpperCase()}</span>
+              <span class="col-latest">
+                <span class="cl-title">{items[0].data.title}</span>
+                <span class="cl-date">· {fmtDate(items[0].data.date)}</span>
+              </span>
               <span class="col-count">{items.length}</span>
             </summary>
             <ul class="col-list" role="list">

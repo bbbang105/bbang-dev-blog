@@ -22,17 +22,17 @@
 
 /* ---------- Tokens ---------- */
 :root {
-  --ink: #0a0a0a;
+  --ink: #161616;
   --paper: #ffffff;
   --muted: #6b6b6b;
-  --line: #0a0a0a;
-  --hair: rgba(10, 10, 10, 0.28);
+  --line: #161616;
+  --hair: rgba(22, 22, 22, 0.28);
   /* Pure black & white — no color anywhere. --accent maps to ink so every
      existing var(--accent) site renders B&W; affordance is via underline,
      not hue. --accent-soft is a neutral grayscale wash. */
   --accent: var(--ink);
-  --accent-soft: rgba(10, 10, 10, 0.07);
-  --selection: rgba(10, 10, 10, 0.16);
+  --accent-soft: rgba(22, 22, 22, 0.07);
+  --selection: rgba(22, 22, 22, 0.16);
 
   --mono: "Sarasa Mono K", "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
@@ -51,11 +51,16 @@
 
   --lh-body: 1.78; /* generous vertical rhythm for Korean long-form */
   --rhythm: 1.6rem;
+
+  /* Soft colorless elevation for content images (post body, About strip).
+     Dark theme swaps it for a faint ring + deep drop below. */
+  --shadow-soft: 0 1px 2px rgba(22, 22, 22, 0.1),
+    0 8px 24px rgba(22, 22, 22, 0.16), 0 20px 48px rgba(22, 22, 22, 0.12);
 }
 
 :root[data-theme="dark"] {
   --ink: #f4f4f4;
-  --paper: #0a0a0a;
+  --paper: #161616;
   --muted: #9a9a9a;
   --line: #f4f4f4;
   --hair: rgba(244, 244, 244, 0.3);
@@ -63,6 +68,9 @@
   --accent: var(--ink);
   --accent-soft: rgba(244, 244, 244, 0.1);
   --selection: rgba(244, 244, 244, 0.22);
+  /* Blur shadows vanish on near-black — ring + deep drop instead. */
+  --shadow-soft: 0 0 0 1px rgba(244, 244, 244, 0.18),
+    0 12px 32px rgba(0, 0, 0, 0.7);
 }
 
 /* ---------- Reset ---------- */
@@ -257,7 +265,7 @@ mark {
   display: grid;
   place-items: center;
   padding: 5vmin;
-  background: rgba(10, 10, 10, 0.92);
+  background: rgba(22, 22, 22, 0.92);
   cursor: zoom-out;
 }
 .lightbox[hidden] {
@@ -510,7 +518,9 @@ main {
   padding: 1.4rem 0 1.6rem;
   flex-wrap: wrap;
 }
-.section-head h2 {
+/* h1 on home (page's only h1 after the hero removal), h2 elsewhere —
+   same visual treatment either way. */
+.section-head :is(h1, h2) {
   font-size: var(--fs-h2);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1243,12 +1253,19 @@ a.pg-n:hover {
   margin-bottom: 1rem;
 }
 .foot-cta p {
+  /* Single line: question left, About → pushed right (wraps on narrow). */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 2rem;
   font-size: clamp(1.1rem, 2.6vw, 1.7rem);
   font-weight: 700;
   line-height: 1.35;
-  max-width: 30ch;
 }
 .foot-cta p a {
+  /* Solid bottom border only — suppress the global dashed underline. */
+  text-decoration: none;
   border-bottom: 2px solid var(--accent);
   white-space: nowrap;
 }
@@ -1532,19 +1549,17 @@ a.pg-n:hover {
     font-size: 0.82rem;
   }
 }
-.prose :is(h2, h3) {
+.prose :is(h1, h2, h3) {
   scroll-margin-top: 1.8rem;
 }
 .post-toc li a.is-active {
   color: var(--ink);
   border-left-color: var(--ink);
 }
-/* Desktop: reading column stays page-centered (1fr | measure | 1fr);
-   the TOC lives in the right gutter as a sticky rail. */
+/* Desktop: the reading column starts at the container's left edge —
+   same line as the article header and the full-width rule above — and
+   stretches to the TOC rail. */
 @media (min-width: 1101px) {
-  /* Reserve a fixed right column for the TOC; the prose is centered
-     within the remaining writing area (between full-left and
-     page-center). */
   .article-body {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 15rem;
@@ -1554,8 +1569,8 @@ a.pg-n:hover {
   .article-body .prose,
   .article-body .post-nav {
     grid-column: 1;
-    max-width: var(--measure);
-    margin: 0 auto;
+    max-width: none;
+    margin: 0;
   }
   .article-body .post-nav {
     width: 100%;
@@ -1635,11 +1650,16 @@ a.pg-n:hover {
 
 
 .prose {
+  /* Text sits inset from the column edges; full-width rules (h1 top
+     rule, hr) outdent back out so the type reads as living INSIDE the
+     ruled frame. */
+  --prose-inset: 0.9rem;
   max-width: var(--measure);
   margin: 0 auto;
-  padding: clamp(2rem, 5vw, 3.2rem) 0 4rem;
+  padding: clamp(2rem, 5vw, 3.2rem) var(--prose-inset) 4rem;
   font-size: 1.02rem;
   line-height: var(--lh-body);
+  counter-reset: prose-section;
 }
 .prose > * + * {
   margin-top: var(--rhythm);
@@ -1653,21 +1673,50 @@ a.pg-n:hover {
   letter-spacing: -0.01em;
   margin-top: 2.8rem;
 }
-/* Clear, stepped hierarchy so md #/##/### read distinctly:
-   h1 = major section (dominant), h2 = sub-section (dashed rule),
-   h3 = detail. */
+/* Calm, structural hierarchy: heading sizes stay close to body text so
+   the article title keeps its authority. "Chapter" cues come from rules
+   and counters instead of scale — h1 = major section (2px solid top rule
+   + auto SECTION NN label), h2 = sub-section (dashed rule), h3 = detail
+   (body-size bold). */
 .prose h1 {
-  font-size: 2.05rem;
+  font-size: 1.45rem;
+  margin-top: 3.4rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--line);
+  counter-increment: prose-section;
+  /* Rule spans the full column; the heading text stays at the inset. */
+  margin-left: calc(-1 * var(--prose-inset));
+  margin-right: calc(-1 * var(--prose-inset));
+  padding-left: var(--prose-inset);
+  padding-right: var(--prose-inset);
+}
+/* First section opens the article: the prose padding already provides
+   the gap below the header rule — drop the heading's own top margin. */
+.prose > h1:first-child {
+  margin-top: 0;
+}
+.prose h1::before {
+  content: "Section " counter(prose-section, decimal-leading-zero);
+  display: block;
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
 }
 .prose h2 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px dashed var(--hair);
 }
 .prose h3 {
-  font-size: 1.12rem;
-  color: var(--muted);
+  font-size: 1rem;
+  /* Ink, not muted: at body size a gray bold heading would read weaker
+     than bold body text. */
+  color: var(--ink);
 }
+.prose h1 + *,
 .prose h2 + *,
 .prose h3 + * {
   margin-top: 1rem;
@@ -1683,13 +1732,9 @@ a.pg-n:hover {
   text-decoration-thickness: 2px;
 }
 .prose strong {
+  /* emphasis = weight only — underlines on every bold read as noise in
+     long Korean prose, and dashed underlines are reserved for links */
   font-weight: 700;
-  /* emphasis = weight + thin underline (no bg wash — a gray box on
-     every bold is noisy in long Korean prose) */
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--hair);
 }
 /* Mono fonts have ugly synthetic oblique — render em upright with a
    dotted underline instead (distinct from strong's solid + bold). */
@@ -1722,19 +1767,30 @@ a.pg-n:hover {
   margin-top: 0.7rem;
 }
 .prose img {
-  border: 1px dashed var(--hair);
+  /* Soft colorless elevation — body images float free of the dashed
+     chrome (the one soft element by design; everything else stays line). */
+  border: none;
   margin: var(--rhythm) 0;
+  box-shadow: var(--shadow-soft);
 }
 .prose hr {
   border-top: 1px dashed var(--hair);
-  margin: 2.6rem 0;
+  margin: 2.6rem calc(-1 * var(--prose-inset));
+}
+/* Authors habitually write `---` right before a `#` section. The h1 now
+   draws its own solid top rule, so that hr is a redundant second divider
+   — hide it. (No :has() support → harmless fallback to the old dashed
+   line.) */
+.prose hr:has(+ h1) {
+  display: none;
 }
 .prose code {
   font-family: var(--mono);
   font-size: 0.88em;
-  background: transparent;
-  border: 1px dashed var(--hair);
-  padding: 0.08em 0.34em;
+  /* Gray wash chip — quiet enough for code-dense paragraphs; the token
+     flips automatically in dark mode. */
+  background: var(--accent-soft);
+  padding: 0.1em 0.4em;
 }
 .prose pre {
   font-family: var(--mono);
@@ -1748,7 +1804,8 @@ a.pg-n:hover {
 }
 .prose pre code {
   background: none;
-  border: 0; /* inline-code dashed box must NOT apply inside code blocks */
+  border: 0; /* inline-code chip must NOT apply inside code blocks */
+  color: inherit;
   padding: 0;
   font-size: inherit;
   white-space: pre; /* keep code formatting; the pre scrolls horizontally */
@@ -1759,6 +1816,16 @@ a.pg-n:hover {
 }
 .prose a {
   overflow-wrap: anywhere;
+}
+/* External links get a deep-link pictogram (same ↗ grammar as the About
+   pills). inline-block keeps the parent underline off the glyph. */
+.prose a[href^="http"]:not([href*="bbang.dev"])::after {
+  content: "↗";
+  display: inline-block;
+  font-size: 0.78em;
+  margin-left: 0.22em;
+  color: var(--muted);
+  transform: translateY(-0.08em);
 }
 /* Wide tables scroll within their own box, never past the page. */
 .prose table {
@@ -1775,16 +1842,27 @@ a.pg-n:hover {
   padding: 0.5rem 0.75rem;
   text-align: left;
 }
-/* Mobile: keep natural column widths and scroll horizontally instead of
-   squeezing cells until Korean text breaks one char per line. */
+/* Mobile: keep natural cell widths (no one-char-per-line Korean) and let
+   the table scroll INSIDE itself. The table element must stay at column
+   width — width:max-content here would grow the scroll container itself
+   and kill its own overflow scroll. */
 @media (max-width: 640px) {
-  .prose table {
-    min-width: max-content;
-    width: max-content;
-  }
   .prose th,
   .prose td {
     white-space: nowrap;
+  }
+}
+/* Markdown image-pair trick (`![](a)|![](b)` + `--|--`) renders as a
+   table of images — that's a side-by-side layout, not a data table:
+   split columns evenly so the images scale down to fit. */
+.prose table:has(img) {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .prose table:has(img) :is(th, td) {
+    white-space: normal;
   }
 }
 
@@ -1820,17 +1898,21 @@ a.pg-n:hover {
   gap: 0;
   padding: 1rem 0 4rem;
 }
+/* border-top (not bottom) so the first row draws the divider right under
+   the COLLECTIONS header — same grammar as the home ledger rows. */
 .collection {
-  border-bottom: 1px dashed var(--hair);
+  border-top: 1px dashed var(--hair);
 }
 .col-head {
   display: flex;
   align-items: baseline;
   gap: 0.9rem;
-  padding: 1.05rem 0;
+  padding: 1.05rem 0.6rem;
+  margin: 0 -0.6rem;
   cursor: pointer;
   list-style: none;
   user-select: none;
+  transition: background 0.12s ease, color 0.12s ease;
 }
 .col-head::-webkit-details-marker {
   display: none;
@@ -1848,8 +1930,40 @@ a.pg-n:hover {
 .collection[open] .col-mark::before {
   content: "[\2212]";
 }
+/* Closed rows still carry information: latest entry preview, count.
+   Hover inverts the whole row (same grammar as the home ledger). */
+.col-latest {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+/* Title may truncate; the date never does. */
+.cl-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cl-date {
+  flex: none;
+  white-space: nowrap;
+}
+.col-head:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
 .col-head:hover .col-mark::before,
-.col-head:hover .col-count {
+.col-head:hover .col-count,
+.col-head:hover .col-latest {
+  color: var(--paper);
+}
+.col-head:hover .col-cat {
+  background: var(--paper);
   color: var(--ink);
 }
 .collection[open] .col-head {
@@ -1867,6 +1981,8 @@ a.pg-n:hover {
   font-size: 0.95rem;
 }
 .col-count {
+  flex: none;
+  margin-left: auto;
   font-size: var(--fs-label);
   letter-spacing: 0.12em;
   color: var(--muted);
@@ -1912,196 +2028,639 @@ a.pg-n:hover {
   .col-list {
     grid-template-columns: 1fr;
   }
+  /* Narrow screens: the preview moves to its own second line (order
+     pushes it past the count), indented to align with the category chip
+     ([+] = 3ch + the .col-head gap). */
+  .col-head {
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
+  .col-latest {
+    order: 1;
+    flex: 0 0 100%;
+    padding-left: calc(3ch + 0.9rem);
+  }
 }
 
-/* ---------- About / portfolio ---------- */
-.about-hero {
-  padding: clamp(2.5rem, 7vw, 5rem) 0 0;
+/* ---------- About / portfolio (editorial index) ---------- */
+.ab-eyebrow {
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
 }
-.about-hero .label {
-  display: block;
-  margin-bottom: 1.2rem;
+
+/* Masthead */
+.ab-masthead {
+  padding: clamp(2.5rem, 7vw, 5rem) 0 clamp(2rem, 5vw, 3.5rem);
+  border-bottom: 1.5px dashed var(--hair);
 }
-.about-langbar {
+.ab-langbar {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
 }
-.kiko-block {
+.ab-lang {
+  appearance: none;
+  background: transparent;
+  color: var(--ink);
   border: 1.5px dashed var(--line);
-  padding: clamp(1.6rem, 4vw, 2.6rem);
-}
-.kiko-block .tag-now {
-  display: inline-block;
+  padding: 0.5rem 0.85rem;
+  font-family: var(--mono);
   font-size: var(--fs-label);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.ab-lang:hover {
   background: var(--ink);
   color: var(--paper);
-  padding: 0.25rem 0.6rem;
-  margin-bottom: 1.1rem;
 }
-.kiko-block h2 {
-  font-size: clamp(1.8rem, 5vw, 3rem);
+.ab-name {
+  font-size: var(--fs-mega);
+  line-height: 1.02;
   font-weight: 700;
   letter-spacing: -0.02em;
-  line-height: 1.15;
+  margin-top: 1.4rem;
 }
-.kiko-block .one-liner {
-  margin-top: 1rem;
-  font-size: 1.05rem;
-  max-width: 52ch;
-  line-height: 1.6;
-}
-.kiko-block .solves {
-  margin-top: 0.8rem;
-  color: var(--muted);
-  max-width: 52ch;
-}
-
-.showcase {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.4rem;
-}
-.proj {
-  border: 1px dashed var(--line);
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-}
-.proj .thumb {
-  border: 1px dashed var(--hair);
-  aspect-ratio: 16 / 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.1rem;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 9px,
-    var(--accent-soft) 9px,
-    var(--accent-soft) 10px
-  );
-}
-.proj .thumb span {
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: 0.04em;
-  background: var(--paper);
-  padding: 0.3rem 0.7rem;
-}
-.proj h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-.proj .role {
-  font-size: var(--fs-label);
-  letter-spacing: 0.12em;
+.ab-role {
+  margin-top: 1.1rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 700;
-  margin-top: 0.4rem;
 }
-.proj .one {
-  margin-top: 0.8rem;
-  font-size: 0.92rem;
-  line-height: 1.65;
+.ab-pills {
+  margin-top: 1.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
 }
-.proj .impact {
-  margin-top: 0.9rem;
-  font-size: 0.86rem;
+.ab-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px dashed var(--hair);
+  padding: 0.4rem 0.7rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.ab-pill:hover {
+  border-color: var(--line);
+  background: var(--accent-soft);
+}
+.ab-pill-arr {
   color: var(--muted);
+}
+
+/* Bio + now building */
+.ab-bio {
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+}
+.ab-lines {
+  max-width: var(--measure);
+}
+.ab-lines p {
+  margin-top: 1.4rem;
+  font-size: 1.02rem;
+  line-height: var(--lh-body);
+}
+.ab-lines p:first-child {
+  margin-top: 0;
+}
+.ab-now {
+  margin-top: clamp(1.8rem, 4vw, 2.5rem);
+  border: 1.5px dashed var(--line);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+.ab-now-badge {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.3rem 0.65rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+}
+.ab-now-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.ab-now-one {
+  margin-top: 0.7rem;
+  font-size: 1rem;
+  max-width: var(--measure);
+}
+.ab-now-detail {
+  margin-top: 0.9rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: var(--measure);
+}
+
+/* Index / TOC */
+.ab-toc {
+  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  border-top: 1.5px dashed var(--hair);
+  border-bottom: 1.5px dashed var(--hair);
+}
+.ab-toc-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+.ab-toc-title {
+  font-size: var(--fs-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.ab-toc-list {
   list-style: none;
 }
-.proj .impact li {
-  padding-left: 1rem;
-  position: relative;
+.ab-toc-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  padding: 0.85rem 0;
+  border-top: 1px dashed var(--hair);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
 }
-.proj .impact li::before {
+.ab-toc-list li:first-child .ab-toc-row {
+  border-top: none;
+}
+.ab-toc-row:hover {
+  background: var(--accent-soft);
+}
+.ab-toc-row:hover .ab-toc-name {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 4px;
+}
+.ab-toc-num {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  font-weight: 700;
+  min-width: 2.2ch;
+  flex: none;
+  font-variant-numeric: tabular-nums;
+}
+.ab-toc-name {
+  font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+  font-weight: 700;
+  flex: none;
+}
+.ab-toc-leader {
+  flex: 1 1 auto;
+  align-self: center;
+  border-bottom: 1px dotted var(--hair);
+  transform: translateY(-2px);
+  min-width: 1.5rem;
+}
+.ab-toc-go {
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex: none;
+}
+
+/* Numbered section */
+.ab-section {
+  padding: clamp(3rem, 7vw, 5rem) 0 clamp(1rem, 3vw, 2rem);
+  scroll-margin-top: 80px;
+}
+.ab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.28fr) minmax(0, 0.72fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+.ab-num {
+  font-size: clamp(3rem, 9vw, 6rem);
+  line-height: 0.9;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--hair);
+  font-variant-numeric: tabular-nums;
+}
+.ab-rail-label {
+  margin-top: 0.75rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.ab-rail-rule {
+  margin-top: 0.6rem;
+  border: none;
+  border-top: 1px dashed var(--hair);
+}
+.ab-body {
+  min-width: 0;
+  /* "Chapter entry" cue — every section body opens with a solid rule,
+     mirroring the prose h1 treatment on post pages. */
+  border-top: 2px solid var(--line);
+  padding-top: clamp(1.4rem, 3.5vw, 2rem);
+}
+
+/* Editorial entry */
+.ab-entry {
+  padding: clamp(1.5rem, 4vw, 2.25rem) 0;
+  border-top: 1px dashed var(--hair);
+}
+.ab-entry:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.ab-entry-top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+.ab-entry-no {
+  font-size: var(--fs-small);
+  color: var(--muted);
+  font-weight: 700;
+}
+.ab-entry-title {
+  font-size: clamp(1.3rem, 3.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.ab-entry-badge {
+  border: 1px dashed var(--line);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.45rem;
+  font-weight: 700;
+  align-self: center;
+}
+.ab-entry-meta {
+  margin-top: 0.5rem;
+  font-size: var(--fs-small);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.ab-entry-one {
+  margin-top: 1rem;
+  font-size: 1rem;
+  max-width: var(--measure);
+}
+.ab-impact {
+  list-style: none;
+  margin-top: 1.1rem;
+  max-width: var(--measure);
+}
+.ab-impact li {
+  position: relative;
+  padding-left: 1.6rem;
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.ab-impact li:first-child {
+  margin-top: 0;
+}
+.ab-impact li::before {
   content: "—";
   position: absolute;
   left: 0;
-  color: var(--accent);
+  color: var(--ink);
 }
-.proj .links {
-  margin-top: auto;
-  padding-top: 1.1rem;
+.ab-tags {
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1.2rem;
+}
+.ab-chip {
+  border: 1px dashed var(--hair);
+  padding: 0.28rem 0.55rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.ab-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 1.2rem;
   font-size: var(--fs-small);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
 }
 
-.career {
-  list-style: none;
-  max-width: var(--measure);
+/* Filmstrip — horizontal snap-scroll product shots (showcase entries) */
+.ab-strip {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  padding: 1.2rem 0.25rem 1.4rem;
+  margin-top: 1.3rem;
+  scroll-snap-type: x mandatory;
+  /* Standard scrollbar props (Firefox); the ::-webkit ones below cover
+     Chromium/Safari. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--hair) transparent;
 }
-.career li {
-  border-top: 1px dashed var(--hair);
-  padding: 1.4rem 0;
+.ab-strip::-webkit-scrollbar {
+  height: 8px;
 }
-.career li:last-child {
+.ab-strip::-webkit-scrollbar-thumb {
+  background: var(--hair);
+  border-radius: 999px;
+}
+.ab-shot {
+  flex: 0 0 min(26rem, 72%);
+  margin: 0;
+  scroll-snap-align: start;
+}
+.ab-shot img {
+  width: 100%;
+  display: block;
+  box-shadow: var(--shadow-soft);
+}
+.ab-shot figcaption {
+  margin-top: 0.75rem;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+/* Placeholder card carrying the capture guide for missing screenshots. */
+.ab-shot-todo {
+  aspect-ratio: 16 / 10;
+  border: 1.5px dashed var(--hair);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.3rem;
+}
+.ab-shot-todo-label {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+}
+.ab-shot-todo p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* "What I built" ledger — contribution | impact value */
+.ab-ledger {
+  margin-top: 0.3rem;
+}
+.ab-ledger-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 0.45rem;
+}
+.ab-lrow {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.7rem 0;
   border-bottom: 1px dashed var(--hair);
+  font-size: 0.9rem;
 }
-.career .ch {
+.ab-ln {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ab-lt {
+  line-height: 1.6;
+}
+.ab-lv {
+  font-weight: 700;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Generic list item (activities / education) */
+.ab-item {
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  border-top: 1px dashed var(--hair);
+}
+.ab-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.ab-item-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.8rem;
   flex-wrap: wrap;
 }
-.career .ch strong {
-  font-size: 1.05rem;
-}
-.career .ch .period {
-  font-size: var(--fs-small);
-  color: var(--muted);
+.ab-item-name {
+  font-size: 1.1rem;
   font-weight: 700;
 }
-.career .cd {
-  margin-top: 0.5rem;
+.ab-item-when {
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.ab-item-desc {
+  margin-top: 0.8rem;
+  font-size: 0.95rem;
+  max-width: var(--measure);
+  color: var(--muted);
   line-height: 1.65;
 }
-.certs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+
+/* Certifications ledger table — name | issuer | date */
+.ab-certs {
+  width: 100%;
+  max-width: var(--measure);
+  border-collapse: collapse;
 }
-.certs > span {
-  font-size: var(--fs-small);
-  border: 1px dashed var(--hair);
-  padding: 0.3rem 0.65rem;
+.ab-certs th,
+.ab-certs td {
+  text-align: left;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--hair);
+  vertical-align: baseline;
+}
+.ab-cert-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding-right: 1.2rem;
+}
+.ab-cert-issuer {
   color: var(--muted);
-  font-weight: 700;
+  font-size: var(--fs-small);
+  padding-right: 1.2rem;
+}
+.ab-certs td.ab-cert-date {
+  color: var(--muted);
+  font-size: var(--fs-small);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-.section-block {
-  padding: clamp(2rem, 5vw, 3.5rem) 0;
+/* Fixed section spy — numbers rail on very wide screens only (needs free
+   gutter outside --maxw so it never overlaps content). Names appear on
+   hover/focus as a side label. */
+.ab-spy {
+  display: none;
 }
-.section-block > h2 {
-  font-size: var(--fs-h2);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 1.6rem;
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 860px) {
-  .showcase {
-    grid-template-columns: 1fr;
+@media (min-width: 1400px) {
+  .ab-spy {
+    display: block;
+    position: fixed;
+    right: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 40;
   }
+  .ab-spy ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .ab-spy a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.05rem;
+    border: 1px dashed var(--hair);
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.12s ease, border-color 0.12s ease;
+  }
+  .ab-spy a:hover {
+    color: var(--ink);
+    border-color: var(--line);
+  }
+  .ab-spy a[aria-current="true"] {
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--line);
+  }
+  .ab-spy-name {
+    position: absolute;
+    right: calc(100% + 0.6rem);
+    top: 50%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px dashed var(--hair);
+    padding: 0.2rem 0.55rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.12s ease;
+  }
+  .ab-spy a:hover .ab-spy-name,
+  .ab-spy a:focus-visible .ab-spy-name {
+    opacity: 1;
+  }
+}
+
+/* About responsive: collapse the numbered rail above each section */
+@media (max-width: 760px) {
+  .ab-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .ab-rail {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1px dashed var(--hair);
+    padding-bottom: 0.75rem;
+  }
+  .ab-num {
+    font-size: 2.5rem;
+  }
+  .ab-rail-label {
+    margin-top: 0;
+  }
+  .ab-rail-rule {
+    display: none;
+  }
+  /* Rail already draws a dashed divider here — drop the body's solid
+     rule so the two don't stack. */
+  .ab-body {
+    border-top: none;
+    padding-top: 0;
+  }
+  /* Filmstrip: bigger slides, ledger collapses value under text. */
+  .ab-shot {
+    flex-basis: 84%;
+  }
+  .ab-lrow {
+    grid-template-columns: 1.6rem 1fr;
+  }
+  .ab-lv {
+    grid-column: 2;
+    white-space: normal;
+    color: var(--muted);
+  }
+}
+
+/* Shared intro statement border (home / collections / 404) */
+.intro {
+  padding-bottom: clamp(1.8rem, 4vw, 2.8rem);
+  border-bottom: 1px dashed var(--hair);
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

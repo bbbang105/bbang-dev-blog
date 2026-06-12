@@ -14,22 +14,9 @@ const nn = (n: number) => String(n).padStart(2, "0");
 ---
 
 <Base title="bbang.dev — 기술 블로그" current="home">
-  <section class="intro">
-    <div class="wrap">
-      <h1>
-        <T en={ui.en.introHeading} ko={ui.ko.introHeading} />
-      </h1>
-      <p class="sec sub">
-        <T en={ui.en.introSub} ko={ui.ko.introSub} />
-      </p>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
   <section class="wrap">
     <div class="section-head">
-      <h2><T en={ui.en.sectionPosts} ko={ui.ko.sectionPosts} /></h2>
+      <h1><T en={ui.en.sectionPosts} ko={ui.ko.sectionPosts} /></h1>
       <span class="count">
         <T
           en={`${posts.length} ${ui.en.postsCount}`}
@@ -126,7 +113,11 @@ const nn = (n: number) => String(n).padStart(2, "0");
           return;
         }
         var re = new RegExp("(" + esc.join("|") + ")", "ig");
-        t.innerHTML = escHtml(orig).replace(re, "<mark>$1</mark>");
+        // Function replacer: "$'"-style patterns in the query can't
+        // corrupt the substitution.
+        t.innerHTML = escHtml(orig).replace(re, function (m) {
+          return "<mark>" + m + "</mark>";
+        });
       }
       function render() {
         var v = ((q && q.value) || "").trim().toLowerCase();

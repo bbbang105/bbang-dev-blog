@@ -58,7 +58,7 @@ public class MyApplication { ... }
 
 ```
 
-- 최근에는 서블릿을 잘 쓰지는 않으며, `@RestController` , `@RequestMapping`을 사용한다. [참고 글](https://bbbang105.github.io/Spring/Spring--Spring-Boot)
+- 최근에는 서블릿을 잘 쓰지는 않으며, `@RestController` , `@RequestMapping`을 사용한다. [참고 글](https://bbang.dev/posts/spring/spring-spring-boot)
 
 ### 2. 필터 (Filter)
 

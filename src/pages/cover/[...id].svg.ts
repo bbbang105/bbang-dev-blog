@@ -11,7 +11,8 @@ function esc(s: string): string {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 // Naive width-aware wrapper (monospace ≈ fixed advance; CJK ≈ 2 cells).
@@ -65,26 +66,26 @@ export const GET: APIRoute = ({ props }) => {
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="ui-monospace, 'Sarasa Mono K', monospace">
   <rect width="1600" height="1000" fill="#ffffff"/>
-  <rect x="28" y="28" width="1544" height="944" fill="none" stroke="#0a0a0a" stroke-width="3" stroke-dasharray="14 10"/>
-  <text x="80" y="120" font-size="30" letter-spacing="8" font-weight="700" fill="#0a0a0a">${esc(
+  <rect x="28" y="28" width="1544" height="944" fill="none" stroke="#161616" stroke-width="3" stroke-dasharray="14 10"/>
+  <text x="80" y="120" font-size="30" letter-spacing="8" font-weight="700" fill="#161616">${esc(
     (category || "POST").toUpperCase(),
   )}</text>
-  <line x1="80" y1="150" x2="1520" y2="150" stroke="#0a0a0a" stroke-width="2" stroke-dasharray="6 8"/>
+  <line x1="80" y1="150" x2="1520" y2="150" stroke="#161616" stroke-width="2" stroke-dasharray="6 8"/>
   ${lines
     .map(
       (ln, i) =>
         `<text x="80" y="${
           startY + i * fs * 1.18
-        }" font-size="${fs}" font-weight="700" fill="#0a0a0a" letter-spacing="-1">${esc(
+        }" font-size="${fs}" font-weight="700" fill="#161616" letter-spacing="-1">${esc(
           ln,
         )}</text>`,
     )
     .join("\n  ")}
-  <line x1="80" y1="880" x2="1520" y2="880" stroke="#0a0a0a" stroke-width="2" stroke-dasharray="6 8"/>
-  <text x="80" y="930" font-size="28" letter-spacing="6" font-weight="700" fill="#0a0a0a">${esc(
+  <line x1="80" y1="880" x2="1520" y2="880" stroke="#161616" stroke-width="2" stroke-dasharray="6 8"/>
+  <text x="80" y="930" font-size="28" letter-spacing="6" font-weight="700" fill="#161616">${esc(
     date,
   )}</text>
-  <text x="1520" y="930" font-size="26" letter-spacing="4" text-anchor="end" fill="#0a0a0a">bbang.dev</text>
+  <text x="1520" y="930" font-size="26" letter-spacing="4" text-anchor="end" fill="#161616">bbang.dev</text>
 </svg>`;
 
   return new Response(svg, {

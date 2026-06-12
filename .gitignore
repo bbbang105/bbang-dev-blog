@@ -13,9 +13,6 @@ npm-debug.log*
 .idea/
 .vscode/
 
-# MoAI-ADK runtime artifacts
-.moai/cache/
-.moai/logs/
-.moai/reports/
-.moai/state/
+# Claude Code local artifacts
 .claude/agent-memory/
+.claude/worktrees/
