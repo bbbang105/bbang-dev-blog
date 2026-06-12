@@ -1245,10 +1245,15 @@ a.pg-n:hover {
   margin-bottom: 1rem;
 }
 .foot-cta p {
+  /* Single line: question left, About → pushed right (wraps on narrow). */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem 2rem;
   font-size: clamp(1.1rem, 2.6vw, 1.7rem);
   font-weight: 700;
   line-height: 1.35;
-  max-width: 30ch;
 }
 .foot-cta p a {
   /* Solid bottom border only — suppress the global dashed underline. */
@@ -1870,8 +1875,10 @@ a.pg-n:hover {
   gap: 0;
   padding: 1rem 0 4rem;
 }
+/* border-top (not bottom) so the first row draws the divider right under
+   the COLLECTIONS header — same grammar as the home ledger rows. */
 .collection {
-  border-bottom: 1px dashed var(--hair);
+  border-top: 1px dashed var(--hair);
 }
 .col-head {
   display: flex;
