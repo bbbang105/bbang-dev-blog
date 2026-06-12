@@ -1,35 +1,87 @@
 ---
+import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import T from "../components/T.astro";
 import { about } from "../i18n";
+
+// Live post count for the KPI strip (the only computed KPI value).
+const postCount = (await getCollection("posts")).length;
+const kpis = about.kpis.map((k) => ({
+  ...k,
+  value: k.value === "__POSTS__" ? String(postCount) : k.value,
+}));
+
+// Numbered index — drives both the TOC and each section's rail.
+const sections = [
+  { id: "ab-sec-01", num: "01", heading: about.selfBuiltHeading },
+  { id: "ab-sec-02", num: "02", heading: about.careerHeading },
+  { id: "ab-sec-03", num: "03", heading: about.activitiesHeading },
+  { id: "ab-sec-04", num: "04", heading: about.educationHeading },
+  { id: "ab-sec-05", num: "05", heading: about.certsHeading },
+];
 ---
 
 <Base title="About — bbang.dev" current="about">
   <div class="about-i18n" id="about-i18n" data-lang="en">
-  <section class="about-hero">
-    <div class="wrap">
-      <div class="about-langbar">
-        <button
-          class="theme-toggle ico"
-          id="lang-toggle"
-          type="button"
-          aria-label="Toggle language"
-        >
-          <span data-lang-en>KO</span><span data-lang-ko>EN</span>
-        </button>
-      </div>
-
-      <div class="intro">
-        <span class="intro-label">
+    <!-- ===== masthead ===== -->
+    <header class="ab-masthead">
+      <div class="wrap">
+        <div class="ab-langbar">
+          <button
+            class="ab-lang"
+            id="lang-toggle"
+            type="button"
+            aria-label="Toggle language"
+          >
+            <span data-lang-en>KO</span><span data-lang-ko>EN</span>
+          </button>
+        </div>
+        <p class="ab-eyebrow">
           <T en={about.introLabel.en} ko={about.introLabel.ko} />
-        </span>
-        <h1 class="intro-name">
+        </p>
+        <h1 class="ab-name">
           <T en={about.introName.en} ko={about.introName.ko} />
         </h1>
-        <span class="intro-role">
+        <p class="ab-role">
           <T en={about.introRole.en} ko={about.introRole.ko} />
-        </span>
-        <div class="intro-lines">
+        </p>
+        <nav class="ab-pills" aria-label="Profile links">
+          {
+            about.links.map((l) => (
+              <a class="ab-pill" href={l.href} rel="noopener" target="_blank">
+                {l.label}
+                <span class="ab-pill-arr" aria-hidden="true">
+                  ↗
+                </span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <!-- ===== KPI strip ===== -->
+    <section class="ab-kpis-wrap" aria-label="Key numbers">
+      <div class="wrap">
+        <div class="ab-kpis">
+          {
+            kpis.map((k) => (
+              <div class="ab-kpi">
+                <span class="ab-kpi-val">{k.value}</span>
+                <span class="ab-kpi-label">
+                  <T en={k.label.en} ko={k.label.ko} />
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== bio + now building ===== -->
+    <section class="ab-bio" aria-label="Introduction">
+      <div class="wrap">
+        <div class="ab-lines">
           {
             about.introLines.en.map((_, idx) => (
               <p>
@@ -41,250 +93,379 @@ import { about } from "../i18n";
             ))
           }
         </div>
-        <div class="intro-links">
+
+        <div class="ab-now">
+          <span class="ab-now-badge">
+            <T en={about.nowBadge.en} ko={about.nowBadge.ko} />
+          </span>
+          <h2 class="ab-now-title">{about.nowTitle}</h2>
+          <p class="ab-now-one">
+            <T en={about.nowOneLiner.en} ko={about.nowOneLiner.ko} />
+          </p>
+          <p class="ab-now-detail">
+            <T en={about.nowDetail.en} ko={about.nowDetail.ko} />
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== index / table of contents ===== -->
+    <nav class="ab-toc" aria-labelledby="ab-toc-title">
+      <div class="wrap">
+        <div class="ab-toc-head">
+          <h2 class="ab-toc-title" id="ab-toc-title">
+            <T en="Index" ko="목차" />
+          </h2>
+          <span class="label"><T en="Contents" ko="목록" /></span>
+        </div>
+        <ul class="ab-toc-list">
           {
-            about.links.map((l) => (
-              <a href={l.href} rel="noopener" target="_blank">
-                {l.label} →
-              </a>
+            sections.map((s) => (
+              <li>
+                <a class="ab-toc-row" href={`#${s.id}`}>
+                  <span class="ab-toc-num">{s.num}</span>
+                  <span class="ab-toc-name">
+                    <T en={s.heading.en} ko={s.heading.ko} />
+                  </span>
+                  <span class="ab-toc-leader" aria-hidden="true" />
+                  <span class="ab-toc-go">
+                    <T en="Go ↓" ko="이동 ↓" />
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ===== 01 self-built ===== -->
+    <section class="ab-section" id="ab-sec-01" aria-labelledby="ab-sec-01-label">
+      <div class="wrap ab-grid">
+        <div class="ab-rail">
+          <p class="ab-num" aria-hidden="true">01</p>
+          <p class="ab-rail-label" id="ab-sec-01-label">
+            <T en={about.selfBuiltHeading.en} ko={about.selfBuiltHeading.ko} />
+          </p>
+          <hr class="ab-rail-rule" />
+        </div>
+        <div class="ab-body">
+          {
+            about.showcase.map((p, idx) => (
+              <article class="ab-entry">
+                <div class="ab-entry-top">
+                  <span class="ab-entry-no">
+                    [{String(idx + 1).padStart(2, "0")}]
+                  </span>
+                  <h3 class="ab-entry-title">{p.name}</h3>
+                  {"badge" in p ? (
+                    <span class="ab-entry-badge">
+                      <T en={p.badge.en} ko={p.badge.ko} />
+                    </span>
+                  ) : (
+                    p.featured && (
+                      <span class="ab-entry-badge">
+                        <T en="Featured" ko="대표" />
+                      </span>
+                    )
+                  )}
+                </div>
+                <p class="ab-entry-meta">
+                  <T en={p.role.en} ko={p.role.ko} />
+                </p>
+                <p class="ab-entry-one">
+                  <T en={p.one.en} ko={p.one.ko} />
+                </p>
+                <ul class="ab-impact">
+                  {p.impact.en.map((_, k) => (
+                    <li>
+                      <T en={p.impact.en[k]} ko={p.impact.ko[k]} />
+                    </li>
+                  ))}
+                </ul>
+                <div class="ab-tags">
+                  {p.tags.map((t) => (
+                    <span class="ab-chip">{t}</span>
+                  ))}
+                </div>
+                <div class="ab-links">
+                  {p.links.map((l) => (
+                    <a href={l.href} rel="noopener" target="_blank">
+                      {l.label} ↗
+                    </a>
+                  ))}
+                </div>
+
+                {p.featured && "gallery" in p && (
+                  <figure class="ab-figure">
+                    <div class="carousel" data-carousel>
+                      <div class="carousel-viewport">
+                        <ul class="carousel-track">
+                          {p.gallery.map((g) => (
+                            <li class="carousel-slide">
+                              <img
+                                class="cimg"
+                                data-lang-ko
+                                src={g.ko}
+                                alt={g.alt.ko}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                              <img
+                                class="cimg"
+                                data-lang-en
+                                src={g.en}
+                                alt={g.alt.en}
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <button
+                        class="carousel-arrow prev"
+                        type="button"
+                        aria-label="Previous slide"
+                      >
+                        ‹
+                      </button>
+                      <button
+                        class="carousel-arrow next"
+                        type="button"
+                        aria-label="Next slide"
+                      >
+                        ›
+                      </button>
+                      <div class="carousel-dots" role="tablist">
+                        {p.gallery.map((_, i) => (
+                          <button
+                            class="carousel-dot"
+                            type="button"
+                            aria-label={`Go to slide ${i + 1}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <figcaption>
+                      <T
+                        en="Fig. 01 — OneTime: time block board, fixed schedule, recommended times & participant status."
+                        ko="Fig. 01 — OneTime: 시간 블록 보드, 고정 스케줄, 추천 시간·참여자 현황."
+                      />
+                    </figcaption>
+                  </figure>
+                )}
+              </article>
             ))
           }
         </div>
       </div>
+    </section>
 
-      <div class="kiko-block">
-        <span class="tag-now">
-          <T en={about.kikoBadge.en} ko={about.kikoBadge.ko} />
-        </span>
-        <h2>kiko</h2>
-        <p class="one-liner">
-          <T en={about.kikoOneLiner.en} ko={about.kikoOneLiner.ko} />
-        </p>
-        <p class="solves">
-          <T en={about.kikoSolves.en} ko={about.kikoSolves.ko} />
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section-block">
-    <div class="wrap">
-      <h2>
-        <T en={about.selfBuiltHeading.en} ko={about.selfBuiltHeading.ko} />
-      </h2>
-      <div class="showcase">
-        {
-          about.showcase.map((p) => (
-            <article class={p.featured ? "proj proj-featured" : "proj"}>
-              {p.featured && "gallery" in p ? (
-                <div class="carousel" data-carousel>
-                  <div class="carousel-viewport">
-                    <ul class="carousel-track">
-                      {p.gallery.map((g) => (
-                        <li class="carousel-slide">
-                          <img
-                            class="cimg"
-                            data-lang-ko
-                            src={g.ko}
-                            alt={g.alt.ko}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                          <img
-                            class="cimg"
-                            data-lang-en
-                            src={g.en}
-                            alt={g.alt.en}
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <button
-                    class="carousel-arrow prev"
-                    type="button"
-                    aria-label="Previous slide"
-                  >
-                    ‹
-                  </button>
-                  <button
-                    class="carousel-arrow next"
-                    type="button"
-                    aria-label="Next slide"
-                  >
-                    ›
-                  </button>
-                  <div class="carousel-dots" role="tablist">
-                    {p.gallery.map((_, i) => (
-                      <button
-                        class="carousel-dot"
-                        type="button"
-                        aria-label={`Go to slide ${i + 1}`}
-                      />
-                    ))}
-                  </div>
+    <!-- ===== 02 career ===== -->
+    <section class="ab-section" id="ab-sec-02" aria-labelledby="ab-sec-02-label">
+      <div class="wrap ab-grid">
+        <div class="ab-rail">
+          <p class="ab-num" aria-hidden="true">02</p>
+          <p class="ab-rail-label" id="ab-sec-02-label">
+            <T en={about.careerHeading.en} ko={about.careerHeading.ko} />
+          </p>
+          <hr class="ab-rail-rule" />
+        </div>
+        <div class="ab-body">
+          {
+            about.career.map((c) => (
+              <article class="ab-entry">
+                <div class="ab-entry-top">
+                  <h3 class="ab-entry-title">
+                    <T en={c.company.en} ko={c.company.ko} />
+                  </h3>
                 </div>
-              ) : (
-                <div class="thumb" aria-hidden="true">
-                  <span>{p.name}</span>
+                <p class="ab-entry-meta">
+                  <T en={c.period.en} ko={c.period.ko} /> · {c.role}
+                </p>
+                <p class="ab-entry-one">
+                  <T en={c.desc.en} ko={c.desc.ko} />
+                </p>
+                <ul class="ab-impact">
+                  {c.points.en.map((_, k) => (
+                    <li>
+                      <T en={c.points.en[k]} ko={c.points.ko[k]} />
+                    </li>
+                  ))}
+                </ul>
+                <div class="ab-tags">
+                  {c.tags.map((t) => (
+                    <span class="ab-chip">{t}</span>
+                  ))}
                 </div>
-              )}
-              <h3>{p.name}</h3>
-              <span class="role">
-                <T en={p.role.en} ko={p.role.ko} />
-              </span>
-              <p class="one">
-                <T en={p.one.en} ko={p.one.ko} />
-              </p>
-              <ul class="impact">
-                {p.impact.en.map((_, idx) => (
-                  <li>
-                    <T en={p.impact.en[idx]} ko={p.impact.ko[idx]} />
-                  </li>
-                ))}
-              </ul>
-              <div class="tags">
-                {p.tags.map((t) => (
-                  <span>{t}</span>
-                ))}
-              </div>
-              <div class="links">
-                {p.links.map((l) => (
-                  <a href={l.href} rel="noopener" target="_blank">
-                    {l.label} →
-                  </a>
-                ))}
-              </div>
-            </article>
-          ))
-        }
+              </article>
+            ))
+          }
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <hr class="rule" />
-
-  <section class="section-block">
-    <div class="wrap">
-      <h2>
-        <T en={about.careerHeading.en} ko={about.careerHeading.ko} />
-      </h2>
-      <ul class="career">
-        {
-          about.career.map((c) => (
-            <li>
-              <div class="ch">
-                <strong>
-                  <T en={c.company.en} ko={c.company.ko} />
-                </strong>
-                <span class="period">
-                  <T en={c.period.en} ko={c.period.ko} />
-                </span>
+    <!-- ===== 03 activities ===== -->
+    <section class="ab-section" id="ab-sec-03" aria-labelledby="ab-sec-03-label">
+      <div class="wrap ab-grid">
+        <div class="ab-rail">
+          <p class="ab-num" aria-hidden="true">03</p>
+          <p class="ab-rail-label" id="ab-sec-03-label">
+            <T en={about.activitiesHeading.en} ko={about.activitiesHeading.ko} />
+          </p>
+          <hr class="ab-rail-rule" />
+        </div>
+        <div class="ab-body">
+          {
+            about.activities.map((a) => (
+              <div class="ab-item">
+                <div class="ab-item-head">
+                  <h3 class="ab-item-name">
+                    <T en={a.title.en} ko={a.title.ko} />
+                  </h3>
+                  <span class="ab-item-when">
+                    <T en={a.period.en} ko={a.period.ko} />
+                  </span>
+                </div>
+                <p class="ab-item-desc">
+                  <T en={a.desc.en} ko={a.desc.ko} />
+                </p>
               </div>
-              <div class="role" style="margin-top:.5rem">
-                {c.role}
-              </div>
-              <p class="cd">
-                <T en={c.desc.en} ko={c.desc.ko} />
-              </p>
-              <ul class="cpoints">
-                {c.points.en.map((_, idx) => (
-                  <li>
-                    <T en={c.points.en[idx]} ko={c.points.ko[idx]} />
-                  </li>
-                ))}
-              </ul>
-              <div class="tags">
-                {c.tags.map((t) => (
-                  <span>{t}</span>
-                ))}
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
-  <section class="section-block">
-    <div class="wrap">
-      <h2>
-        <T en={about.activitiesHeading.en} ko={about.activitiesHeading.ko} />
-      </h2>
-      <ul class="career">
-        {
-          about.activities.map((a) => (
-            <li>
-              <div class="ch">
-                <strong>
-                  <T en={a.title.en} ko={a.title.ko} />
-                </strong>
-                <span class="period">
-                  <T en={a.period.en} ko={a.period.ko} />
-                </span>
-              </div>
-              <p class="cd">
-                <T en={a.desc.en} ko={a.desc.ko} />
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
-  <section class="section-block">
-    <div class="wrap">
-      <h2>
-        <T en={about.educationHeading.en} ko={about.educationHeading.ko} />
-      </h2>
-      <ul class="career">
-        {
-          about.education.map((e) => (
-            <li>
-              <div class="ch">
-                <strong>
-                  <T en={e.school.en} ko={e.school.ko} />
-                </strong>
-                <span class="period">
-                  <T en={e.period.en} ko={e.period.ko} />
-                </span>
-              </div>
-              <p class="cd">
-                <T en={e.desc.en} ko={e.desc.ko} />
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <hr class="rule" />
-
-  <section class="section-block">
-    <div class="wrap">
-      <h2>
-        <T en={about.certsHeading.en} ko={about.certsHeading.ko} />
-      </h2>
-      <div class="certs">
-        {
-          about.certs.map((c) => (
-            <span>
-              <T en={c.en} ko={c.ko} />
-            </span>
-          ))
-        }
+            ))
+          }
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <!-- ===== 04 education ===== -->
+    <section class="ab-section" id="ab-sec-04" aria-labelledby="ab-sec-04-label">
+      <div class="wrap ab-grid">
+        <div class="ab-rail">
+          <p class="ab-num" aria-hidden="true">04</p>
+          <p class="ab-rail-label" id="ab-sec-04-label">
+            <T en={about.educationHeading.en} ko={about.educationHeading.ko} />
+          </p>
+          <hr class="ab-rail-rule" />
+        </div>
+        <div class="ab-body">
+          {
+            about.education.map((e) => (
+              <div class="ab-item">
+                <div class="ab-item-head">
+                  <h3 class="ab-item-name">
+                    <T en={e.school.en} ko={e.school.ko} />
+                  </h3>
+                  <span class="ab-item-when">
+                    <T en={e.period.en} ko={e.period.ko} />
+                  </span>
+                </div>
+                <p class="ab-item-desc">
+                  <T en={e.desc.en} ko={e.desc.ko} />
+                </p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 05 certifications ===== -->
+    <section class="ab-section" id="ab-sec-05" aria-labelledby="ab-sec-05-label">
+      <div class="wrap ab-grid">
+        <div class="ab-rail">
+          <p class="ab-num" aria-hidden="true">05</p>
+          <p class="ab-rail-label" id="ab-sec-05-label">
+            <T en={about.certsHeading.en} ko={about.certsHeading.ko} />
+          </p>
+          <hr class="ab-rail-rule" />
+        </div>
+        <div class="ab-body">
+          <table class="ab-certs">
+            <tbody>
+              {
+                about.certs.map((c) => (
+                  <tr>
+                    <th scope="row" class="ab-cert-name">
+                      <T en={c.name.en} ko={c.name.ko} />
+                    </th>
+                    <td class="ab-cert-issuer">
+                      <T en={c.issuer.en} ko={c.issuer.ko} />
+                    </td>
+                    <td class="ab-cert-date">{c.date}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== sticky section spy (desktop only) ===== -->
+    <nav class="ab-spy" id="ab-spy" aria-label="Section index">
+      <ul>
+        {
+          sections.map((s) => (
+            <li>
+              <a href={`#${s.id}`} data-spy={s.id}>
+                <span class="ab-spy-num">{s.num}</span>
+                <span class="ab-spy-name">
+                  <T en={s.heading.en} ko={s.heading.ko} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
   </div>
+
+  <script is:inline>
+    (function () {
+      // Scrollspy for the fixed section index: highlight the section
+      // currently nearest the top of the viewport.
+      var spy = document.getElementById("ab-spy");
+      if (!spy || !("IntersectionObserver" in window)) return;
+      var links = spy.querySelectorAll("a[data-spy]");
+      var map = {};
+      links.forEach(function (a) {
+        map[a.getAttribute("data-spy")] = a;
+      });
+      var current = null;
+      function setCurrent(id) {
+        if (current === id) return;
+        current = id;
+        links.forEach(function (a) {
+          a.setAttribute(
+            "aria-current",
+            a.getAttribute("data-spy") === id ? "true" : "false",
+          );
+        });
+      }
+      var visible = {};
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            visible[e.target.id] = e.isIntersecting;
+          });
+          var ids = Object.keys(map);
+          for (var i = ids.length - 1; i >= 0; i--) {
+            if (visible[ids[i]]) {
+              setCurrent(ids[i]);
+              return;
+            }
+          }
+          setCurrent(ids[0]);
+        },
+        { rootMargin: "-15% 0px -55% 0px" },
+      );
+      Object.keys(map).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) io.observe(el);
+      });
+    })();
+  </script>
 
   <script is:inline>
     (function () {
