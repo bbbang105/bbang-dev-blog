@@ -176,13 +176,73 @@ const sections = [
                 <p class="ab-entry-one">
                   <T en={p.one.en} ko={p.one.ko} />
                 </p>
-                <ul class="ab-impact">
-                  {p.impact.en.map((_, k) => (
-                    <li>
-                      <T en={p.impact.en[k]} ko={p.impact.ko[k]} />
-                    </li>
+
+                {/* Filmstrip — horizontal snap-scroll product shots.
+                    todo entries render as capture-guide placeholders. */}
+                <div class="ab-strip" role="list">
+                  {p.shots.map((s, k) => (
+                    <figure class="ab-shot" role="listitem">
+                      {"todo" in s ? (
+                        <div class="ab-shot-todo">
+                          <span class="ab-shot-todo-label">
+                            <T en="Screenshot TBD" ko="캡처 예정" />
+                          </span>
+                          <p>
+                            <T en={s.note.en} ko={s.note.ko} />
+                          </p>
+                        </div>
+                      ) : "src" in s ? (
+                        <img
+                          src={s.src}
+                          alt={s.caption.ko}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <>
+                          <img
+                            data-lang-ko
+                            src={s.srcKo}
+                            alt={s.caption.ko}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <img
+                            data-lang-en
+                            src={s.srcEn}
+                            alt={s.caption.en}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </>
+                      )}
+                      <figcaption>
+                        {String(k + 1).padStart(2, "0")} —{" "}
+                        <T en={s.caption.en} ko={s.caption.ko} />
+                      </figcaption>
+                    </figure>
                   ))}
-                </ul>
+                </div>
+
+                {/* What I built — contribution | impact ledger */}
+                <div class="ab-ledger">
+                  <div class="ab-ledger-head">
+                    <span><T en="What I built" ko="만든 것" /></span>
+                    <span><T en="Impact" ko="임팩트" /></span>
+                  </div>
+                  {p.built.map((b, k) => (
+                    <div class="ab-lrow">
+                      <span class="ab-ln">{String(k + 1).padStart(2, "0")}</span>
+                      <span class="ab-lt">
+                        <T en={b.text.en} ko={b.text.ko} />
+                      </span>
+                      <span class="ab-lv">
+                        <T en={b.value.en} ko={b.value.ko} />
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
                 <div class="ab-tags">
                   {p.tags.map((t) => (
                     <span class="ab-chip">{t}</span>
@@ -195,66 +255,6 @@ const sections = [
                     </a>
                   ))}
                 </div>
-
-                {p.featured && "gallery" in p && (
-                  <figure class="ab-figure">
-                    <div class="carousel" data-carousel>
-                      <div class="carousel-viewport">
-                        <ul class="carousel-track">
-                          {p.gallery.map((g) => (
-                            <li class="carousel-slide">
-                              <img
-                                class="cimg"
-                                data-lang-ko
-                                src={g.ko}
-                                alt={g.alt.ko}
-                                loading="lazy"
-                                decoding="async"
-                              />
-                              <img
-                                class="cimg"
-                                data-lang-en
-                                src={g.en}
-                                alt={g.alt.en}
-                                loading="lazy"
-                                decoding="async"
-                              />
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <button
-                        class="carousel-arrow prev"
-                        type="button"
-                        aria-label="Previous slide"
-                      >
-                        ‹
-                      </button>
-                      <button
-                        class="carousel-arrow next"
-                        type="button"
-                        aria-label="Next slide"
-                      >
-                        ›
-                      </button>
-                      <div class="carousel-dots" role="tablist">
-                        {p.gallery.map((_, i) => (
-                          <button
-                            class="carousel-dot"
-                            type="button"
-                            aria-label={`Go to slide ${i + 1}`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    <figcaption>
-                      <T
-                        en="Fig. 01 — OneTime: time block board, fixed schedule, recommended times & participant status."
-                        ko="Fig. 01 — OneTime: 시간 블록 보드, 고정 스케줄, 추천 시간·참여자 현황."
-                      />
-                    </figcaption>
-                  </figure>
-                )}
               </article>
             ))
           }
@@ -489,63 +489,4 @@ const sections = [
     })();
   </script>
 
-  <script is:inline>
-    (function () {
-      var roots = document.querySelectorAll("[data-carousel]");
-      roots.forEach(function (root) {
-        var track = root.querySelector(".carousel-track");
-        var slides = root.querySelectorAll(".carousel-slide");
-        var prev = root.querySelector(".carousel-arrow.prev");
-        var next = root.querySelector(".carousel-arrow.next");
-        var dots = root.querySelectorAll(".carousel-dot");
-        var n = slides.length;
-        if (!track || n === 0) return;
-        var i = 0;
-
-        function render() {
-          track.style.transform = "translateX(" + -i * 100 + "%)";
-          dots.forEach(function (d, k) {
-            d.setAttribute("aria-current", k === i ? "true" : "false");
-          });
-          if (prev) prev.disabled = i === 0;
-          if (next) next.disabled = i === n - 1;
-        }
-        function go(to) {
-          i = Math.max(0, Math.min(n - 1, to));
-          render();
-        }
-
-        if (prev) prev.addEventListener("click", function () { go(i - 1); });
-        if (next) next.addEventListener("click", function () { go(i + 1); });
-        dots.forEach(function (d, k) {
-          d.addEventListener("click", function () { go(k); });
-        });
-
-        root.setAttribute("tabindex", "0");
-        root.addEventListener("keydown", function (e) {
-          if (e.key === "ArrowLeft") { go(i - 1); e.preventDefault(); }
-          else if (e.key === "ArrowRight") { go(i + 1); e.preventDefault(); }
-        });
-
-        // Pointer drag / swipe
-        var startX = 0;
-        var dragging = false;
-        root.addEventListener("pointerdown", function (e) {
-          dragging = true;
-          startX = e.clientX;
-        });
-        root.addEventListener("pointerup", function (e) {
-          if (!dragging) return;
-          dragging = false;
-          var dx = e.clientX - startX;
-          if (Math.abs(dx) > 40) go(dx < 0 ? i + 1 : i - 1);
-        });
-        root.addEventListener("pointercancel", function () {
-          dragging = false;
-        });
-
-        render();
-      });
-    })();
-  </script>
 </Base>

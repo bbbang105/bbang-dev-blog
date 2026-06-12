@@ -212,18 +212,58 @@ export const about = {
         en: "An all-in-one operations SaaS for flower shops — sales, expenses, customers, reservations, insights. Started from my sister's shop; now building it as a business.",
         ko: "꽃집을 위한 올인원 운영 SaaS — 매출·지출·고객·예약·인사이트. 친누나의 가게에서 시작해 사업으로 키우고 있습니다.",
       },
-      impact: {
-        en: [
-          "Multi-tenant architecture where a Kotlin BFF owns data & auth — one API shared by web and mobile",
-          "Social OAuth (Kakao·Google·Naver) with httpOnly JWT cookies + S3 presigned upload pipeline",
-          "Self-hosted on AWS (Docker → ECR → EC2) with GitHub Actions CI/CD + Playwright e2e on a mock BFF",
-        ],
-        ko: [
-          "Kotlin BFF가 데이터·인증을 단일 소유하는 멀티테넌트 아키텍처 — web·모바일이 같은 API 사용",
-          "소셜 OAuth(카카오·구글·네이버) + httpOnly JWT 쿠키 인증, S3 presigned 업로드 파이프라인",
-          "AWS 자체 호스팅(Docker → ECR → EC2) + GitHub Actions CI/CD, mock BFF 기반 Playwright e2e",
-        ],
-      },
+      // Filmstrip — product screenshots (landing assets reused).
+      shots: [
+        {
+          src: "/images/flori/feature-sales-1.png",
+          caption: { en: "Sales tracking", ko: "매출 기록" },
+        },
+        {
+          src: "/images/flori/feature-calendar.png",
+          caption: { en: "Reservation calendar", ko: "예약 캘린더" },
+        },
+        {
+          src: "/images/flori/feature-customers.png",
+          caption: { en: "Customer management", ko: "고객 관리" },
+        },
+        {
+          src: "/images/flori/feature-gallery.png",
+          caption: { en: "Photo gallery", ko: "사진첩" },
+        },
+      ],
+      // "What I built" ledger — contribution | impact value.
+      built: [
+        {
+          text: {
+            en: "Multi-tenant Kotlin BFF architecture — one API for web & mobile",
+            ko: "Kotlin BFF 멀티테넌트 아키텍처 — web·모바일 단일 API",
+          },
+          value: {
+            en: "single source of data & auth",
+            ko: "데이터·인증 단일 소유",
+          },
+        },
+        {
+          text: {
+            en: "Social OAuth ×3 + httpOnly JWT cookies, S3 presigned uploads",
+            ko: "소셜 OAuth 3종 + httpOnly JWT 쿠키, S3 presigned 업로드",
+          },
+          value: {
+            en: "no tokens in browser",
+            ko: "토큰 브라우저 비노출",
+          },
+        },
+        {
+          text: {
+            en: "Self-hosted AWS (Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
+            ko: "AWS 자체 호스팅(Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
+          },
+          value: {
+            en: "push → deploy automated",
+            ko: "push → deploy 자동화",
+          },
+        },
+      ],
       tags: [
         "Kotlin",
         "Spring Boot",
@@ -240,29 +280,39 @@ export const about = {
     {
       name: "OneTime",
       featured: true,
-      gallery: [
+      shots: [
         {
-          ko: "/images/onetime/time-block-board-ko.png",
-          en: "/images/onetime/time-block-board-en.png",
-          alt: {
-            ko: "시간 블록 보드 — 가능한 시간대 선택 화면",
-            en: "Time block board — selecting available time slots",
+          srcKo: "/images/onetime/time-block-board-ko.png",
+          srcEn: "/images/onetime/time-block-board-en.png",
+          caption: { en: "Time block board", ko: "시간 블록 보드" },
+        },
+        {
+          srcKo: "/images/onetime/fixed-schedule-ko.png",
+          srcEn: "/images/onetime/fixed-schedule-en.png",
+          caption: { en: "Fixed schedules", ko: "고정 스케줄" },
+        },
+        {
+          srcKo: "/images/onetime/recommend-and-participant-ko.png",
+          srcEn: "/images/onetime/recommend-and-participant-en.png",
+          caption: {
+            en: "Recommended times & participants",
+            ko: "추천 시간·참여자 현황",
           },
         },
         {
-          ko: "/images/onetime/fixed-schedule-ko.png",
-          en: "/images/onetime/fixed-schedule-en.png",
-          alt: {
-            ko: "고정 스케줄 등록 화면",
-            en: "Fixed schedule registration",
+          todo: true,
+          caption: { en: "Admin statistics dashboard", ko: "어드민 통계 대시보드" },
+          note: {
+            en: "Capture: admin → statistics dashboard with the 7 stat domains visible",
+            ko: "캡처: 어드민 → 통계 대시보드 (7개 도메인 그래프가 보이는 화면)",
           },
         },
         {
-          ko: "/images/onetime/recommend-and-participant-ko.png",
-          en: "/images/onetime/recommend-and-participant-en.png",
-          alt: {
-            ko: "추천 시간과 참여자 현황 화면",
-            en: "Recommended times and participant status",
+          todo: true,
+          caption: { en: "Event creation", ko: "이벤트 생성" },
+          note: {
+            en: "Capture: event creation form (pairs with the Bulk INSERT improvement)",
+            ko: "캡처: 이벤트 생성 폼 (Bulk INSERT 성능 개선과 짝)",
           },
         },
       ],
@@ -274,18 +324,38 @@ export const about = {
         en: "A web service to align schedules with many people from a single shared link. 30K+ cumulative users · 22+ months in operation.",
         ko: "링크 공유 한 번으로 여러 사람과 쉽게 일정을 맞추는 웹 서비스. 누적 사용자 3만+ · 22개월+ 운영.",
       },
-      impact: {
-        en: [
-          "N+1 removed via QueryDSL fetch join + composite index: 18.38s → 0.35s (98%↓)",
-          "Event creation Bulk INSERT + async QR: 16.56s → 0.41s (97.5%↓)",
-          "Solo-designed admin dashboard: 7 stat domains / 26 APIs + SQS email system",
-        ],
-        ko: [
-          "QueryDSL fetch join + 복합 인덱스로 N+1 제거: 18.38s → 0.35s (98%↓)",
-          "이벤트 생성 Bulk INSERT + 비동기 QR 생성: 16.56s → 0.41s (97.5%↓)",
-          "7개 통계 도메인·26개 API 어드민 대시보드 단독 설계·구현 + SQS 이메일 시스템",
-        ],
-      },
+      built: [
+        {
+          text: {
+            en: "N+1 removed via QueryDSL fetch join + composite index",
+            ko: "QueryDSL fetch join + 복합 인덱스로 N+1 제거",
+          },
+          value: {
+            en: "18.38s → 0.35s (98%↓)",
+            ko: "18.38s → 0.35s (98%↓)",
+          },
+        },
+        {
+          text: {
+            en: "Event creation Bulk INSERT + async QR generation",
+            ko: "이벤트 생성 Bulk INSERT + 비동기 QR 생성",
+          },
+          value: {
+            en: "16.56s → 0.41s (97.5%↓)",
+            ko: "16.56s → 0.41s (97.5%↓)",
+          },
+        },
+        {
+          text: {
+            en: "Solo-designed admin dashboard + SQS email system",
+            ko: "어드민 대시보드 단독 설계·구현 + SQS 이메일 시스템",
+          },
+          value: {
+            en: "7 stat domains · 26 APIs",
+            ko: "통계 7종 · API 26개",
+          },
+        },
+      ],
       tags: [
         "Java",
         "Spring Boot",
@@ -313,18 +383,72 @@ export const about = {
         en: "I've run a 30+ member blog study for 2 years; after hitting the limits of Notion + KakaoTalk, I automated the whole flow with a Discord bot + custom web dashboard.",
         ko: "2년째 운영해 온 30~35명 블로그 스터디를 노션+카톡의 한계에서 꺼내, Discord 봇 + 자체 웹 대시보드로 전 과정을 자동화한 플랫폼.",
       },
-      impact: {
-        en: [
-          "RSS every 5 min → attendance → late/absence fines → Discord alerts",
-          "Board votes (4 types) + FCM web push (5 alert types)",
-          "Discord alert-log system tracking all 16 alert types with admin UI",
-        ],
-        ko: [
-          "RSS 5분 주기 자동 수집 → 출석 → 지각/결석 벌금 자동 부과 → Discord 알림",
-          "게시판 투표 4종(단일/복수/날짜/익명) + FCM 웹 푸시 5종 알림",
-          "Discord 알림 로그 시스템 (16종 알림 전수 추적, 관리자 UI)",
-        ],
-      },
+      shots: [
+        {
+          todo: true,
+          caption: { en: "Attendance dashboard", ko: "출석 현황 대시보드" },
+          note: {
+            en: "Capture: /dashboard — attendance status + ranking summary cards",
+            ko: "캡처: /dashboard — 출석 현황·랭킹 요약 카드가 보이게",
+          },
+        },
+        {
+          todo: true,
+          caption: { en: "Admin attendance", ko: "어드민 출석 관리" },
+          note: {
+            en: "Capture: /admin/attendance — RSS auto-collected attendance table",
+            ko: "캡처: /admin/attendance — RSS 자동 수집된 출석 테이블",
+          },
+        },
+        {
+          todo: true,
+          caption: { en: "Automated fines", ko: "벌금 자동 부과" },
+          note: {
+            en: "Capture: /admin/fines — late/absence fine records",
+            ko: "캡처: /admin/fines — 지각·결석 벌금 내역",
+          },
+        },
+        {
+          todo: true,
+          caption: { en: "Board polls", ko: "게시판 투표" },
+          note: {
+            en: "Capture: /board — a post with a poll (single/multi/date/anonymous)",
+            ko: "캡처: /board — 투표(단일/복수/날짜/익명)가 붙은 게시글",
+          },
+        },
+      ],
+      built: [
+        {
+          text: {
+            en: "RSS every 5 min → attendance → late/absence fines → Discord alerts",
+            ko: "RSS 5분 주기 수집 → 출석 → 벌금 자동 부과 → Discord 알림",
+          },
+          value: {
+            en: "ops fully automated",
+            ko: "운영 전 과정 자동화",
+          },
+        },
+        {
+          text: {
+            en: "Board polls (4 types) + FCM web push (5 alert types)",
+            ko: "게시판 투표 4종(단일/복수/날짜/익명) + FCM 웹 푸시 5종",
+          },
+          value: {
+            en: "PWA notifications",
+            ko: "PWA 알림",
+          },
+        },
+        {
+          text: {
+            en: "Discord alert-log system with admin UI",
+            ko: "Discord 알림 로그 시스템 + 관리자 UI",
+          },
+          value: {
+            en: "all 16 alert types tracked",
+            ko: "16종 알림 전수 추적",
+          },
+        },
+      ],
       tags: [
         "Next.js",
         "React 19",

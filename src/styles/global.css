@@ -2362,22 +2362,114 @@ a.pg-n:hover {
   font-weight: 700;
 }
 
-/* Figure (wraps the OneTime carousel) */
-.ab-figure {
-  margin-top: 1.5rem;
-  border: 1.5px dashed var(--hair);
-  padding: 0.75rem;
+/* Filmstrip — horizontal snap-scroll product shots (showcase entries) */
+.ab-strip {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  padding: 1.2rem 0.25rem 1.4rem;
+  margin-top: 1.3rem;
+  scroll-snap-type: x mandatory;
 }
-.ab-figure .carousel {
+.ab-strip::-webkit-scrollbar {
+  height: 8px;
+}
+.ab-strip::-webkit-scrollbar-thumb {
+  background: var(--hair);
+  border-radius: 999px;
+}
+.ab-shot {
+  flex: 0 0 min(26rem, 72%);
   margin: 0;
-  border-color: var(--hair);
+  scroll-snap-align: start;
 }
-.ab-figure figcaption {
-  margin-top: 0.65rem;
+.ab-shot img {
+  width: 100%;
+  display: block;
+  /* Same soft elevation as post body images. */
+  box-shadow:
+    0 1px 2px rgba(10, 10, 10, 0.1),
+    0 8px 24px rgba(10, 10, 10, 0.16),
+    0 20px 48px rgba(10, 10, 10, 0.12);
+}
+:root[data-theme="dark"] .ab-shot img {
+  box-shadow:
+    0 0 0 1px rgba(244, 244, 244, 0.18),
+    0 12px 32px rgba(0, 0, 0, 0.7);
+}
+.ab-shot figcaption {
+  margin-top: 0.75rem;
   font-size: var(--fs-label);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
+  font-weight: 700;
+}
+/* Placeholder card carrying the capture guide for missing screenshots. */
+.ab-shot-todo {
+  aspect-ratio: 16 / 10;
+  border: 1.5px dashed var(--hair);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.3rem;
+}
+.ab-shot-todo-label {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+}
+.ab-shot-todo p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* "What I built" ledger — contribution | impact value */
+.ab-ledger {
+  margin-top: 0.3rem;
+}
+.ab-ledger-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-label);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 0.45rem;
+}
+.ab-lrow {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--hair);
+  font-size: 0.9rem;
+}
+.ab-ln {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.ab-lt {
+  line-height: 1.6;
+}
+.ab-lv {
+  font-weight: 700;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 /* Generic list item (activities / education) */
@@ -2544,6 +2636,18 @@ a.pg-n:hover {
     border-top: none;
     padding-top: 0;
   }
+  /* Filmstrip: bigger slides, ledger collapses value under text. */
+  .ab-shot {
+    flex-basis: 84%;
+  }
+  .ab-lrow {
+    grid-template-columns: 1.6rem 1fr;
+  }
+  .ab-lv {
+    grid-column: 2;
+    white-space: normal;
+    color: var(--muted);
+  }
   .ab-kpis {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -2560,94 +2664,6 @@ a.pg-n:hover {
   padding-bottom: clamp(1.8rem, 4vw, 2.8rem);
   border-bottom: 1px dashed var(--hair);
   margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
-}
-
-/* OneTime image carousel */
-.carousel {
-  position: relative;
-  border: 1px dashed var(--hair);
-  background: var(--accent-soft);
-  margin: 0 auto 1.1rem;
-  max-width: 100%;
-  touch-action: pan-y;
-  cursor: grab;
-  outline-offset: 2px;
-}
-.carousel:active {
-  cursor: grabbing;
-}
-.carousel-viewport {
-  overflow: hidden;
-  aspect-ratio: 5 / 4;
-}
-.carousel-track {
-  display: flex;
-  height: 100%;
-  transition: transform 0.35s ease;
-  will-change: transform;
-}
-.carousel-slide {
-  flex: 0 0 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.carousel-slide .cimg {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: clamp(0.6rem, 2vw, 1.4rem);
-  user-select: none;
-  -webkit-user-drag: none;
-}
-.carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.2rem;
-  height: 2.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  color: var(--ink);
-  font-size: 1.25rem;
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
-}
-.carousel-arrow.prev {
-  left: 0.6rem;
-}
-.carousel-arrow.next {
-  right: 0.6rem;
-}
-.carousel-arrow:disabled {
-  opacity: 0.25;
-  cursor: default;
-}
-.carousel-dots {
-  position: absolute;
-  bottom: 0.7rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 0.45rem;
-}
-.carousel-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--paper);
-  cursor: pointer;
-}
-.carousel-dot[aria-current="true"] {
-  background: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
