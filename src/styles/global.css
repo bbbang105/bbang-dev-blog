@@ -500,16 +500,6 @@ main {
   font-size: 0.92rem;
   line-height: 1.65;
 }
-/* Home: tagline-only hero — one line at ~60% scale, no sub paragraph.
-   (.intro itself is shared with collections/404, hence the modifier.) */
-.intro--tagline {
-  padding: clamp(1.6rem, 4vw, 2.6rem) 0;
-}
-.intro--tagline h1 {
-  font-size: calc(var(--fs-mega) * 0.48);
-  max-width: none;
-  line-height: 1.25;
-}
 
 /* ---------- Section header (gallery98 "CURRENT SPOTLIGHT") ---------- */
 .section-head {
@@ -520,7 +510,9 @@ main {
   padding: 1.4rem 0 1.6rem;
   flex-wrap: wrap;
 }
-.section-head h2 {
+/* h1 on home (page's only h1 after the hero removal), h2 elsewhere —
+   same visual treatment either way. */
+.section-head :is(h1, h2) {
   font-size: var(--fs-h2);
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1259,6 +1251,8 @@ a.pg-n:hover {
   max-width: 30ch;
 }
 .foot-cta p a {
+  /* Solid bottom border only — suppress the global dashed underline. */
+  text-decoration: none;
   border-bottom: 2px solid var(--accent);
   white-space: nowrap;
 }
