@@ -1681,7 +1681,9 @@ a.pg-n:hover {
 }
 .prose h3 {
   font-size: 1rem;
-  color: var(--muted);
+  /* Ink, not muted: at body size a gray bold heading would read weaker
+     than bold body text. */
+  color: var(--ink);
 }
 .prose h1 + *,
 .prose h2 + *,
