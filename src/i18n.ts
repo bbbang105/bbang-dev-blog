@@ -88,26 +88,6 @@ export const about = {
       "기록과 사람의 힘을 믿습니다. 2년간 140개 이상의 기술 블로그 글을 작성하고, 블로그 스터디를 2년째 운영하고 있습니다.",
     ],
   },
-  // Headline numbers — rendered as the KPI strip right under the masthead.
-  // postsLabel's value is computed at build time (content collection count).
-  kpis: [
-    {
-      value: "30K+",
-      label: { en: "Cumulative users", ko: "누적 사용자" },
-    },
-    {
-      value: "22mo+",
-      label: { en: "Service in operation", ko: "서비스 운영" },
-    },
-    {
-      value: "__POSTS__", // replaced with the live post count in about.astro
-      label: { en: "Technical posts", ko: "기술 포스트" },
-    },
-    {
-      value: "2yr",
-      label: { en: "Study group run", ko: "블로그 스터디 운영" },
-    },
-  ],
   links: [
     { label: "GitHub", href: "https://github.com/bbbang105" },
     { label: "Blog", href: "https://bbbang105.github.io" },

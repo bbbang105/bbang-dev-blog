@@ -1,15 +1,7 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import T from "../components/T.astro";
 import { about } from "../i18n";
-
-// Live post count for the KPI strip (the only computed KPI value).
-const postCount = (await getCollection("posts")).length;
-const kpis = about.kpis.map((k) => ({
-  ...k,
-  value: k.value === "__POSTS__" ? String(postCount) : k.value,
-}));
 
 // Numbered index — drives both the TOC and each section's rail.
 const sections = [
@@ -59,24 +51,6 @@ const sections = [
         </nav>
       </div>
     </header>
-
-    <!-- ===== KPI strip ===== -->
-    <section class="ab-kpis-wrap" aria-label="Key numbers">
-      <div class="wrap">
-        <div class="ab-kpis">
-          {
-            kpis.map((k) => (
-              <div class="ab-kpi">
-                <span class="ab-kpi-val">{k.value}</span>
-                <span class="ab-kpi-label">
-                  <T en={k.label.en} ko={k.label.ko} />
-                </span>
-              </div>
-            ))
-          }
-        </div>
-      </div>
-    </section>
 
     <!-- ===== bio + now building ===== -->
     <section class="ab-bio" aria-label="Introduction">
