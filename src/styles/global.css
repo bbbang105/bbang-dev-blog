@@ -1764,9 +1764,15 @@ a.pg-n:hover {
 .prose code {
   font-family: var(--mono);
   font-size: 0.88em;
-  background: transparent;
-  border: 1px dashed var(--hair);
-  padding: 0.08em 0.34em;
+  /* Ink chip: same inverted-box grammar as category labels. Soft black
+     (not pure ink) so the chip sits a step behind body text. */
+  background: #26262b;
+  color: #ffffff;
+  padding: 0.1em 0.42em;
+}
+:root[data-theme="dark"] .prose code {
+  background: #e9e9e9;
+  color: #0a0a0a;
 }
 .prose pre {
   font-family: var(--mono);
@@ -1780,7 +1786,8 @@ a.pg-n:hover {
 }
 .prose pre code {
   background: none;
-  border: 0; /* inline-code dashed box must NOT apply inside code blocks */
+  border: 0; /* inline-code chip must NOT apply inside code blocks */
+  color: inherit;
   padding: 0;
   font-size: inherit;
   white-space: pre; /* keep code formatting; the pre scrolls horizontally */
