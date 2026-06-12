@@ -1532,7 +1532,7 @@ a.pg-n:hover {
     font-size: 0.82rem;
   }
 }
-.prose :is(h2, h3) {
+.prose :is(h1, h2, h3) {
   scroll-margin-top: 1.8rem;
 }
 .post-toc li a.is-active {
@@ -1640,6 +1640,7 @@ a.pg-n:hover {
   padding: clamp(2rem, 5vw, 3.2rem) 0 4rem;
   font-size: 1.02rem;
   line-height: var(--lh-body);
+  counter-reset: prose-section;
 }
 .prose > * + * {
   margin-top: var(--rhythm);
@@ -1653,21 +1654,38 @@ a.pg-n:hover {
   letter-spacing: -0.01em;
   margin-top: 2.8rem;
 }
-/* Clear, stepped hierarchy so md #/##/### read distinctly:
-   h1 = major section (dominant), h2 = sub-section (dashed rule),
-   h3 = detail. */
+/* Calm, structural hierarchy: heading sizes stay close to body text so
+   the article title keeps its authority. "Chapter" cues come from rules
+   and counters instead of scale — h1 = major section (2px solid top rule
+   + auto SECTION NN label), h2 = sub-section (dashed rule), h3 = detail
+   (body-size bold). */
 .prose h1 {
-  font-size: 2.05rem;
+  font-size: 1.45rem;
+  margin-top: 3.4rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--line);
+  counter-increment: prose-section;
+}
+.prose h1::before {
+  content: "Section " counter(prose-section, decimal-leading-zero);
+  display: block;
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
 }
 .prose h2 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px dashed var(--hair);
 }
 .prose h3 {
-  font-size: 1.12rem;
+  font-size: 1rem;
   color: var(--muted);
 }
+.prose h1 + *,
 .prose h2 + *,
 .prose h3 + * {
   margin-top: 1rem;
