@@ -500,6 +500,16 @@ main {
   font-size: 0.92rem;
   line-height: 1.65;
 }
+/* Home: tagline-only hero — one line at ~60% scale, no sub paragraph.
+   (.intro itself is shared with collections/404, hence the modifier.) */
+.intro--tagline {
+  padding: clamp(1.6rem, 4vw, 2.6rem) 0;
+}
+.intro--tagline h1 {
+  font-size: calc(var(--fs-mega) * 0.48);
+  max-width: none;
+  line-height: 1.25;
+}
 
 /* ---------- Section header (gallery98 "CURRENT SPOTLIGHT") ---------- */
 .section-head {
