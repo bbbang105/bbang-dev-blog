@@ -1830,16 +1830,27 @@ a.pg-n:hover {
   padding: 0.5rem 0.75rem;
   text-align: left;
 }
-/* Mobile: keep natural column widths and scroll horizontally instead of
-   squeezing cells until Korean text breaks one char per line. */
+/* Mobile: keep natural cell widths (no one-char-per-line Korean) and let
+   the table scroll INSIDE itself. The table element must stay at column
+   width — width:max-content here would grow the scroll container itself
+   and kill its own overflow scroll. */
 @media (max-width: 640px) {
-  .prose table {
-    min-width: max-content;
-    width: max-content;
-  }
   .prose th,
   .prose td {
     white-space: nowrap;
+  }
+}
+/* Markdown image-pair trick (`![](a)|![](b)` + `--|--`) renders as a
+   table of images — that's a side-by-side layout, not a data table:
+   split columns evenly so the images scale down to fit. */
+.prose table:has(img) {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+@media (max-width: 640px) {
+  .prose table:has(img) :is(th, td) {
+    white-space: normal;
   }
 }
 
