@@ -1649,6 +1649,14 @@ a.pg-n:hover {
   line-height: var(--lh-body);
   counter-reset: prose-section;
 }
+/* Single-column mode (no TOC rail): breathe a little off the page
+   gutters — body text was sitting flush against them. */
+@media (max-width: 1100px) {
+  .prose {
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+  }
+}
 .prose > * + * {
   margin-top: var(--rhythm);
 }
