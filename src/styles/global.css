@@ -1993,9 +1993,17 @@ a.pg-n:hover {
   .col-list {
     grid-template-columns: 1fr;
   }
-  /* Narrow screens: drop the latest-entry preview; keep cat + count. */
+  /* Narrow screens: the preview moves to its own second line (order
+     pushes it past the count), indented to align with the category chip
+     ([+] = 3ch + the .col-head gap). */
+  .col-head {
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
   .col-latest {
-    display: none;
+    order: 1;
+    flex: 0 0 100%;
+    padding-left: calc(3ch + 0.9rem);
   }
 }
 
