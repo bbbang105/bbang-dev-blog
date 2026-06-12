@@ -5,7 +5,8 @@ date: 2025-07-08
 description: "원티드 2025 커리어 개더링에서 채용 평가 기준과 커리어 전략 세션을 듣고 정리한 후기입니다."
 
 tags:
-  - conference
+  - networking
+  - seminar
   - career
 
 thumbnail: https://velog.velcdn.com/images/hsh111366/post/716165a7-3582-4a6a-989e-b52d1d40df2a/image.jpg
