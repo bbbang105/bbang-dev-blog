@@ -14,76 +14,59 @@ const sections = [
 ---
 
 <Base title="About — bbang.dev" current="about">
-  <div class="about-i18n" id="about-i18n" data-lang="en">
-    <!-- ===== masthead ===== -->
+  <div class="about-i18n" id="about-i18n" data-lang="ko">
+    <!-- ===== page heading (matches other pages) + language toggle ===== -->
+    <section class="wrap">
+      <div class="section-head">
+        <h1>About</h1>
+        <button
+          class="ab-lang"
+          id="lang-toggle"
+          type="button"
+          aria-label="Toggle language"
+        >
+          <span data-lang-en>KO</span><span data-lang-ko>EN</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===== masthead — name ===== -->
     <header class="ab-masthead">
       <div class="wrap">
-        <div class="ab-langbar">
-          <button
-            class="ab-lang"
-            id="lang-toggle"
-            type="button"
-            aria-label="Toggle language"
-          >
-            <span data-lang-en>KO</span><span data-lang-ko>EN</span>
-          </button>
-        </div>
-        <p class="ab-eyebrow">
-          <T en={about.introLabel.en} ko={about.introLabel.ko} />
-        </p>
-        <h1 class="ab-name">
+        <p class="ab-name">
           <T en={about.introName.en} ko={about.introName.ko} />
-        </h1>
-        <p class="ab-role">
-          <T en={about.introRole.en} ko={about.introRole.ko} />
         </p>
-        <nav class="ab-pills" aria-label="Profile links">
-          {
-            about.links.map((l) => (
-              <a
-                class="ab-pill"
-                href={l.href}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {l.label}
-                <span class="ab-pill-arr" aria-hidden="true">
-                  ↗
-                </span>
-              </a>
-            ))
-          }
-        </nav>
       </div>
     </header>
 
-    <!-- ===== bio + now building ===== -->
+    <!-- ===== bio ===== -->
     <section class="ab-bio" aria-label="Introduction">
       <div class="wrap">
-        <div class="ab-lines">
-          {
-            about.introLines.en.map((_, idx) => (
-              <p>
-                <T
-                  en={about.introLines.en[idx]}
-                  ko={about.introLines.ko[idx]}
-                />
-              </p>
-            ))
-          }
-        </div>
-
-        <div class="ab-now">
-          <span class="ab-now-badge">
-            <T en={about.nowBadge.en} ko={about.nowBadge.ko} />
+        <div class="ab-bio-card">
+          <span class="ab-bio-badge">
+            <T en="About me" ko="자기소개" />
           </span>
-          <h2 class="ab-now-title">{about.nowTitle}</h2>
-          <p class="ab-now-one">
-            <T en={about.nowOneLiner.en} ko={about.nowOneLiner.ko} />
-          </p>
-          <p class="ab-now-detail">
-            <T en={about.nowDetail.en} ko={about.nowDetail.ko} />
-          </p>
+          <div class="ab-strengths">
+            {
+              about.introLines.en.map((_, idx) => (
+                <div class="ab-strength">
+                  <span class="ab-strength-no" aria-hidden="true">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                  <h3 class="ab-strength-key">
+                    <T
+                      en={about.introKeys.en[idx]}
+                      ko={about.introKeys.ko[idx]}
+                    />
+                  </h3>
+                  <p class="ab-strength-body">
+                    <span data-lang-en set:html={about.introLines.en[idx]} />
+                    <span data-lang-ko set:html={about.introLines.ko[idx]} />
+                  </p>
+                </div>
+              ))
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -107,9 +90,7 @@ const sections = [
                     <T en={s.heading.en} ko={s.heading.ko} />
                   </span>
                   <span class="ab-toc-leader" aria-hidden="true" />
-                  <span class="ab-toc-go">
-                    <T en="Go ↓" ko="이동 ↓" />
-                  </span>
+                  <span class="ab-toc-go" aria-hidden="true">↓</span>
                 </a>
               </li>
             ))
@@ -131,7 +112,7 @@ const sections = [
         <div class="ab-body">
           {
             about.showcase.map((p, idx) => (
-              <article class="ab-entry">
+              <article class="ab-entry" id={`ab-pj-${p.name}`}>
                 <div class="ab-entry-top">
                   <span class="ab-entry-no">
                     [{String(idx + 1).padStart(2, "0")}]
@@ -341,11 +322,24 @@ const sections = [
         </div>
         <div class="ab-body">
           {
-            about.education.map((e) => (
+            about.education.map((e) => {
+              const href = "href" in e ? (e.href as string) : undefined;
+              return (
               <div class="ab-item">
                 <div class="ab-item-head">
                   <h3 class="ab-item-name">
-                    <T en={e.school.en} ko={e.school.ko} />
+                    {href ? (
+                      <a
+                        class="ab-extlink"
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <T en={e.school.en} ko={e.school.ko} />
+                      </a>
+                    ) : (
+                      <T en={e.school.en} ko={e.school.ko} />
+                    )}
                   </h3>
                   <span class="ab-item-when">
                     <T en={e.period.en} ko={e.period.ko} />
@@ -355,7 +349,8 @@ const sections = [
                   <T en={e.desc.en} ko={e.desc.ko} />
                 </p>
               </div>
-            ))
+              );
+            })
           }
         </div>
       </div>
@@ -464,7 +459,7 @@ const sections = [
       var box = document.getElementById("about-i18n");
       var btn = document.getElementById("lang-toggle");
       if (!box) return;
-      var l = "en";
+      var l = "ko";
       try {
         var s = localStorage.getItem("aboutLang");
         if (s === "ko" || s === "en") l = s;

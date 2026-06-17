@@ -71,22 +71,30 @@ export const ui = {
 export const about = {
   // Intro / masthead
   introLabel: { en: "// Who I am", ko: "// 저는" },
-  introName: { en: "Sangho Han", ko: "한상호" },
+  introName: {
+    en: "Hi, I'm Sangho Han — a developer.",
+    ko: "안녕하세요, 개발자 한상호입니다.",
+  },
   introRole: {
-    en: "Backend & Infrastructure Engineer",
-    ko: "백엔드·인프라 엔지니어",
+    en: "AI-Native Engineer",
+    ko: "AI 네이티브 엔지니어",
   },
   introLines: {
     en: [
-      "I know how to work with AI. I've built products as a solo full-stack developer through vibe coding, while designing and building the backend for a RAG-based AICC solution.",
-      "I believe the essence of development is understanding the friction users feel and proactively solving it. I put this into practice by planning, building, and operating OneTime — a service with 30,000+ cumulative users, run for 22+ months.",
-      "I believe in the power of records and people. Over 2 years I've written 140+ technical posts and have run a blog study group for 2 years.",
+      "I know how to work with AI. Using Claude Code, I move solo full-stack — from planning to building, operating, and marketing — as an engineer.",
+      'I believe the essence of development is understanding the friction users feel and proactively solving it. I put this into practice by planning, building, and operating <a class="ab-jump" href="#ab-pj-OneTime">OneTime</a> — a service with 30,000+ cumulative users, run for 22+ months.',
+      'I believe in the power of records and people. Over 3 years I\'ve written 140+ technical posts and have run a <a class="ab-jump" href="#ab-pj-kusting">blog study group</a> for 2 years.',
     ],
     ko: [
-      "AI와 함께 일하는 방법을 압니다. 바이브코딩으로 프로덕트를 1인 풀스택으로 개발하고, RAG 기반 AICC 솔루션의 백엔드를 설계·구현해왔습니다.",
-      "사용자가 겪는 불편함을 이해하고 주도적으로 해결하는 것이 개발의 본질이라고 생각합니다. 누적 사용자 3만 명 이상, 22개월 이상 운영 중인 서비스 OneTime을 직접 기획·개발·운영하며 이를 실천합니다.",
-      "기록과 사람의 힘을 믿습니다. 2년간 140개 이상의 기술 블로그 글을 작성하고, 블로그 스터디를 2년째 운영하고 있습니다.",
+      "AI와 함께 일하는 법을 압니다. Claude Code로 기획부터 개발·운영·마케팅까지 1인 풀스택으로 움직이는 엔지니어입니다.",
+      '사용자가 겪는 불편함을 이해하고 주도적으로 해결하는 것이 개발의 본질이라고 생각합니다. 누적 사용자 3만 명 이상, 22개월 이상 운영 중인 서비스 <a class="ab-jump" href="#ab-pj-OneTime">OneTime</a>을 직접 기획·개발·운영하며 이를 실천합니다.',
+      '기록과 사람의 힘을 믿습니다. 3년간 140개 이상의 기술 블로그 글을 작성하고, <a class="ab-jump" href="#ab-pj-kusting">블로그 스터디</a>를 2년째 운영하고 있습니다.',
     ],
+  },
+  // Keyword headline for each intro line — drives the 3-up strengths grid.
+  introKeys: {
+    en: ["AI-native", "Operating", "People"],
+    ko: ["AI 네이티브", "서비스 운영", "사람"],
   },
   links: [
     { label: "GitHub", href: "https://github.com/bbbang105" },
@@ -96,18 +104,18 @@ export const about = {
   // flori — the "Now building" highlight under the intro (current business)
   nowTitle: "flori",
   nowBadge: {
-    en: "Now building · In business",
-    ko: "Now building · 사업 진행 중",
+    en: "Now building",
+    ko: "Now building",
   },
   nowOneLiner: {
-    en: "An all-in-one operations SaaS for flower shops. What I focus on most right now.",
-    ko: "꽃집을 위한 올인원 운영 SaaS. 지금 가장 집중하는 것.",
+    en: "An all-in-one operations SaaS for flower shops.",
+    ko: "꽃집을 위한 올인원 운영 SaaS",
   },
   nowDetail: {
-    en: "Sales, expenses, customers, reservations and insights in one admin — started from my sister's flower shop, now being built into a business.",
-    ko: "매출·지출·고객·예약·인사이트를 하나의 어드민으로 — 친누나의 꽃집에서 시작한 문제를 사업으로 키우고 있습니다.",
+    en: "One admin for sales, expenses, customers, reservations and insights — topped with a premium AI assistant: analytics chat, reservation OCR from KakaoTalk screenshots, a voice assistant, and proactive suggestions. Started from my sister's flower shop, now growing it into a freemium SaaS.",
+    ko: "매출·지출·고객·예약·인사이트를 한 어드민에서 관리하고, 그 위에 데이터 분석 챗·카톡 예약 OCR·음성 비서·선제 제안까지 — 사장님을 위한 프리미엄 AI 비서를 얹었습니다. 친누나의 꽃집에서 시작한 문제를 freemium SaaS로 키우고 있습니다.",
   },
-  selfBuiltHeading: { en: "Self-built", ko: "직접 만든 것" },
+  selfBuiltHeading: { en: "Products", ko: "프로덕트" },
   careerHeading: { en: "Career", ko: "경력" },
   activitiesHeading: { en: "Activities", ko: "활동" },
   educationHeading: { en: "Education", ko: "학력" },
@@ -189,8 +197,8 @@ export const about = {
         ko: "창업 · 1인 풀스택 · 2026.01 — 현재",
       },
       one: {
-        en: "An all-in-one operations SaaS for flower shops — sales, expenses, customers, reservations, insights. Started from my sister's shop; now building it as a business.",
-        ko: "꽃집을 위한 올인원 운영 SaaS — 매출·지출·고객·예약·인사이트. 친누나의 가게에서 시작해 사업으로 키우고 있습니다.",
+        en: "A premium AI assistant + store-operations admin SaaS for flower shops. Started from my sister's shop (formerly Hazel); I design and build it solo across 5 repos — web/api/ai/mobile/homepage.",
+        ko: "꽃집 사장님을 위한 프리미엄 AI 비서 + 매장 운영 어드민 SaaS. 친누나의 가게(구 Hazel)에서 출발해 web/api/ai/mobile/homepage 5개 레포를 1인 풀스택으로 직접 설계·개발하고 있습니다.",
       },
       // Filmstrip — product screenshots (landing assets reused).
       shots: [
@@ -215,44 +223,46 @@ export const about = {
       built: [
         {
           text: {
-            en: "Multi-tenant Kotlin BFF architecture — one API for web & mobile",
-            ko: "Kotlin BFF 멀티테넌트 아키텍처 — web·모바일 단일 API",
+            en: "AI assistant ×4 — read-only analytics chat, KakaoTalk-screenshot OCR → reservation, real-time voice, proactive suggestions",
+            ko: "AI 비서 4종 — 읽기전용 분석 챗 · 카톡 스크린샷 OCR→예약 · 실시간 음성 · 선제 제안",
           },
           value: {
-            en: "single source of data & auth",
-            ko: "데이터·인증 단일 소유",
+            en: "writes are human-in-loop",
+            ko: "쓰기는 human-in-loop",
           },
         },
         {
           text: {
-            en: "Social OAuth ×3 + httpOnly JWT cookies, S3 presigned uploads",
-            ko: "소셜 OAuth 3종 + httpOnly JWT 쿠키, S3 presigned 업로드",
+            en: "Re-architected Next.js + Supabase (client-to-DB) into a Kotlin/Spring BFF — server owns the DB as single SSOT",
+            ko: "Next.js+Supabase 직결 구조를 Kotlin/Spring BFF로 재설계 — DB는 server만 소유하는 단일 SSOT",
           },
           value: {
-            en: "no tokens in browser",
-            ko: "토큰 브라우저 비노출",
+            en: "3,200+ lines of debt cut",
+            ko: "부채 3,200줄+ 삭제",
           },
         },
         {
           text: {
-            en: "Self-hosted AWS (Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
-            ko: "AWS 자체 호스팅(Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
+            en: "Contract-first OpenAPI (84 paths/119 ops) + Playwright e2e 0→21 safety net + super-admin console (3-gate auth)",
+            ko: "계약-우선 OpenAPI(84 path/119 op) + Playwright e2e 0→21 안전망 + 슈퍼어드민 콘솔(3중 권한 게이트)",
           },
           value: {
-            en: "push → deploy automated",
-            ko: "push → deploy 자동화",
+            en: "web coverage 6.6% → 94.4%",
+            ko: "web 커버리지 6.6%→94.4%",
           },
         },
       ],
       tags: [
-        "Kotlin",
-        "Spring Boot",
         "Next.js",
         "React 19",
         "TypeScript",
+        "Kotlin",
+        "Spring Boot",
         "PostgreSQL",
-        "AWS",
-        "Tailwind CSS",
+        "FastAPI",
+        "LangChain",
+        "AWS Bedrock",
+        "React Native",
         "Playwright",
       ],
       links: [{ label: "Live", href: "https://flori.ai.kr" }],
@@ -356,8 +366,8 @@ export const about = {
       name: "kusting",
       featured: false,
       role: {
-        en: "Solo full-stack (AI Vibe Coding) · 2026.02 — Present",
-        ko: "1인 풀스택 (AI Vibe Coding) · 2026.02 — 현재",
+        en: "Solo full-stack · 2026.02 — Present",
+        ko: "1인 풀스택 · 2026.02 — 현재",
       },
       one: {
         en: "I've run a 30+ member blog study for 2 years; after hitting the limits of Notion + KakaoTalk, I automated the whole flow with a Discord bot + custom web dashboard.",
@@ -456,14 +466,6 @@ export const about = {
       },
     },
     {
-      title: { en: "Tech blog", ko: "기술 블로그" },
-      period: { en: "2023 — Present", ko: "2023 — 현재" },
-      desc: {
-        en: "Wrote 140+ technical posts over 2 years (Spring, Database, Infra, Troubleshooting).",
-        ko: "2년간 140개 이상의 기술 포스트를 작성했습니다 (Spring · Database · Infra · Troubleshooting).",
-      },
-    },
-    {
       title: {
         en: "KUSITMS (Korea Univ. IT Management Society)",
         ko: "KUSITMS (한국대학생IT경영학회)",
@@ -478,6 +480,7 @@ export const about = {
   education: [
     {
       school: { en: "Dongguk University", ko: "동국대학교" },
+      href: "https://www.linkedin.com/school/dongguk/",
       period: { en: "2018 — 2025", ko: "2018 — 2025" },
       desc: {
         en: "Double major in Management Information Systems & Convergence Software",
@@ -488,14 +491,6 @@ export const about = {
   // Rendered as a ledger table: name | issuer | date.
   certs: [
     {
-      name: {
-        en: "AWS Solutions Architect Associate",
-        ko: "AWS SAA",
-      },
-      issuer: { en: "Amazon Web Services", ko: "Amazon Web Services" },
-      date: "2025.10",
-    },
-    {
       name: { en: "Linux Master Lv.2", ko: "리눅스마스터 2급" },
       issuer: { en: "KAIT", ko: "한국정보통신진흥협회" },
       date: "2026.01",
@@ -504,6 +499,14 @@ export const about = {
       name: { en: "Network Admin Lv.2", ko: "네트워크관리사 2급" },
       issuer: { en: "ICQA", ko: "한국정보통신자격협회" },
       date: "2025.12",
+    },
+    {
+      name: {
+        en: "AWS Solutions Architect Associate",
+        ko: "AWS SAA",
+      },
+      issuer: { en: "Amazon Web Services", ko: "Amazon Web Services" },
+      date: "2025.10",
     },
     {
       name: { en: "SQLD", ko: "SQLD" },
