@@ -6,7 +6,7 @@ tags:
   - ai
   - insight
 description: "필자의 AI 가치관에 대한 첫 번째 글입니다."
-thumbnail: /assets/values1/img_1.png
+thumbnail: /assets/values1/thumbnail.png
 ---
 
 # 서론
