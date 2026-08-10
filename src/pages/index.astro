@@ -13,7 +13,11 @@ const sFor = (p: (typeof posts)[number]) =>
 const nn = (n: number) => String(n).padStart(2, "0");
 ---
 
-<Base title="bbang.dev — 기술 블로그" current="home">
+<Base
+  title="bbang.dev — 기술 블로그"
+  description="백엔드·인프라·AI를 기록하는 한상호(Sangho Han)의 기술 블로그. 트러블슈팅, 시스템 설계, 회고 등 145편의 글."
+  current="home"
+>
   <section class="wrap">
     <div class="section-head">
       <h1><T en={ui.en.sectionPosts} ko={ui.ko.sectionPosts} /></h1>

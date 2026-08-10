@@ -84,7 +84,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="en" data-theme="light" data-lang="en">
+<html lang="ko" data-theme="light" data-lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -124,11 +124,11 @@ const jsonLd = {
     {/* No-flash language: applied before paint. Default = en. */}
     <script is:inline>
       (function () {
-        // Global chrome (header/footer/nav) is always English.
+        // Global chrome (header/footer/nav) is always English, but the
+        // document language stays "ko" — post bodies are Korean (SEO).
         // Per-page language (currently only About) is scoped locally.
         try {
           document.documentElement.dataset.lang = "en";
-          document.documentElement.lang = "en";
         } catch (e) {}
       })();
     </script>
