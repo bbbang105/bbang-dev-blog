@@ -70,108 +70,131 @@ export const ui = {
 // About page bilingual content.
 export const about = {
   // Intro / masthead
-  introLabel: { en: "// Who I am", ko: "// 저는" },
-  introName: { en: "Sangho Han", ko: "한상호" },
-  introRole: {
-    en: "Backend & Infrastructure Engineer",
-    ko: "백엔드·인프라 엔지니어",
+  introName: {
+    en: "Hi, I'm Sangho Han — a developer.",
+    ko: "안녕하세요, 개발자 한상호입니다.",
   },
   introLines: {
     en: [
-      "I know how to work with AI. I've built products as a solo full-stack developer through vibe coding, while designing and building the backend for a RAG-based AICC solution.",
-      "I believe the essence of development is understanding the friction users feel and proactively solving it. I put this into practice by planning, building, and operating OneTime — a service with 30,000+ cumulative users, run for 22+ months.",
-      "I believe in the power of records and people. Over 2 years I've written 140+ technical posts and have run a blog study group for 2 years.",
+      'I know how to work with AI. I designed my own division of labor with coding agents like Claude Code, and shipped <a class="ab-jump" href="#ab-pj-플로리">flori</a> — 5 codebases (web · app · API · AI server · homepage) — solo, to production. Judgment, design and final review stay human; implementation, tests and docs go to the agents.',
+      'I turn what customers need into working software. Understanding user friction and solving it proactively is the essence of development — I practice it by operating <a class="ab-jump" href="#ab-pj-OneTime">OneTime</a> (30K+ cumulative users) and by founding a flower-shop operations SaaS around a problem I discovered firsthand.',
+      'I believe in the power of records and people. Over 3 years I\'ve written 140+ technical posts and have run a <a class="ab-jump" href="#ab-pj-큐스팅">blog study group</a> for 2 years.',
     ],
     ko: [
-      "AI와 함께 일하는 방법을 압니다. 바이브코딩으로 프로덕트를 1인 풀스택으로 개발하고, RAG 기반 AICC 솔루션의 백엔드를 설계·구현해왔습니다.",
-      "사용자가 겪는 불편함을 이해하고 주도적으로 해결하는 것이 개발의 본질이라고 생각합니다. 누적 사용자 3만 명 이상, 22개월 이상 운영 중인 서비스 OneTime을 직접 기획·개발·운영하며 이를 실천합니다.",
-      "기록과 사람의 힘을 믿습니다. 2년간 140개 이상의 기술 블로그 글을 작성하고, 블로그 스터디를 2년째 운영하고 있습니다.",
+      'AI와 함께 일하는 방법을 압니다. Claude Code 등 코딩 에이전트와의 분업 체계를 직접 설계해, 웹·앱·API·AI 서버·홈페이지 5개 코드베이스로 이뤄진 <a class="ab-jump" href="#ab-pj-플로리">플로리</a>를 혼자 개발하고 정식 출시했습니다. 판단·설계·최종 리뷰는 사람이, 구현·테스트·문서화는 에이전트가 맡습니다.',
+      '고객이 원하는 가치를 기술로 구현합니다. 사용자가 겪는 불편함을 이해하고 주도적으로 해결하는 것이 개발의 본질이라고 생각합니다. 누적 3만 명 이상이 사용한 <a class="ab-jump" href="#ab-pj-OneTime">OneTime</a>을 운영해 왔고, 지금은 꽃집의 운영 문제를 직접 찾아 창업하며 이를 실천하고 있습니다.',
+      '기록과 사람의 힘을 믿습니다. 3년 넘게 140개 이상의 기술 블로그 글을 작성하고, <a class="ab-jump" href="#ab-pj-큐스팅">블로그 스터디</a>를 2년째 운영하고 있습니다. 모든 성장은 결국 좋은 사람들과의 연결에서 시작된다고 믿습니다.',
     ],
+  },
+  // Keyword headline for each intro line — drives the 3-up strengths grid.
+  introKeys: {
+    en: ["AI-native", "Shipping & Operating", "People & Connection"],
+    ko: ["AI 네이티브", "서비스 운영", "사람, 연결"],
   },
   links: [
     { label: "GitHub", href: "https://github.com/bbbang105" },
-    { label: "Blog", href: "https://bbbang105.github.io" },
-    { label: "OneTime", href: "https://www.onetime-with-members.com" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/bbangdev/" },
   ],
-  // flori — the "Now building" highlight under the intro (current business)
-  nowTitle: "flori",
-  nowBadge: {
-    en: "Now building · In business",
-    ko: "Now building · 사업 진행 중",
-  },
-  nowOneLiner: {
-    en: "An all-in-one operations SaaS for flower shops. What I focus on most right now.",
-    ko: "꽃집을 위한 올인원 운영 SaaS. 지금 가장 집중하는 것.",
-  },
-  nowDetail: {
-    en: "Sales, expenses, customers, reservations and insights in one admin — started from my sister's flower shop, now being built into a business.",
-    ko: "매출·지출·고객·예약·인사이트를 하나의 어드민으로 — 친누나의 꽃집에서 시작한 문제를 사업으로 키우고 있습니다.",
-  },
-  selfBuiltHeading: { en: "Self-built", ko: "직접 만든 것" },
+  selfBuiltHeading: { en: "Products", ko: "프로덕트" },
   careerHeading: { en: "Career", ko: "경력" },
   activitiesHeading: { en: "Activities", ko: "활동" },
   educationHeading: { en: "Education", ko: "학력" },
   certsHeading: { en: "Certifications", ko: "자격증" },
+  moreHeading: { en: "Background", ko: "배경" },
+  awardsHeading: { en: "Awards", ko: "수상" },
+  contactEmail: "hchsa77@gmail.com",
+  // Bottom full-width inverted contact block.
+  ctaTitle: {
+    en: "Good products start with good conversations.",
+    ko: "좋은 대화에서, 좋은 프로덕트가 시작됩니다.",
+  },
+  ctaSub: {
+    en: "Collaborations, commissions, coffee chats — I reply within a day.",
+    ko: "협업·의뢰·커피챗, 무엇이든 하루 안에 답장합니다.",
+  },
   career: [
     {
-      company: { en: "LOGOS AI", ko: "(주)로고스AI" },
-      period: { en: "2025.08 — Present", ko: "2025.08 — 현재" },
-      role: "Backend & Infrastructure Engineer",
+      company: { en: "Generative Lab", ko: "(주)제너러티브랩" },
+      url: "https://generativelab.co.kr/",
+      period: { en: "2026.09 — Present", ko: "2026.09 — 현재" },
+      role: "Backend Engineer",
+      desc: { en: "", ko: "" },
+      points: { en: [], ko: [] },
+      tags: [],
+    },
+    {
+      company: { en: "flori", ko: "플로리" },
+      url: "https://flori.ai.kr",
+      period: { en: "2026.06 — Present", ko: "2026.06 — 현재" },
+      role: "Founder",
+      desc: { en: "", ko: "" },
+      points: { en: [], ko: [] },
+      tags: [],
+    },
+    {
+      company: { en: "LOGOS AI", ko: "(주)로고스에이아이" },
+      url: "https://logosai.co.kr/",
+      period: { en: "2025.08 — 2026.05", ko: "2025.08 — 2026.05" },
+      role: "Backend Engineer",
       desc: {
-        en: "Backend & infra for 'OptiGen', a RAG-based AICC solution — LLM streaming, document batch pipeline, AWS infrastructure.",
-        ko: "RAG 기반 AICC 솔루션 'OptiGen'의 백엔드·인프라 — LLM 스트리밍, 문서 배치 파이프라인, AWS 인프라.",
+        en: "Backend for a RAG-based AICC (AI contact center) solution platform.",
+        ko: "RAG 기반 AICC(AI 컨택센터) 솔루션 플랫폼의 백엔드.",
       },
       points: {
         en: [
-          "Built LLM streaming API (RestClient + SseEmitter) and a Spring Batch RAG chunking batch system",
-          "FastAPI document-parsing tool + multi-tenant security (@PreAuthorize, userUid migration)",
-          "POC AWS infra design + GitHub Actions auto-deploy across 4 services; LiteLLM·Datadog LLM Observability",
+          "Designed & built REST APIs for core domains — statistics, RAG document management, org-level access control",
+          "Spring Batch document chunking/preprocessing pipeline + FastAPI·Docling parsing microservice",
+          "Multi-LLM serving on AWS GPU servers with vLLM — model loading cut from 5+ min to 8–32 s (≈100×)",
+          "Solo-designed AWS infra for 2 enterprise PoCs (LG·SOLUM); LiteLLM·LangSmith·Datadog LLM gateway & observability",
         ],
         ko: [
-          "LLM 스트리밍 API(RestClient+SseEmitter)와 Spring Batch RAG 청킹 배치 시스템 구축",
-          "FastAPI 문서 파싱 도구 + 멀티테넌트 보안(@PreAuthorize, userUid 마이그레이션) 구현",
-          "POC AWS 인프라 설계 + GitHub Actions 4개 서비스 자동 배포, LiteLLM·Datadog LLM Observability 구축",
+          "통계·RAG 문서 관리·조직 접근 제어 등 핵심 도메인의 REST API 설계·구현",
+          "Spring Batch 문서 청킹·전처리 파이프라인 + FastAPI·Docling 파싱 마이크로서비스 구축",
+          "AWS GPU 서버 vLLM 멀티 LLM 서빙 — 모델 로딩 5분+ → 8~32초(약 100배) 개선",
+          "LG·SOLUM PoC 2건의 AWS 인프라 단독 설계·구축, LiteLLM·LangSmith·Datadog 게이트웨이·관측 환경",
         ],
       },
       tags: [
         "Java",
         "Spring Boot",
         "Spring Batch",
+        "MyBatis",
         "MySQL",
+        "NGINX",
         "AWS",
-        "LLM",
-        "RAG",
-        "GitHub Actions",
-        "Datadog",
-        "LiteLLM",
-        "Asterisk",
-        "Python",
-        "FastAPI",
+        "NCP",
         "vLLM",
+        "LiteLLM",
+        "Datadog",
+        "LLM",
       ],
     },
     {
       company: { en: "Ribella Realty", ko: "(주)리벨라리얼티" },
+      url: "https://service.findit.im/home",
       period: { en: "2025.06 — 2025.08", ko: "2025.06 — 2025.08" },
-      role: "Backend & Infrastructure Engineer",
+      role: "Backend Engineer",
       desc: {
-        en: "Backend & infra for 'FindIt', a realtor-matching platform.",
-        ko: "부동산 중개사 연결 플랫폼 'FindIt'의 백엔드·인프라.",
+        en: "Backend & infra for 'FindIt', a realtor-matching proptech platform.",
+        ko: "부동산 중개사 연결 프롭테크 플랫폼 'FindIt'의 백엔드·인프라.",
       },
       points: {
         en: [
-          "AWS migration in 3 days: $300+/mo → $108 (66%↓), GitLab CI/CD automation",
-          "Python·FastAPI REST API + Swagger docs; infra ops manuals shortened team onboarding",
+          "Built initial dev infrastructure on a KVM-based on-premise virtualization environment",
+          "Led AWS cloud migration of dev infra, focused on cost optimization and high availability",
+          "FastAPI (Python) REST APIs + infra architecture / ops manual documentation",
         ],
         ko: [
-          "3일 내 AWS 마이그레이션으로 월 $300+ → $108 (66%↓), GitLab CI/CD 자동화",
-          "Python·FastAPI REST API 구현·Swagger 문서화, 인프라 운영 매뉴얼로 팀 온보딩 단축",
+          "KVM 기반 온프레미스 가상화 환경에서 초기 개발 인프라 구축",
+          "비용 최적화·고가용성에 초점을 맞춰 개발 인프라의 AWS 클라우드 마이그레이션 주도",
+          "FastAPI(Python) 기반 REST API 구현 및 인프라 아키텍처·운영 매뉴얼 문서화",
         ],
       },
       tags: [
         "Python",
         "FastAPI",
         "MySQL",
+        "SQLAlchemy",
         "Docker Swarm",
         "AWS",
         "GitLab CI",
@@ -181,95 +204,129 @@ export const about = {
   ],
   showcase: [
     {
-      name: "flori",
-      featured: false,
-      badge: { en: "Now building", ko: "빌딩 중" },
+      name: "플로리",
+      nameEn: "flori",
       role: {
-        en: "Founder · Solo full-stack · 2026.01 — Present",
-        ko: "창업 · 1인 풀스택 · 2026.01 — 현재",
+        en: "Founder · Solo full-cycle · 2026.06 — Present",
+        ko: "창립자 · 1인 풀사이클 · 2026.06 — 현재",
+      },
+      slogan: {
+        en: "Focus on the flowers — flori handles the rest.",
+        ko: "꽃에만 집중하세요, 운영은 플로리가 챙길게요.",
       },
       one: {
-        en: "An all-in-one operations SaaS for flower shops — sales, expenses, customers, reservations, insights. Started from my sister's shop; now building it as a business.",
-        ko: "꽃집을 위한 올인원 운영 SaaS — 매출·지출·고객·예약·인사이트. 친누나의 가게에서 시작해 사업으로 키우고 있습니다.",
+        en: "A B2B SaaS where flower-shop owners manage reservations, sales, customers and photos in one app. Web, iOS/Android app and homepage all shipped — live with real users and real payments.",
+        ko: "꽃집 사장님이 예약·매출·고객·사진을 하나의 앱에서 관리하는 B2B SaaS. 웹·iOS/Android 앱·홈페이지를 동시 출시했고, 실제 사용자가 쓰고 결제가 발생하는 서비스로 운영 중입니다.",
       },
-      // Filmstrip — product screenshots (landing assets reused).
+      // Plate shots — masked landing/product captures from the live app.
       shots: [
         {
-          src: "/images/flori/feature-sales-1.png",
-          caption: { en: "Sales tracking", ko: "매출 기록" },
+          src: "/images/flori/shot-feature-banner.png",
+          caption: { en: "One app to run a flower shop", ko: "꽃집 사장님을 위한 단 하나의 운영 앱" },
         },
         {
-          src: "/images/flori/feature-calendar.png",
+          src: "/images/flori/shot-app-store.webp",
+          caption: { en: "iOS · Android app", ko: "iOS · Android 앱" },
+        },
+        {
+          src: "/images/flori/shot-ai-chat.png",
+          caption: { en: "AI assistant chat", ko: "AI 비서" },
+        },
+        {
+          src: "/images/flori/shot-ledger.webp",
+          caption: { en: "Sales & expense ledger", ko: "매출·지출 장부" },
+        },
+        {
+          src: "/images/flori/shot-calendar.webp",
           caption: { en: "Reservation calendar", ko: "예약 캘린더" },
         },
         {
-          src: "/images/flori/feature-customers.png",
+          src: "/images/flori/shot-customers.webp",
           caption: { en: "Customer management", ko: "고객 관리" },
-        },
-        {
-          src: "/images/flori/feature-gallery.png",
-          caption: { en: "Photo gallery", ko: "사진첩" },
         },
       ],
       // "What I built" ledger — contribution | impact value.
       built: [
         {
           text: {
-            en: "Multi-tenant Kotlin BFF architecture — one API for web & mobile",
-            ko: "Kotlin BFF 멀티테넌트 아키텍처 — web·모바일 단일 API",
+            en: "AI assistant — 'register by photo': one screenshot fills reservation·ledger·customer·photo at once, plus analytics over real sales data",
+            ko: "AI 비서 — 「사진으로 예약 등록」 캡처 한 장이면 예약·장부·고객·사진이 한 번에, 실제 매출 데이터 분석",
           },
           value: {
-            en: "single source of data & auth",
-            ko: "데이터·인증 단일 소유",
+            en: "1 photo → 4 records at once",
+            ko: "사진 1장 → 네 가지가 한 번에",
           },
         },
         {
           text: {
-            en: "Social OAuth ×3 + httpOnly JWT cookies, S3 presigned uploads",
-            ko: "소셜 OAuth 3종 + httpOnly JWT 쿠키, S3 presigned 업로드",
+            en: "5 codebases (web · app · API · AI · homepage) built and shipped solo — both app-store reviews passed, Toss Payments PG subscription billing integrated",
+            ko: "웹·앱·API·AI·홈페이지 5개 코드베이스 1인 개발·정식 출시 — 양대 앱스토어 심사 통과, 토스페이먼츠 PG 구독 결제 연동",
           },
           value: {
-            en: "no tokens in browser",
-            ko: "토큰 브라우저 비노출",
+            en: "revenue without funding",
+            ko: "투자 없이 매출 발생",
           },
         },
         {
           text: {
-            en: "Self-hosted AWS (Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
-            ko: "AWS 자체 호스팅(Docker → ECR → EC2) + GitHub Actions CI/CD, Playwright e2e",
+            en: "Human–agent division of labor: PR-finishing automation, mandatory Playwright e2e on UI changes, docs auto-synced across repos",
+            ko: "에이전트 분업 체계 — PR 마무리 자동화, UI 변경 시 Playwright e2e 강제, 레포 간 문서 자동 동기화",
           },
           value: {
-            en: "push → deploy automated",
-            ko: "push → deploy 자동화",
+            en: "solo speed that doesn't collapse",
+            ko: "무너지지 않는 1인 개발 속도",
+          },
+        },
+        {
+          text: {
+            en: "Store-review and legal requirements (Korean telecom law) designed into the code itself",
+            ko: "양대 앱스토어 심사와 정보통신망법 같은 법적 요건을 코드 레벨에서 준수하도록 설계",
+          },
+          value: {
+            en: "compliant by design",
+            ko: "심사·법규 대응 내재화",
           },
         },
       ],
       tags: [
-        "Kotlin",
-        "Spring Boot",
-        "Next.js",
-        "React 19",
         "TypeScript",
-        "PostgreSQL",
+        "Next.js",
+        "Spring Boot",
+        "FastAPI",
+        "MySQL",
+        "Docker",
         "AWS",
-        "Tailwind CSS",
-        "Playwright",
+        "AWS Bedrock",
+        "LiteLLM",
+        "Langfuse",
       ],
-      links: [{ label: "Live", href: "https://flori.ai.kr" }],
+      links: [
+        { label: "Live", href: "https://flori.ai.kr" },
+        {
+          label: "App Store",
+          href: "https://apps.apple.com/kr/app/id6788602719",
+        },
+        {
+          label: "Google Play",
+          href: "https://play.google.com/store/apps/details?id=kr.ai.flori.app",
+        },
+        {
+          label: "Instagram",
+          href: "https://www.instagram.com/flori.ai.official/",
+        },
+      ],
     },
     {
       name: "OneTime",
-      featured: true,
       shots: [
+        {
+          src: "/images/onetime/banner.png",
+          caption: { en: "Group scheduling service", ko: "다인원 일정 조율 서비스" },
+        },
         {
           srcKo: "/images/onetime/time-block-board-ko.png",
           srcEn: "/images/onetime/time-block-board-en.png",
           caption: { en: "Time block board", ko: "시간 블록 보드" },
-        },
-        {
-          srcKo: "/images/onetime/fixed-schedule-ko.png",
-          srcEn: "/images/onetime/fixed-schedule-en.png",
-          caption: { en: "Fixed schedules", ko: "고정 스케줄" },
         },
         {
           srcKo: "/images/onetime/recommend-and-participant-ko.png",
@@ -280,59 +337,84 @@ export const about = {
           },
         },
         {
-          todo: true,
-          caption: { en: "Admin statistics dashboard", ko: "어드민 통계 대시보드" },
-          note: {
-            en: "Capture: admin → statistics dashboard with the 7 stat domains visible",
-            ko: "캡처: 어드민 → 통계 대시보드 (7개 도메인 그래프가 보이는 화면)",
+          srcKo: "/images/onetime/confirm-schedule-ko.png",
+          srcEn: "/images/onetime/confirm-schedule-en.png",
+          caption: { en: "Schedule confirmation", ko: "일정 확정" },
+        },
+        {
+          srcKo: "/images/onetime/fixed-schedule-ko.png",
+          srcEn: "/images/onetime/fixed-schedule-en.png",
+          caption: {
+            en: "Fixed schedules · Everytime timetable import",
+            ko: "고정 스케줄 · 에브리타임 시간표 연동",
           },
         },
         {
-          todo: true,
-          caption: { en: "Event creation", ko: "이벤트 생성" },
-          note: {
-            en: "Capture: event creation form (pairs with the Bulk INSERT improvement)",
-            ko: "캡처: 이벤트 생성 폼 (Bulk INSERT 성능 개선과 짝)",
-          },
+          src: "/images/onetime/admin-dashboard.png",
+          caption: { en: "Ops admin", ko: "운영 어드민" },
         },
       ],
       role: {
-        en: "Backend, Infra & Admin · plan, build, operate · 2024.08 — Present",
-        ko: "백엔드·인프라·어드민 · 기획·개발·운영 · 2024.08 — 현재",
+        en: "Backend & Infra · plan, build, operate · 2024.08 — Present",
+        ko: "백엔드·인프라 · 기획·개발·운영 · 2024.08 — 현재",
+      },
+      slogan: {
+        en: "Share a link once — find the time that works for everyone.",
+        ko: "링크 공유 한번으로, 여러 사람과 쉽게 일정을 맞추세요.",
       },
       one: {
-        en: "A web service to align schedules with many people from a single shared link. 30K+ cumulative users · 22+ months in operation.",
-        ko: "링크 공유 한 번으로 여러 사람과 쉽게 일정을 맞추는 웹 서비스. 누적 사용자 3만+ · 22개월+ 운영.",
+        en: "A scheduling service that gathers everyone's availability and finds the best time.",
+        ko: "모두의 빈 시간을 모아 가장 적합한 시간을 찾아주는 일정 조율 서비스.",
       },
+      stats: [
+        { value: { en: "30K+", ko: "3만+" }, label: { en: "total users", ko: "누적 사용자" } },
+        { value: { en: "2yr+", ko: "2년+" }, label: { en: "in operation", ko: "운영" } },
+      ],
       built: [
         {
           text: {
-            en: "N+1 removed via QueryDSL fetch join + composite index",
-            ko: "QueryDSL fetch join + 복합 인덱스로 N+1 제거",
+            en: "AWS infra re-architecture cut monthly cost 46% ($83 → $45); AWS Activate credits $1,000 secured",
+            ko: "AWS 인프라 구조 개선으로 월 비용 46% 절감($83→$45), AWS Activate 크레딧 $1,000 확보",
           },
+          posts: ["/posts/onetime/원타임-인프라-개선-도전기/"],
           value: {
-            en: "18.38s → 0.35s (98%↓)",
-            ko: "18.38s → 0.35s (98%↓)",
+            en: "server costs covered",
+            ko: "운영 서버 비용 확보",
           },
         },
         {
           text: {
-            en: "Event creation Bulk INSERT + async QR generation",
-            ko: "이벤트 생성 Bulk INSERT + 비동기 QR 생성",
+            en: "Fail2ban firewall — abnormal-access detection, auto IP ban, Discord alerts",
+            ko: "Fail2ban 방화벽 — 비정상 접근 탐지·IP 자동 차단·Discord 알림 자동화",
           },
+          posts: ["/posts/onetime/웹-스캐닝-공격-9개월간의-fail2ban-로그-분석/"],
           value: {
-            en: "16.56s → 0.41s (97.5%↓)",
-            ko: "16.56s → 0.41s (97.5%↓)",
+            en: "675+ IPs blocked",
+            ko: "675건+ IP 차단",
           },
         },
         {
           text: {
-            en: "Solo-designed admin dashboard + SQS email system",
-            ko: "어드민 대시보드 단독 설계·구현 + SQS 이메일 시스템",
+            en: "Everytime timetable import — built on crawling, load-tested, then switched to direct API calls, removing the crawling server",
+            ko: "에브리타임 시간표 연동 — 크롤링 기반으로 개발·부하 테스트 후, API 직접 호출 구조로 전환해 크롤링 서버 제거",
+          },
+          posts: [
+            "/posts/onetime/에브리타임-시간표를-원타임으로/",
+            "/posts/onetime/에브리타임-시간표를-더-빠르게-가져오기/",
+          ],
+          value: {
+            en: "3–4s → instant · crawler retired",
+            ko: "3~4초 → 즉시 응답 · 크롤링 서버 제거",
+          },
+        },
+        {
+          text: {
+            en: "Solo full-stack ops admin — user·event·retention stats dashboards, marketing targeting, email delivery & banner management",
+            ko: "운영 어드민 풀스택 단독 구축 — 유저·이벤트·리텐션 통계 대시보드, 마케팅 타겟·이메일 발송·배너 관리",
           },
           value: {
-            en: "7 stat domains · 26 APIs",
-            ko: "통계 7종 · API 26개",
+            en: "7 stat domains · data-driven ops",
+            ko: "통계 7종 · 데이터 기반 운영",
           },
         },
       ],
@@ -342,6 +424,8 @@ export const about = {
         "Spring Security",
         "MySQL",
         "QueryDSL",
+        "Thymeleaf",
+        "Tailwind CSS",
         "AWS",
         "GitHub Actions",
         "Nginx",
@@ -350,82 +434,92 @@ export const about = {
       links: [
         { label: "Live", href: "https://www.onetime-with-members.com/" },
         { label: "GitHub", href: "https://github.com/onetime-with-members" },
+        {
+          label: "Instagram",
+          href: "https://www.instagram.com/one.time.official/",
+        },
       ],
     },
     {
-      name: "kusting",
-      featured: false,
+      name: "큐스팅",
+      nameEn: "Kusting",
+      slogan: {
+        en: "Write together, grow together.",
+        ko: "함께 쓰고, 함께 성장하다.",
+      },
       role: {
-        en: "Solo full-stack (AI Vibe Coding) · 2026.02 — Present",
-        ko: "1인 풀스택 (AI Vibe Coding) · 2026.02 — 현재",
+        en: "AI full-stack · study founder & operator · 2026.02 — Present",
+        ko: "AI 풀스택 · 스터디 창립·운영 · 2026.02 — 현재",
       },
       one: {
-        en: "I've run a 30+ member blog study for 2 years; after hitting the limits of Notion + KakaoTalk, I automated the whole flow with a Discord bot + custom web dashboard.",
+        en: "The platform behind my 30-member blog study — moved off Notion + KakaoTalk, with the whole workflow automated by a Discord bot and a custom web dashboard.",
         ko: "2년째 운영해 온 30~35명 블로그 스터디를 노션+카톡의 한계에서 꺼내, Discord 봇 + 자체 웹 대시보드로 전 과정을 자동화한 플랫폼.",
       },
       shots: [
         {
-          todo: true,
-          caption: { en: "Attendance dashboard", ko: "출석 현황 대시보드" },
-          note: {
-            en: "Capture: /dashboard — attendance status + ranking summary cards",
-            ko: "캡처: /dashboard — 출석 현황·랭킹 요약 카드가 보이게",
-          },
+          src: "/images/kusting/banner.png",
+          caption: { en: "Write together, grow together", ko: "함께 쓰고, 함께 성장하다" },
         },
         {
-          todo: true,
-          caption: { en: "Admin attendance", ko: "어드민 출석 관리" },
-          note: {
-            en: "Capture: /admin/attendance — RSS auto-collected attendance table",
-            ko: "캡처: /admin/attendance — RSS 자동 수집된 출석 테이블",
-          },
+          src: "/images/kusting/dashboard.png",
+          caption: { en: "My dashboard — round & activity points", ko: "내 대시보드 — 회차 현황·활동 점수" },
         },
         {
-          todo: true,
-          caption: { en: "Automated fines", ko: "벌금 자동 부과" },
-          note: {
-            en: "Capture: /admin/fines — late/absence fine records",
-            ko: "캡처: /admin/fines — 지각·결석 벌금 내역",
-          },
+          src: "/images/kusting/posts.png",
+          caption: { en: "Post feed — popularity ranking & reactions", ko: "포스트 피드 — 인기 랭킹·리액션" },
         },
         {
-          todo: true,
-          caption: { en: "Board polls", ko: "게시판 투표" },
-          note: {
-            en: "Capture: /board — a post with a poll (single/multi/date/anonymous)",
-            ko: "캡처: /board — 투표(단일/복수/날짜/익명)가 붙은 게시글",
-          },
+          src: "/images/kusting/ranking.png",
+          caption: { en: "Ranking podium", ko: "랭킹 포디움" },
+        },
+        {
+          src: "/images/kusting/admin-home.png",
+          caption: { en: "Admin dashboard", ko: "관리자 대시보드" },
+        },
+        {
+          src: "/images/kusting/bot.png",
+          caption: { en: "Bot ops — automation jobs & alert logs", ko: "봇 관리 — 자동화 작업·알림 로그" },
         },
       ],
       built: [
         {
           text: {
-            en: "RSS every 5 min → attendance → late/absence fines → Discord alerts",
-            ko: "RSS 5분 주기 수집 → 출석 → 벌금 자동 부과 → Discord 알림",
+            en: "Round creation → RSS polling every 5 min → attendance grading → fines → round report & weekly-ranking alerts",
+            ko: "회차 생성 → RSS 5분 주기 수집 → 출석 판정 → 벌금 부과 → 회차 리포트·주간 랭킹 알림",
           },
           value: {
-            en: "ops fully automated",
-            ko: "운영 전 과정 자동화",
+            en: "the whole cycle runs itself",
+            ko: "운영 전 과정 무인 자동화",
           },
         },
         {
           text: {
-            en: "Board polls (4 types) + FCM web push (5 alert types)",
-            ko: "게시판 투표 4종(단일/복수/날짜/익명) + FCM 웹 푸시 5종",
+            en: "Gamification — activity points for writing·commenting·reading, ranking podium & rank changes",
+            ko: "게이미피케이션 설계 — 포스팅·댓글·조회 활동 점수, 랭킹 포디움·순위 변동",
           },
           value: {
-            en: "PWA notifications",
-            ko: "PWA 알림",
+            en: "keeps members writing",
+            ko: "꾸준함을 만드는 장치",
           },
         },
         {
           text: {
-            en: "Discord alert-log system with admin UI",
-            ko: "Discord 알림 로그 시스템 + 관리자 UI",
+            en: "Post feed & community board — comment and react with emoji on each other's posts, polls in 4 types, secret posts + PWA web push",
+            ko: "포스트 피드·커뮤니티 게시판 — 서로의 글에 댓글·이모지 리액션, 투표 4종·비밀글 + PWA 웹 푸시",
           },
           value: {
-            en: "all 16 alert types tracked",
-            ko: "16종 알림 전수 추적",
+            en: "community built in-house",
+            ko: "커뮤니티까지 자체 구축",
+          },
+        },
+        {
+          text: {
+            en: "Admin console — members, rounds, attendance, fines & scores managed in one place, with alert-delivery logs",
+            ko: "관리자 콘솔 — 멤버·회차·출석·벌금·점수 관리부터 알림 발송 로그 추적까지",
+          },
+          value: {
+            en: "run the whole study from one screen",
+            ko: "한 화면에서 운영 완결",
           },
         },
       ],
@@ -442,11 +536,114 @@ export const about = {
         "FCM",
       ],
       links: [
+        { label: "Live", href: "https://kusting-web.vercel.app/" },
         { label: "GitHub", href: "https://github.com/bbbang105/study-admin" },
+      ],
+    },
+    {
+      name: "일단",
+      nameEn: "ILLDAN",
+      slogan: {
+        en: "Plan less, act fast.",
+        ko: "계획은 적게, 행동은 빠르게",
+      },
+      role: {
+        en: "Backend & Infra · team side project · 2025.01 — Present",
+        ko: "백엔드·인프라 · 팀 사이드 프로젝트 · 2025.01 — 현재",
+      },
+      one: {
+        en: "A to-do app for spontaneous planners — capture tasks fast, without overthinking. Live on the App Store and Google Play.",
+        ko: "MBTI P를 위한 투두 앱 — 긴 고민 없이 빠르게 추가하는 일정 관리. iOS·Android 스토어 동시 출시, 운영 중.",
+      },
+      shots: [
+        {
+          src: "/images/illdan/shot-1.webp",
+          caption: { en: "Plan less, act fast — ILLDAN", ko: "계획은 적게, 행동은 빠르게 — 일단 해!" },
+        },
+        {
+          src: "/images/illdan/shot-2.webp",
+          caption: { en: "Capture to-dos the moment they come up", ko: "할 일이 생기면 일단 바로 기록" },
+        },
+        {
+          src: "/images/illdan/shot-3.webp",
+          caption: { en: "Swipe to build today's to-do list", ko: "스와이프로 만드는 오늘의 투두리스트" },
+        },
+        {
+          src: "/images/illdan/shot-4.webp",
+          caption: { en: "Repeat · priority · D-day — just the essentials", ko: "반복·중요·D-day — 필요한 기능만" },
+        },
+      ],
+      built: [
+        {
+          text: {
+            en: "AWS CodeDeploy Blue/Green zero-downtime deploy pipeline; AWS Activate credits $1,000 secured",
+            ko: "AWS CodeDeploy Blue/Green 무중단 배포 파이프라인 구축, AWS Activate 크레딧 $1,000 확보",
+          },
+          value: {
+            en: "zero-downtime releases",
+            ko: "다운타임 0 배포",
+          },
+        },
+        {
+          text: {
+            en: "Async event architecture (@TransactionalEventListener + @Async) piping user feedback to Notion & Discord",
+            ko: "@TransactionalEventListener + @Async 비동기 이벤트 — 유저 의견을 노션·디스코드로 실시간 연동",
+          },
+          posts: [
+            "/posts/일단/고객의-의견-노션-디스코드로-바로-받아보기-feat-비동기-이벤트-처리/",
+          ],
+          value: {
+            en: "transactions decoupled from external APIs",
+            ko: "트랜잭션-외부 API 분리",
+          },
+        },
+        {
+          text: {
+            en: "Scheduler-driven to-do lifecycle — unfinished tasks roll into the backlog at midnight, routines regenerate, deadline & unfinished-task push alerts",
+            ko: "스케줄러 기반 투두 라이프사이클 — 자정마다 미완료 할 일 백로그 이월, 루틴 자동 생성, 마감·미완료 푸시 알림",
+          },
+          value: {
+            en: "today's list, ready every morning",
+            ko: "매일 아침, 오늘 할 일이 준비됨",
+          },
+        },
+      ],
+      tags: [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "Redis",
+        "Docker",
+        "Nginx",
+        "AWS CodeDeploy",
+        "GitHub Actions",
+        "FCM",
+      ],
+      links: [
+        {
+          label: "App Store",
+          href: "https://apps.apple.com/kr/app/%EC%9D%BC%EB%8B%A8/id6740790261",
+        },
+        {
+          label: "Google Play",
+          href: "https://play.google.com/store/apps/details?id=com.poptato.app",
+        },
+        { label: "GitHub", href: "https://github.com/realchillguyclub" },
       ],
     },
   ],
   activities: [
+    {
+      title: {
+        en: "Hyundai WIA Learning Lab — vibe-coding assistant coach",
+        ko: "현대위아 러닝랩 바이브코딩 교육 보조강사",
+      },
+      period: { en: "2026.07", ko: "2026.07" },
+      desc: {
+        en: "Assisted a Claude Code vibe-coding program for Hyundai WIA employees — ran small-group coaching on the chatbot track and 1:1 mentoring across varied skill levels, non-developers included.",
+        ko: "현대위아 임직원 대상 Claude Code 기반 바이브코딩 교육에 보조강사로 참여 — 챗봇 트랙 소그룹 순회 코칭과 개별 멘토링을 진행하며, 비개발자를 포함한 다양한 기술 수준에 맞춰 코칭했습니다.",
+      },
+    },
     {
       title: { en: "Blog study group", ko: "블로그 스터디" },
       period: { en: "2024.06 — Present", ko: "2024.06 — 현재" },
@@ -456,28 +653,51 @@ export const about = {
       },
     },
     {
-      title: { en: "Tech blog", ko: "기술 블로그" },
-      period: { en: "2023 — Present", ko: "2023 — 현재" },
-      desc: {
-        en: "Wrote 140+ technical posts over 2 years (Spring, Database, Infra, Troubleshooting).",
-        ko: "2년간 140개 이상의 기술 포스트를 작성했습니다 (Spring · Database · Infra · Troubleshooting).",
-      },
-    },
-    {
       title: {
-        en: "KUSITMS (Korea Univ. IT Management Society)",
+        en: "KUSITMS (Korean University Students IT, Management Society)",
         ko: "KUSITMS (한국대학생IT경영학회)",
       },
       period: { en: "2024", ko: "2024" },
+      links: [
+        { label: { en: "LIVE", ko: "LIVE" }, href: "https://www.kusitms.com/" },
+        {
+          label: { en: "retrospective", ko: "회고" },
+          href: "/posts/큐시즘/30기/반년-간의-부학회장을-마무리하며/",
+        },
+      ],
       desc: {
         en: "Joined as backend dev in a planner/designer collaboration project; led 70+ members as 30th-term vice president.",
         ko: "기획자·디자이너 협업 프로젝트에 백엔드 개발자로 참여하고, 30기 부학회장으로서 70명 이상의 학회원을 이끌었습니다.",
       },
     },
   ],
+  awards: [
+    {
+      name: { en: "NClouder of the Month", ko: "이달의 NClouder" },
+      date: "2024.07",
+      desc: {
+        en: "Naver Cloud Platform — selected for contribution to cloud tech content.",
+        ko: "Naver Cloud Platform — 클라우드 기술 콘텐츠 기여로 선정.",
+      },
+      post: "/posts/ncp/네이버-클로바-스튜디오로-챗봇-기능-구현하기/",
+    },
+    {
+      name: {
+        en: "Dongguk Univ. Capstone Design — Dean's Award (2nd place)",
+        ko: "동국대학교 캡스톤디자인 원장상 (2위)",
+      },
+      date: "2024.06",
+      desc: {
+        en: "Awarded for BAMOWL, a crypto backtesting & auto-trading service.",
+        ko: "가상화폐 백테스팅·자동매매 서비스 BAMOWL로 수상.",
+      },
+      post: "/posts/회고/프로젝트/가상화폐-백테스팅-자동매매-서비스-bamowl-개발기/",
+    },
+  ],
   education: [
     {
       school: { en: "Dongguk University", ko: "동국대학교" },
+      href: "https://www.linkedin.com/school/dongguk/",
       period: { en: "2018 — 2025", ko: "2018 — 2025" },
       desc: {
         en: "Double major in Management Information Systems & Convergence Software",
@@ -488,22 +708,25 @@ export const about = {
   // Rendered as a ledger table: name | issuer | date.
   certs: [
     {
+      name: { en: "Linux Master Lv.2", ko: "리눅스마스터 2급" },
+      issuer: { en: "KAIT", ko: "한국정보통신진흥협회" },
+      date: "2026.01",
+      post: "/posts/자격증/리눅스마스터-2급-합격-후기/",
+    },
+    {
+      name: { en: "Network Admin Lv.2", ko: "네트워크관리사 2급" },
+      issuer: { en: "ICQA", ko: "한국정보통신자격협회" },
+      date: "2025.12",
+      post: "/posts/자격증/네트워크관리사-2급-합격-후기/",
+    },
+    {
       name: {
         en: "AWS Solutions Architect Associate",
         ko: "AWS SAA",
       },
       issuer: { en: "Amazon Web Services", ko: "Amazon Web Services" },
       date: "2025.10",
-    },
-    {
-      name: { en: "Linux Master Lv.2", ko: "리눅스마스터 2급" },
-      issuer: { en: "KAIT", ko: "한국정보통신진흥협회" },
-      date: "2026.01",
-    },
-    {
-      name: { en: "Network Admin Lv.2", ko: "네트워크관리사 2급" },
-      issuer: { en: "ICQA", ko: "한국정보통신자격협회" },
-      date: "2025.12",
+      post: "/posts/자격증/aws-saa-자격증-합격-후기/",
     },
     {
       name: { en: "SQLD", ko: "SQLD" },
