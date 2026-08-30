@@ -167,7 +167,7 @@ const nn = (n: number) => String(n).padStart(2, "0");
                     Shots stay grayscale until hovered (or scrolled into view
                     on touch devices); todo entries render capture guides. */}
                 <div class="ab-plate" data-plate>
-                  <div class="ab-hero" data-swipe>
+                  <div class="ab-hero">
                     {p.shots.length > 1 && (
                       <>
                         <button
@@ -664,29 +664,6 @@ const nn = (n: number) => String(n).padStart(2, "0");
             show(cur + parseInt(b.getAttribute("data-nav"), 10));
           });
         });
-        // Mobile: horizontal swipe on the hero swaps slides.
-        var hero = plate.querySelector("[data-swipe]");
-        if (hero && heroes.length > 1) {
-          var sx = 0, sy = 0;
-          hero.addEventListener(
-            "touchstart",
-            function (e) {
-              sx = e.touches[0].clientX;
-              sy = e.touches[0].clientY;
-            },
-            { passive: true },
-          );
-          hero.addEventListener(
-            "touchend",
-            function (e) {
-              var dx = e.changedTouches[0].clientX - sx;
-              var dy = e.changedTouches[0].clientY - sy;
-              if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.5)
-                show(cur + (dx < 0 ? 1 : -1));
-            },
-            { passive: true },
-          );
-        }
       });
     })();
   </script>
