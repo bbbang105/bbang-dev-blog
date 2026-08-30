@@ -6,7 +6,7 @@
 
 - 색·폰트·간격은 반드시 `:root` 토큰을 사용한다 — `var(--ink)`, `var(--paper)`, `var(--muted)`, `var(--hair)`, `var(--accent-soft)` 등. **hex 하드코딩 금지** (다크 모드가 토큰 반전으로 동작하므로).
 - 타이포 스케일: `--fs-mega`~`--fs-label`, 본문 행간 `--lh-body: 1.78`(한글 장문 기준), 리듬 `--rhythm`.
-- 본문 컬럼 폭은 `--measure: 70ch`.
+- 본문 컬럼 폭은 `--measure: 70ch`. About처럼 한글 전각 비중이 높은 텍스트는 `--measure-wide: 56rem`을 쓴다.
 
 ## 2. 흑백 원칙 (정체성)
 
