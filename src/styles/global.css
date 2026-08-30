@@ -2577,19 +2577,10 @@ a.pg-n:hover {
   background: var(--ink);
   color: var(--paper);
 }
-/* Touch/small screens: no hover — arrows stay visible, slightly smaller. */
+/* Touch/small screens: no arrows — thumbnails below do the switching. */
 @media (max-width: 760px), (hover: none) {
   .ab-nav {
-    opacity: 1;
-    width: 1.9rem;
-    height: 1.9rem;
-    font-size: 0.85rem;
-  }
-  .ab-nav--prev {
-    left: 0.6rem;
-  }
-  .ab-nav--next {
-    right: 0.6rem;
+    display: none;
   }
 }
 .ab-hero-shot {
