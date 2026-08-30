@@ -2538,8 +2538,7 @@ a.pg-n:hover {
 .ab-hero {
   position: relative;
 }
-/* Plate arrows — desktop only, revealed on hover/focus over the image.
-   Mobile swaps slides by swipe (see about.astro inline JS). */
+/* Plate arrows — revealed on hover/focus on desktop, always visible on touch. */
 .ab-nav {
   position: absolute;
   /* Center on the image itself — the hero also contains a ~2.2rem
@@ -2578,9 +2577,19 @@ a.pg-n:hover {
   background: var(--ink);
   color: var(--paper);
 }
+/* Touch/small screens: no hover — arrows stay visible, slightly smaller. */
 @media (max-width: 760px), (hover: none) {
   .ab-nav {
-    display: none;
+    opacity: 1;
+    width: 1.9rem;
+    height: 1.9rem;
+    font-size: 0.85rem;
+  }
+  .ab-nav--prev {
+    left: 0.6rem;
+  }
+  .ab-nav--next {
+    right: 0.6rem;
   }
 }
 .ab-hero-shot {
